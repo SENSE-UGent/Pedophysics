@@ -1,2 +1,1 @@
-# pedophysics
-Pedophysics: a python package for soil geophysics.
+# Pedophysics_code
