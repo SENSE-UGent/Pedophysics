@@ -110,7 +110,7 @@ def LongmireSmithC(bulk_cond, frequency_cond):
         bulk_perm: float
             Soil bulk real relative dielectric permittivity       
     """               
-    if bulk_cond == 0:
+    if (bulk_cond == 0).all():
         return 0
     
     a = [3.4e6, 2.74e5, 2.58e4, 3.38e3, 5.26e2, 1.33e2, 2.72e1, 1.25e1, 4.8, 2.17, 9.8e-1, 3.92e-1, 1.73e-1]

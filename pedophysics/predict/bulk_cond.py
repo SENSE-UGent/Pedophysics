@@ -1,7 +1,6 @@
 import numpy as np
 from pedophysics.pedophysical_models.bulk_cond import *
-# from pedophysics.predict import FrequencyCond, ParticleDensity, WaterCond, Texture, SolidCond
-import pedophysics
+
 
 def BulkCond(soil):
     """ 

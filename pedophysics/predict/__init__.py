@@ -11,7 +11,7 @@ from .temperature import *
 from .texture import *
 from .water_cond import *
 from .water_perm import *
-from .water import *
+from .water.main import *
 from .cation_exchange_capacity import *
 
 

@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import pedophysics
+
 from pedophysics.predict import BulkCond, BulkPerm
 from pedophysics.simulate import Soil
 

@@ -143,6 +143,17 @@ sample10 = Soil(bulk_cond = np.array([0.0128, 0.0128, 0.0128, 0.0128, 0.0128, 0.
 print('pdm.LongmireSmithP(sample10.bulk_cond, sample10.bulk_perm_inf, sample10.frequency_perm)', LongmireSmithP(sample10.bulk_cond, sample10.bulk_perm_inf, sample10.frequency_perm))
 print("BulkPerm(sample10) :", BulkPerm(sample10))
 
+print("################## ExampleSandValthe ####################")
+                         #           0     1    2     3      4      5     6      7      
+samplev = Soil( bulk_perm=np.array([ 3,    8,   15,   20,    22,    7,    12,    18     ]), 
+                            bulk_density=1.4,
+                            texture = 'Sand',
+                            solid_perm = 5,
+                            CEC = 1.6,
+                      frequency_perm = np.array([50e6]))
+
+waterv = BulkPerm(samplev)
+print("waterv", waterv)
 
 
 print("#################  Graph example  ####################")
