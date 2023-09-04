@@ -1,38 +1,5 @@
 import numpy as np
 
-def LongmireSmithP(bulk_cond, bulk_perm_inf, frequency_perm):
-    """
-        Longmire and Smith 1975 
-        
-        Parameters
-        ----------
-        bulk_cond: float
-            Soil bulk real direct current electrical conductivity [S/m]
-        
-        bulk_perm_inf: float
-            Bulk permittivity at infinite frequency [-]
-            
-        frequency_perm: float
-            frequency of permittivity readings [-]
-   
-        Returns
-        -------
-        bulk_perm: float
-            Soil bulk real relative dielectric permittivity       
-    """ 
-    a = [3.4e6, 2.74e5, 2.58e4, 3.38e3, 5.26e2, 1.33e2, 2.72e1, 1.25e1, 4.8, 2.17, 9.8e-1, 3.92e-1, 1.73e-1]
-    f = (125*bulk_cond)**0.8312
-    bulk_permi_ = []
-
-    for i in range(len(a)):
-        F_ = f*(10**i)
-        bulk_permi = a[i]/(1+(frequency_perm/F_)**2)
-        bulk_permi_.append(bulk_permi)
-
-    bulk_perm = bulk_perm_inf + sum(bulk_permi_)
-    return bulk_perm
-
-
 def WunderlichP(water, perm_init, wat_init, wp, Lw): 
     """
         Wunderlich et.al 2013 
@@ -57,7 +24,7 @@ def WunderlichP(water, perm_init, wat_init, wp, Lw):
         Returns
         -------
         bulk_perm: float
-            Soil bulk real relative dielectric permittivity   
+            Soil bulk real relative dielectric permittivity [-]  
     """     
     diff = water - wat_init                                          # Diference utilized just for simplicity
     bulk_perm = perm_init                                            # Initial permitivity = epsilon sub 1  
@@ -72,9 +39,9 @@ def WunderlichP(water, perm_init, wat_init, wp, Lw):
     return bulk_perm
 
 
-def RothMV(water, bd, pdn, ap, sp, wp, CEC): 
+def LR_MV(water, bd, pdn, ap, sp, wp, CEC): 
     """
-        Roth et al., 1990 and Mendoza Veirana et al., 2022
+        Lichtenecker and Rother, 1931 and Mendoza Veirana et al., 2022
         
         Parameters
         ----------
@@ -105,16 +72,15 @@ def RothMV(water, bd, pdn, ap, sp, wp, CEC):
             Soil bulk real relative dielectric permittivity   
     """
     por = 1 - bd/pdn    
-
     alpha = 0.248*np.log(CEC) + 0.366
     bulk_perm = ( water*wp**alpha + (1-por)*sp**alpha + (por-water)*ap**(alpha))**(1/alpha)
 
     return bulk_perm
 
 
-def RothCRIM(water, bd, pdn, ap, sp, wp, alpha): 
+def LR(water, bd, pdn, ap, sp, wp, alpha): 
     """
-        Roth et al., 1990
+        Lichtenecker and Rother, 1931
         
         Parameters
         ----------
@@ -150,9 +116,9 @@ def RothCRIM(water, bd, pdn, ap, sp, wp, alpha):
     return bulk_perm
 
 
-def RothW(water, bd, pdn, ap, sp, wp, clay): 
+def LR_W(water, bd, pdn, ap, sp, wp, clay): 
     """
-        Roth et al., 1990 and Wunderlich et al., 2013
+        Lichtenecker and Rother, 1931 and Wunderlich et al., 2013
         
         Parameters
         ----------
@@ -182,9 +148,69 @@ def RothW(water, bd, pdn, ap, sp, wp, clay):
         bulk_perm: float
             Soil bulk real relative dielectric permittivity   
     """
-
     por = 1 - bd/pdn    
     alpha = -0.46*(clay/100)+0.71
     bulk_perm = ( water*wp**alpha + (1-por)*sp**alpha + (por-water)*ap**(alpha))**(1/alpha)
+
+    return bulk_perm
+
+
+def LongmireSmithP(bulk_ec, bulk_perm_inf, frequency_perm):
+    """
+        Longmire and Smith, 1975 
+        
+        Parameters
+        ----------
+        bulk_ec: float
+            Soil bulk real direct current electrical conductivity [S/m]
+        
+        bulk_perm_inf: float
+            Bulk permittivity at infinite frequency [-]
+            
+        frequency_perm: float
+            frequency of permittivity readings [-]
+   
+        Returns
+        -------
+        bulk_perm: float
+            Soil bulk real relative dielectric permittivity       
+    """ 
+    a = [3.4e6, 2.74e5, 2.58e4, 3.38e3, 5.26e2, 1.33e2, 2.72e1, 1.25e1, 4.8, 2.17, 9.8e-1, 3.92e-1, 1.73e-1]
+    f = (125*bulk_ec)**0.8312
+    bulk_permi_ = []
+
+    for i in range(len(a)):
+        F_ = f*(10**i)
+        bulk_permi = a[i]/(1+(frequency_perm/F_)**2)
+        bulk_permi_.append(bulk_permi)
+    bulk_perm = bulk_perm_inf + sum(bulk_permi_)
+
+    return bulk_perm
+
+
+def Hilhorst(bulk_ec, water_ec, water_perm, offset_perm):
+    """
+        Hilhorst, 2000 
+        
+        Parameters
+        ----------
+        bulk_ec: float
+            Soil bulk real direct current electrical conductivity [S/m]
+        
+        water_ec: float
+            Soil water real electrical conductivity [S/m]
+
+        water_perm: float
+            water permittivity phase [-]
+            
+        offset_perm: float
+            Soil offset bulk real relative dielectric permittivity [-]
+   
+        Returns
+        -------
+        bulk_perm: float
+            Soil bulk real relative dielectric permittivity [-]      
+    """ 
+    bulk_perm = bulk_ec*water_perm/water_ec + offset_perm
 
     return bulk_perm

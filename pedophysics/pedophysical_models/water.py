@@ -1,8 +1,8 @@
 import numpy as np
 
-def RothW(bp, bd, pdn, ap, sp, wp, clay): 
+def LR_W(bp, bd, pdn, ap, sp, wp, clay): 
     """
-        Roth et al., 1990 and Wunderlich et al., 2013
+        Lichtenecker and Rother, 1931 and Wunderlich et al., 2013
         
         Parameters
         ----------
@@ -38,9 +38,9 @@ def RothW(bp, bd, pdn, ap, sp, wp, clay):
     return water
 
 
-def RothCRIM(bp, bd, pdn, ap, sp, wp, alpha=0.5): 
+def LR(bp, bd, pdn, ap, sp, wp, alpha): 
     """
-        Roth et al., 1990
+        Lichtenecker and Rother, 1931
         
         Parameters
         ----------
@@ -61,20 +61,27 @@ def RothCRIM(bp, bd, pdn, ap, sp, wp, alpha=0.5):
             
         wp: float
             water permittivity phase [-]
+
+        alpha: float
+            Soil alpha exponent as defined in volumetric mixing theory [-]
             
         Returns
         -------
         Volumetric water content: float
     """
+    alpha = alpha [0]
+
+    if np.isnan(alpha):
+        alpha = 0.5
     por = 1 - bd/pdn    
     water = (bp**alpha - (1-por)*sp**alpha - por*ap**alpha) / (wp**alpha - ap**alpha)
 
     return water
 
 
-def RothMV(bp, bd, pdn, ap, sp, wp, CEC): 
+def LR_MV(bp, bd, pdn, ap, sp, wp, CEC): 
     """
-        Roth et al., 1990
+        Lichtenecker and Rother, 1931 and Mendoza Veirana 
         
         Parameters
         ----------

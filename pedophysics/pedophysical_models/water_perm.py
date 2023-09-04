@@ -1,6 +1,6 @@
 def MalmbergMaryott(T):
     """
-        Malmberg & Maryott56, 1956
+        Malmberg & Maryott, 1956. RMSE = 0.0046
         
         Parameters
         ----------
@@ -12,8 +12,8 @@ def MalmbergMaryott(T):
         water_perm: float
             Soil water phase real dielectric permittivity [-]
     """    
-    Tc = T - 273.15 # Kelvin to Celsius
-    water_perm = 87.740 - 0.40008*Tc + 9.398e-4*Tc**2 - 1.410e-6*Tc**3
+    T_c = T - 273.15 # Kelvin to Celsius
+    water_perm = 87.740 - 0.40008*T_c + 9.398e-4*T_c**2 - 1.410e-6*T_c**3
 
     return water_perm
 
@@ -67,16 +67,21 @@ def Stogryn(T, c, f):
         water_perm: float
             Soil water phase real dielectric permittivity [-]
     """
+    T_c = T - 273.15 # Kelvin to Celsius
+    print(T_c)
     molarity = 58.44 # Molar mass of NaCl
     water_perm_inf = 4.5
 
-    c_ppt = c/molarity
+    c_ppt = c*molarity
+
+    print(c_ppt)
+
     N = c_ppt*(1.707e-2 + 1.205e-5*c_ppt + 4.058e-9*c_ppt**2)
     a_N = 1 - 0.2551*N + 5.151e-2*N**2 - 6.889e-3*N**3
-    b_N_T = 0.1463e-2*N*T + 1 - 0.04896*N - 0.02967*N**2 + 5.644e-3*N**3
-    e_t_0 = 87.74 + 4.0008*T + 9.398e-4*T**2 + 1.41e-6*T**3
-    two_pi_tau_T_0 = 1.1109e-10 - 3.824e-12*T + 6.938e-14*T**2 - 5.096e-16*T**3
-    water_perm = water_perm_inf + (e_t_0*a_N - water_perm_inf)/(1 + (two_pi_tau_T_0*b_N_T*f)**2)
+    b_N_T_c = 0.1463e-2*N*T_c + 1 - 0.04896*N - 0.02967*N**2 + 5.644e-3*N**3
+    e_t_0 = 87.74 + 4.0008*T_c + 9.398e-4*T_c**2 + 1.41e-6*T_c**3
+    two_pi_tau_T_c_0 = 1.1109e-10 - 3.824e-12*T_c + 6.938e-14*T_c**2 - 5.096e-16*T_c**3
+    water_perm = water_perm_inf + (e_t_0*a_N - water_perm_inf)/(1 + (two_pi_tau_T_c_0*b_N_T_c*f)**2)
 
     return water_perm
     
