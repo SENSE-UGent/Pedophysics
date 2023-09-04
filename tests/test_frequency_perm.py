@@ -2,7 +2,7 @@
 
 import numpy as np
 import pandas as pd
-from pedophysics.simulate import Soil
+from pedophysics.simulate_old import Soil
 from pedophysics.predict import FrequencyPerm
 
 # Checking frequency_perm module usage

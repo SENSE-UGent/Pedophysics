@@ -1,9 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
-sys.path.insert(0, 'F:\\Users\\gamendoz\\OneDrive - UGent\\Documentos\\PhD\\Pedophysics_code')
+#sys.path.insert(0, 'F:\\Users\\gamendoz\\OneDrive - UGent\\Documentos\\PhD\\Pedophysics_code')
+sys.path.insert(0, 'C:\\Users\\gmendoza\\OneDrive - UGent\\Documentos\\PhD\\Pedophysics_code')
 
-from pedophysics.simulate import Soil
+from pedophysics.simulate_old import Soil
 from pedophysics.predict import Water
 
 
@@ -51,7 +52,7 @@ sample1c = Soil(water = np.array([  0.05, 0.11, 0.08, 0.11,   np.nan, np.nan, np
                             bulk_density=1.7,
                             texture = 'Sand',
                             solid_perm = 5,
-                            water_cond = 0.05,
+                            water_ec = 0.05,
                     frequency_perm=np.array([   50e6, 50e6, 50e6, 200e6,  200e6,  200e6,  50e6,   50e6, 50e6,   200e6]))
 
 water1c = Water(sample1c)
@@ -90,7 +91,7 @@ ax.set_ylim(0, 0.55)
 plt.show()
 
 
-print("################## Example3 ####################")   # It fills all the missing water states so wat from cond is not called
+print("################## Example3 ####################")   # It fills all the missing water states so wat from ec is not called
                          #                      0    1    2   3    4  5  6   7   8  9   10
 sample3 = Soil(water = np.array([   .20,  0.30, 0.35                                 ]), 
                             bulk_perm=np.array([10,   15,   20,   8.5, 8, 1, 12, 22, 5, 20, 30   ]), 
@@ -167,7 +168,7 @@ sample6c = Soil( bulk_perm=np.array([10,    15,    20,    25,    7,     1,    12
                             bulk_density=1.7,
                             texture = 'Sand',
                             solid_perm = 5,
-                            water_cond = 0.1,
+                            water_ec = 0.1,
                       frequency_perm = np.array([1e6,   2e6,   2.5e6, 3e6,   3.5e6, 10e6, 25e6,  25e6,  50e6, 100e6, 200e6]))
 
 water6c = Water(sample6c)
