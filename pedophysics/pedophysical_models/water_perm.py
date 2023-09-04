@@ -13,7 +13,7 @@ def MalmbergMaryott(T):
             Soil water phase real dielectric permittivity [-]
     """    
     T_c = T - 273.15 # Kelvin to Celsius
-    water_perm = 87.740 - 0.40008*T_c + 9.398e-4*T_c**2 - 1.410e-6*T_c**3
+    water_perm = 87.740 - 0.40008*T_c + 9.398e-4*T_c**2 - 1.410e-6*T_c**3 
 
     return water_perm
 
