@@ -39,17 +39,17 @@ print("sal1b", sal1b)
 
 #------------------------------------------------------
 
-aa = 0.5
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#aa = 0.5
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example1 and 1b')
-ax.plot(sample1S.water_ec, sample1S.df.salinity, 'bo', alpha=aa, markersize=8)
-ax.plot(sample1Sb.water_ec, sample1Sb.df.salinity, 'ro', alpha=aa, markersize=5)
-ax.set_xlim(0, 0.6)
-ax.set_ylim(0, 0.04)
+#ax.set_title('Example1 and 1b')
+#ax.plot(sample1S.water_ec, sample1S.df.salinity, 'bo', alpha=aa, markersize=8)
+#ax.plot(sample1Sb.water_ec, sample1Sb.df.salinity, 'ro', alpha=aa, markersize=5)
+#ax.set_xlim(0, 0.6)
+#ax.set_ylim(0, 0.04)
 
-plt.show()
+#plt.show()
 
 
 ###########################################################################
@@ -70,23 +70,23 @@ print("predict.Salinity(sampleS) :", Salinity(sampleS))
 #sampleS.df.to_excel('sampleS_df.xlsx')
 sampleS.info.water_ec
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
-ss=150
-ax.scatter(sampleS.df.bulk_ec, sampleS.df.perm, marker = "^", color='blue', alpha=1, s=ss)
-ax.scatter(sampleS.df.bulk_ec, Hilhorst(sampleS.df.bulk_ec, sampleS.df.water_ec, sampleS.df.bulk_perm, sampleS.df.offset_perm), color='navy', alpha=1, s=ss)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
+#ss=150
+#ax.scatter(sampleS.df.bulk_ec, sampleS.df.perm, marker = "^", color='blue', alpha=1, s=ss)
+#ax.scatter(sampleS.df.bulk_ec, Hilhorst(sampleS.df.bulk_ec, sampleS.df.water_ec, sampleS.df.bulk_perm, sampleS.df.offset_perm), color='navy', alpha=1, s=ss)
 
 
-fig.set_figheight(5.5)
-fig.set_figwidth(8)
+#fig.set_figheight(5.5)
+#fig.set_figwidth(8)
 
-ax.set_ylim(0, 20)
-ax.set_xlim(0, 15e-3)
-ax.grid(True)
-ax.set_ylabel('Water [%]', fontsize = 22)
-ax.set_xlabel('Bulk real EC [S/m]', fontsize = 22)
-ax.tick_params(axis='y', labelsize=16) 
-ax.tick_params(axis='x', labelsize=16) 
+#ax.set_ylim(0, 20)
+#ax.set_xlim(0, 15e-3)
+#ax.grid(True)
+#ax.set_ylabel('Water [%]', fontsize = 22)
+#ax.set_xlabel('Bulk real EC [S/m]', fontsize = 22)
+#ax.tick_params(axis='y', labelsize=16) 
+#ax.tick_params(axis='x', labelsize=16) 
 
-plt.savefig('ExS1')
-plt.show()
+#plt.savefig('ExS1')
+#plt.show()
