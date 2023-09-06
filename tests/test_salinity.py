@@ -7,6 +7,7 @@ sys.path.insert(0, 'C:\\Users\\gmendoza\\OneDrive - UGent\\Documentos\\PhD\\Pedo
 
 from pedophysics.simulate import Soil
 from pedophysics.predict import Salinity, WaterEC
+from pedophysics.pedophysical_models.bulk_perm import Hilhorst
 
 
 ##############
@@ -21,8 +22,8 @@ sample1S = Soil( water_ec = np.array([100, 200, 50,  300,  60, 40,  150, 250, 22
 sal1 = Salinity(sample1S) # [0.00847 0.01721 0.00419 0.02614 0.00504 0.00334 0.01281 0.02165 0.01898 0.02434 0.02614 0.04446]
 print("sal1", sal1)
 
-sample1S.info.to_excel('sample1S_info.xlsx')
-sample1S.df.to_excel('sample1S_df.xlsx')
+#sample1S.info.to_excel('sample1S_info.xlsx')
+#sample1S.df.to_excel('sample1S_df.xlsx')
 
 print("################## Example1b ####################") 
                          #              0    1    2    3     4   5    6    7    8     9    10   11
@@ -33,8 +34,8 @@ sample1Sb = Soil( water_ec = np.array(  [100, 200, 50,  300,  60, 40,  150, 250,
 sal1b = Salinity(sample1Sb) # [0.0109  0.02594 0.00938 0.01969 0.00647 0.00429 0.01281 0.02165 0.01898 0.02434 0.02614 0.04446]
 print("sal1b", sal1b)
 
-sample1Sb.info.to_excel('sample1Sb_info.xlsx')
-sample1Sb.df.to_excel('sample1Sb_df.xlsx')
+#sample1Sb.info.to_excel('sample1Sb_info.xlsx')
+#sample1Sb.df.to_excel('sample1Sb_df.xlsx')
 
 #------------------------------------------------------
 
@@ -65,8 +66,8 @@ print(sampleS.df)
 print("predict.WaterEC(sampleS) :", WaterEC(sampleS)) 
 print("predict.Salinity(sampleS) :", Salinity(sampleS)) 
 
-sampleS.info.to_excel('sampleS_info.xlsx')
-sampleS.df.to_excel('sampleS_df.xlsx')
+#sampleS.info.to_excel('sampleS_info.xlsx')
+#sampleS.df.to_excel('sampleS_df.xlsx')
 sampleS.info.water_ec
 
 fig = plt.figure()

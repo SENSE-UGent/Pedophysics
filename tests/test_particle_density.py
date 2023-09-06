@@ -3,7 +3,7 @@
 import pedophysics
 import numpy as np
 from pedophysics.predict import ParticleDensity
-from pedophysics.simulate_old import Soil
+from pedophysics.simulate import Soil
 
 
 sample2 = Soil(water = np.append(np.random.rand(15)*40, np.full((4,1),np.nan)), 
