@@ -20,15 +20,15 @@ sample1 = Soil(water = np.array([   0.05, 0.11, 0.08, 0.11,   np.nan, np.nan, np
 water1 = Water(sample1)
 print('water1', water1)
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example1')
-ax.plot(sample1.bulk_perm, sample1.water, 'bo',  markersize=4)
-ax.plot(sample1.bulk_perm, water1, 'ro', alpha=0.3, markersize=8)
-ax.set_xlim(0, 32)
-ax.set_ylim(0, 0.55)
-plt.show()
+#ax.set_title('Example1')
+#ax.plot(sample1.bulk_perm, sample1.water, 'bo',  markersize=4)
+#ax.plot(sample1.bulk_perm, water1, 'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(0, 32)
+#ax.set_ylim(0, 0.55)
+#plt.show()
 
 print("################## Example1b ####################") 
                          #                      0     1     2     3       4       5       6       7
@@ -42,8 +42,8 @@ sample1b = Soil(water = np.array([  0.05, 0.11, 0.08, 0.11,   np.nan, np.nan, np
 water1b = Water(sample1b)
 print('water1b', water1b)
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
 print("################## Example1c ####################")
                          #                      0     1     2     3       4       5       6       7
@@ -58,15 +58,15 @@ sample1c = Soil(water = np.array([  0.05, 0.11, 0.08, 0.11,   np.nan, np.nan, np
 water1c = Water(sample1c)
 print('water1c', water1c)
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example1c')
-ax.plot(sample1c.bulk_perm, sample1c.water, 'bo',  markersize=4)
-ax.plot(sample1c.bulk_perm, sample1c.df.water.values, 'ro', alpha=0.3, markersize=8)
-ax.set_xlim(0, 32)
-ax.set_ylim(0, 0.55)
-plt.show()
+#ax.set_title('Example1c')
+#ax.plot(sample1c.bulk_perm, sample1c.water, 'bo',  markersize=4)
+#ax.plot(sample1c.bulk_perm, sample1c.df.water.values, 'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(0, 32)
+#ax.set_ylim(0, 0.55)
+#plt.show()
 
 print("################## Example2 ####################") # now when permittivity freq is not passed then return
                          #                      0    1    2   3    4  5  6   7   8  9   10
@@ -79,16 +79,16 @@ sample2 = Soil(water = np.array([  .20,  .31, 0.36, 0.38, 0.05]),
 water2 = Water(sample2)
 print("water2", water2)
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example2')
-ax.plot(sample2.bulk_perm, sample2.water, 'bo',  markersize=4)
-ax.plot(sample2.bulk_perm, water2, 'ro', alpha=0.3, markersize=8)
-ax.set_xlim(0, 32)
-ax.set_ylim(0, 0.55)
+#ax.set_title('Example2')
+#ax.plot(sample2.bulk_perm, sample2.water, 'bo',  markersize=4)
+#ax.plot(sample2.bulk_perm, water2, 'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(0, 32)
+#ax.set_ylim(0, 0.55)
 
-plt.show()
+#plt.show()
 
 
 print("################## Example3 ####################")   # It fills all the missing water states so wat from ec is not called
@@ -128,16 +128,16 @@ sample5 = Soil(water = np.array([   .20, .30, 0.35]),
 water5 = Water(sample5)
 print("water5", water5)
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example5')
-ax.plot(sample5.bulk_perm, sample5.water, 'bo',            markersize=4)
-ax.plot(sample5.bulk_perm, water5,        'ro', alpha=0.3, markersize=8)
-ax.set_xlim(0, 32)
-ax.set_ylim(0, 0.55)
+#ax.set_title('Example5')
+#ax.plot(sample5.bulk_perm, sample5.water, 'bo',            markersize=4)
+#ax.plot(sample5.bulk_perm, water5,        'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(0, 32)
+#ax.set_ylim(0, 0.55)
 
-plt.show()
+#plt.show()
 
 
 print("################## Example6 ####################") 
@@ -175,12 +175,12 @@ water6c = Water(sample6c)
 print("water6c", water6c)
 
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example6c')
-ax.plot(sample6c.bulk_perm, water6c, 'ro', alpha=0.3, markersize=8)
-ax.set_xlim(0, 32)
-ax.set_ylim(0, 0.55)
+#ax.set_title('Example6c')
+#ax.plot(sample6c.bulk_perm, water6c, 'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(0, 32)
+#ax.set_ylim(0, 0.55)
 
-plt.show()
+#plt.show()

@@ -30,16 +30,16 @@ print("water0", water0) #
 #sample0P.info.to_excel('sample0P_info.xlsx')
 #sample0P.df.to_excel('sample0P_df.xlsx')
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example0')
-ax.plot(sample0P.bulk_perm, sample0P.water, 'bo',            markersize=4)
-ax.plot(sample0P.bulk_perm, water0,        'ro', alpha=0.3, markersize=8)
-ax.set_xlim(0, 32)
-ax.set_ylim(0, 0.55)
+#ax.set_title('Example0')
+#ax.plot(sample0P.bulk_perm, sample0P.water, 'bo',            markersize=4)
+#ax.plot(sample0P.bulk_perm, water0,        'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(0, 32)
+#ax.set_ylim(0, 0.55)
 
-plt.show()
+#plt.show()
 
 
 print("################## Example0b ####################") 
@@ -68,15 +68,15 @@ print('water1', water1) #
 #sample1P.info.to_excel('sample1P_info.xlsx')
 #sample1P.df.to_excel('sample1P_df.xlsx')
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example1')
-ax.plot(sample1P.bulk_perm, sample1P.water, 'bo',  markersize=4)
-ax.plot(sample1P.bulk_perm, water1, 'ro', alpha=0.3, markersize=8)
-ax.set_xlim(-1, 32)
-ax.set_ylim(-0.1, 0.55)
-plt.show()
+#ax.set_title('Example1')
+#ax.plot(sample1P.bulk_perm, sample1P.water, 'bo',  markersize=4)
+#ax.plot(sample1P.bulk_perm, water1, 'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(-1, 32)
+#ax.set_ylim(-0.1, 0.55)
+#plt.show()
 
 
 print("################## Example1b ####################")     
@@ -94,15 +94,15 @@ print('water1b', water1b) #
 #sample1bP.info.to_excel('sample1bP_info.xlsx')
 #sample1bP.df.to_excel('sample1bP_df.xlsx')
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example1b')
-ax.plot(sample1bP.bulk_perm, sample1bP.water, 'bo',  markersize=4)
-ax.plot(sample1bP.bulk_perm, water1b, 'ro', alpha=0.3, markersize=8)
-ax.set_xlim(-1, 32)
-ax.set_ylim(-0.1, 0.55)
-plt.show()
+#ax.set_title('Example1b')
+#ax.plot(sample1bP.bulk_perm, sample1bP.water, 'bo',  markersize=4)
+#ax.plot(sample1bP.bulk_perm, water1b, 'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(-1, 32)
+#ax.set_ylim(-0.1, 0.55)
+#plt.show()
 
 
 print("################## Example1c ####################")
@@ -136,16 +136,16 @@ print("water3", water3) #
 #sample3P.info.to_excel('sample3P_info.xlsx')
 #sample3P.df.to_excel('sample3P_df.xlsx')
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example3')
-ax.plot(sample3P.bulk_perm, sample3P.water, 'bo',  markersize=4)
-ax.plot(sample3P.bulk_perm, water3, 'ro', alpha=0.3, markersize=8)
-ax.set_xlim(0, 32)
-ax.set_ylim(0, 0.55)
+#ax.set_title('Example3')
+#ax.plot(sample3P.bulk_perm, sample3P.water, 'bo',  markersize=4)
+#ax.plot(sample3P.bulk_perm, water3, 'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(0, 32)
+#ax.set_ylim(0, 0.55)
 
-plt.show()
+#plt.show()
 
 
 print("################## Example4 ####################")     
@@ -163,16 +163,16 @@ print("water4", water4) #
 #sample4P.info.to_excel('sample4P_info.xlsx')
 #sample4P.df.to_excel('sample4P_df.xlsx')
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example4')
-ax.plot(sample4P.bulk_perm, sample4P.water, 'bo',  markersize=4)
-ax.plot(sample4P.bulk_perm, water4, 'ro', alpha=0.3, markersize=8)
-ax.set_xlim(0, 32)
-ax.set_ylim(0, 0.55)
+#ax.set_title('Example4')
+#ax.plot(sample4P.bulk_perm, sample4P.water, 'bo',  markersize=4)
+#ax.plot(sample4P.bulk_perm, water4, 'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(0, 32)
+#ax.set_ylim(0, 0.55)
 
-plt.show()
+#plt.show()
 
 
 print("################## Example5 ####################")     
@@ -189,16 +189,16 @@ print("water5", water5) #
 #sample5P.info.to_excel('sample5P_info.xlsx')
 #sample5P.df.to_excel('sample5P_df.xlsx')
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example5')
-ax.plot(sample5P.bulk_perm, sample5P.water, 'bo',            markersize=4)
-ax.plot(sample5P.bulk_perm, water5,        'ro', alpha=0.3, markersize=8)
-ax.set_xlim(0, 32)
-ax.set_ylim(0, 0.55)
+#ax.set_title('Example5')
+#ax.plot(sample5P.bulk_perm, sample5P.water, 'bo',            markersize=4)
+#ax.plot(sample5P.bulk_perm, water5,        'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(0, 32)
+#ax.set_ylim(0, 0.55)
 
-plt.show()
+#plt.show()
 
 
 ##############
@@ -223,19 +223,19 @@ print('water7', water7) # water7               [0.05  0.11  0.08  0.11    0.    
 #sample7P.info.to_excel('sample7P_info.xlsx')
 #sample7P.df.to_excel('sample7P_df.xlsx')
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example7')
-ax.plot(sample7P.df.bulk_ec, sample7P.water, 'bo',  markersize=4)
-ax.plot(sample7P.df.bulk_ec, water7, 'ro', alpha=0.3, markersize=8)
+#ax.set_title('Example7')
+#ax.plot(sample7P.df.bulk_ec, sample7P.water, 'bo',  markersize=4)
+#ax.plot(sample7P.df.bulk_ec, water7, 'ro', alpha=0.3, markersize=8)
 
-ax.plot(sample7P.bulk_perm, sample7P.water, 'bo',  markersize=4)
-ax.plot(sample7P.bulk_perm, water7, 'ro', alpha=0.3, markersize=8)
-ax.set_xlim(0, 32)
-ax.set_ylim(0, 0.55)
+#ax.plot(sample7P.bulk_perm, sample7P.water, 'bo',  markersize=4)
+#ax.plot(sample7P.bulk_perm, water7, 'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(0, 32)
+#ax.set_ylim(0, 0.55)
 
-plt.show()
+#plt.show()
 
 
 print("################## Example7b ####################") 
@@ -279,15 +279,15 @@ print('water7c', water7c)
 #sample7cP.info.to_excel('sample7cP_info.xlsx')
 #sample7cP.df.to_excel('sample7cP_df.xlsx')
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example7c')
-ax.plot(sample7cP.bulk_perm, sample7cP.water, 'bo',  markersize=4)
-ax.plot(sample7cP.bulk_perm, water7c, 'ro', alpha=0.3, markersize=8)
-ax.set_xlim(-1, 32)
-ax.set_ylim(-0.1, 0.55)
-plt.show()
+#ax.set_title('Example7c')
+#ax.plot(sample7cP.bulk_perm, sample7cP.water, 'bo',  markersize=4)
+#ax.plot(sample7cP.bulk_perm, water7c, 'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(-1, 32)
+#ax.set_ylim(-0.1, 0.55)
+#plt.show()
 
 
 print("################## Example8 ####################")
@@ -320,14 +320,14 @@ print("water8b", water8b) #                    [0.019 0.034  0.081  0.169  0.018
 #sample8bP.info.to_excel('sample8bP_info.xlsx')
 #sample8bP.df.to_excel('sample8bP_df.xlsx')
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example8b')
-ax.plot(sample8bP.bulk_perm, water8b, 'ro', alpha=0.3, markersize=8)
-ax.set_xlim(0, 32)
-ax.set_ylim(0, 0.55)
-plt.show()
+#ax.set_title('Example8b')
+#ax.plot(sample8bP.bulk_perm, water8b, 'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(0, 32)
+#ax.set_ylim(0, 0.55)
+#plt.show()
 
 
 print("################## Example8c ####################")
@@ -345,14 +345,14 @@ print("water8c", water8c) #                     [0.    0.001 0.003 0.011 0.    0
 #sample8cP.info.to_excel('sample8cP_info.xlsx')
 #sample8cP.df.to_excel('sample8cP_df.xlsx')
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example8c')
-ax.plot(sample8cP.bulk_perm, water8c, 'ro', alpha=0.3, markersize=8)
-ax.set_xlim(0, 32)
-ax.set_ylim(0, 0.55)
-plt.show()
+#ax.set_title('Example8c')
+#ax.plot(sample8cP.bulk_perm, water8c, 'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(0, 32)
+#ax.set_ylim(0, 0.55)
+#plt.show()
 
 
 print("################## Example9 ####################")

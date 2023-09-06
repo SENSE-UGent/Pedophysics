@@ -28,15 +28,15 @@ print("wec2", wec2)
 
 rhoadesEC =        Rhoades(DR_SCL.df.water, 0.068793, 0.0, 1.000398, 0.37895)
 #----------------------------------------------------------------------------------------
-fig = plt.figure()
-axdr = fig.add_subplot(1, 1, 1)
-aa = 0.5
-ss = 50
+#fig = plt.figure()
+#axdr = fig.add_subplot(1, 1, 1)
+#aa = 0.5
+#ss = 50
 
-axdr.set_title('DR_SCL')
-axdr.scatter(DR_SCL.df.water, DR_SCL.df.bulk_ec, marker='D', color='black', s=ss)
-axdr.plot(DR_SCL.df.water, rhoadesEC, 'ro', alpha=aa, markersize=8)
-plt.show()
+#axdr.set_title('DR_SCL')
+#axdr.scatter(DR_SCL.df.water, DR_SCL.df.bulk_ec, marker='D', color='black', s=ss)
+#axdr.plot(DR_SCL.df.water, rhoadesEC, 'ro', alpha=aa, markersize=8)
+#plt.show()
 
 
 print("################## Example DR_L ####################") 
@@ -52,14 +52,14 @@ print("wec2b", wec2b)
 
 rhoadesEC2b = Rhoades(DR_L.df.water, 0.093240381, 0.0027970, 0.344834, 0.62287)
 #-------------------------------------------------------------------------------------
-fig = plt.figure()
-axdr = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#axdr = fig.add_subplot(1, 1, 1)
 
-axdr.set_title('DR_L')
-axdr.scatter(DR_L.df.water, DR_L.df.bulk_ec, marker='D', color='black', s=ss)
-axdr.plot(DR_L.df.water, rhoadesEC2b, 'ro', alpha=aa, markersize=8)
+#axdr.set_title('DR_L')
+#axdr.scatter(DR_L.df.water, DR_L.df.bulk_ec, marker='D', color='black', s=ss)
+#axdr.plot(DR_L.df.water, rhoadesEC2b, 'ro', alpha=aa, markersize=8)
 
-plt.show()
+#plt.show()
 
 print("################## Example DR_S ####################") 
                          #          0      1      2     3      4     5      6      7      8      9      10     11
@@ -74,14 +74,14 @@ print("wec2c", wec2c)
 
 rhoadesEC2c =        Rhoades(DR_S.df.water, 0.06344, 0.0, 2.19037, 0.018659)
 #-----------------------------------------------------------------------------------
-fig = plt.figure()
-axdr = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#axdr = fig.add_subplot(1, 1, 1)
 
-axdr.set_title('DR_S')
-axdr.scatter(DR_S.df.water, DR_S.df.bulk_ec, marker='D', color='black', s=ss)
-axdr.plot(DR_S.df.water, rhoadesEC2c, 'ro', alpha=aa, markersize=8)
+#axdr.set_title('DR_S')
+#axdr.scatter(DR_S.df.water, DR_S.df.bulk_ec, marker='D', color='black', s=ss)
+#axdr.plot(DR_S.df.water, rhoadesEC2c, 'ro', alpha=aa, markersize=8)
 
-plt.show()
+#plt.show()
 
 print("################## Example DR_Sa ####################") 
                          #          0      1      2     3      4     5      6      7      8      9      10     11
@@ -96,14 +96,14 @@ print("wec2ca", wec2ca)
 
 rhoadesEC2ca =        Rhoades(DR_Sa.df.water, 0.6692, 0.0, 1.0, 0.38)
 #-----------------------------------------------------------------------------------
-fig = plt.figure()
-axdr = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#axdr = fig.add_subplot(1, 1, 1)
 
-axdr.set_title('DR_Sa')
-axdr.scatter(DR_Sa.df.water, DR_Sa.df.bulk_ec, marker='D', color='black', s=ss)
-axdr.plot(DR_Sa.df.water, rhoadesEC2ca, 'ro', alpha=aa, markersize=8)
+#axdr.set_title('DR_Sa')
+#axdr.scatter(DR_Sa.df.water, DR_Sa.df.bulk_ec, marker='D', color='black', s=ss)
+#axdr.plot(DR_Sa.df.water, rhoadesEC2ca, 'ro', alpha=aa, markersize=8)
 
-plt.show()
+#plt.show()
 
 print("################## Example Odarslov_top ####################") 
                          #       0     1     2     3     4     5      6      7      8      9      10     11
@@ -121,14 +121,14 @@ print("wec2d", wec2d)
 
 HilhorstEC2d = Hilhorst(Odarslov_top.df.bulk_ec, 0.283687902, Odarslov_top.df.water_perm, 5.98)
 #---------------------------------------------------------------------------------------
-fig = plt.figure()
-ax2d = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax2d = fig.add_subplot(1, 1, 1)
 
-ax2d.set_title('Odarslov_top')
-ax2d.scatter(Odarslov_top.df.bulk_ec, Odarslov_top.df.bulk_perm, marker='D', color='black', s=ss)
-ax2d.plot(Odarslov_top.df.bulk_ec, HilhorstEC2d, 'ro', alpha=aa, markersize=8)
+#ax2d.set_title('Odarslov_top')
+#ax2d.scatter(Odarslov_top.df.bulk_ec, Odarslov_top.df.bulk_perm, marker='D', color='black', s=ss)
+#ax2d.plot(Odarslov_top.df.bulk_ec, HilhorstEC2d, 'ro', alpha=aa, markersize=8)
 
-plt.show()
+#plt.show()
 
 
 print("################## Example Hil_ex ####################") 
@@ -147,14 +147,14 @@ print("wec2e", wec2e)
 
 HilhorstEC2e = Hilhorst(Hil_ex.df.bulk_ec, 0.4275173, Hil_ex.df.water_perm, 7.21040)
 #-----------------------------------------------------------------------------------------
-fig = plt.figure()
-ax2e = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax2e = fig.add_subplot(1, 1, 1)
 
-ax2e.set_title('Hil_ex')
-ax2e.scatter(Hil_ex.df.bulk_ec, Hil_ex.df.bulk_perm, marker='D', color='black', s=ss)
-ax2e.plot(Hil_ex.df.bulk_ec, HilhorstEC2e, 'ro', alpha=aa, markersize=8)
+#ax2e.set_title('Hil_ex')
+#ax2e.scatter(Hil_ex.df.bulk_ec, Hil_ex.df.bulk_perm, marker='D', color='black', s=ss)
+#ax2e.plot(Hil_ex.df.bulk_ec, HilhorstEC2e, 'ro', alpha=aa, markersize=8)
 
-plt.show()
+#plt.show()
 
 
 print("################## Example Hil_exa ####################") 
@@ -173,14 +173,14 @@ print("wec2ea", wec2ea)
 
 HilhorstEC2ea = Hilhorst(Hil_exa.df.bulk_ec, 0.4275173, Hil_exa.df.water_perm, 7.21040)
 #-----------------------------------------------------------------------------------------
-fig = plt.figure()
-ax2e = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax2e = fig.add_subplot(1, 1, 1)
 
-ax2e.set_title('Hil_exa')
-ax2e.scatter(Hil_exa.df.bulk_ec, Hil_exa.df.bulk_perm, marker='D', color='black', s=ss)
-ax2e.plot(Hil_exa.df.bulk_ec, HilhorstEC2ea, 'ro', alpha=aa, markersize=8)
+#ax2e.set_title('Hil_exa')
+#ax2e.scatter(Hil_exa.df.bulk_ec, Hil_exa.df.bulk_perm, marker='D', color='black', s=ss)
+#ax2e.plot(Hil_exa.df.bulk_ec, HilhorstEC2ea, 'ro', alpha=aa, markersize=8)
 
-plt.show()
+#plt.show()
 
 
 ##############
@@ -208,14 +208,14 @@ print("wec1Sb", wec1Sb)
 #sample1Sb.info.to_excel('sample1Sb_info.xlsx')
 #sample1Sb.df.to_excel('sample1Sb_df.xlsx')
 #---------------------------------------------------------------------------------------------
-aa = 0.5
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#aa = 0.5
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example1 and 1b')
-ax.plot(sample1S.salinity, sample1S.df.water_ec, 'bo', alpha=aa, markersize=8)
-ax.plot(sample1Sb.salinity, sample1Sb.df.water_ec, 'ro', alpha=aa, markersize=8)
-ax.set_ylim(0, 0.6)
-ax.set_xlim(0, 0.04)
+#ax.set_title('Example1 and 1b')
+#ax.plot(sample1S.salinity, sample1S.df.water_ec, 'bo', alpha=aa, markersize=8)
+#ax.plot(sample1Sb.salinity, sample1Sb.df.water_ec, 'ro', alpha=aa, markersize=8)
+#ax.set_ylim(0, 0.6)
+#ax.set_xlim(0, 0.04)
 
-plt.show()
+#plt.show()

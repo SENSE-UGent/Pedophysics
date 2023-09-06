@@ -54,15 +54,15 @@ print("water2", water2) #
 #sample2WEC.info.to_excel('sample2WEC_info.xlsx')
 #sample2WEC.df.to_excel('sample2WEC_df.xlsx')
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example2')
-ax.plot(sample2WEC.bulk_ec, sample2WEC.water, 'bo',  markersize=4)
-ax.plot(sample2WEC.bulk_ec, water2, 'ro', alpha=0.3, markersize=8)
-ax.set_xlim(0, 32*1e-3)
-ax.set_ylim(0, 0.65)
-plt.show()
+#ax.set_title('Example2')
+#ax.plot(sample2WEC.bulk_ec, sample2WEC.water, 'bo',  markersize=4)
+#ax.plot(sample2WEC.bulk_ec, water2, 'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(0, 32*1e-3)
+#ax.set_ylim(0, 0.65)
+#plt.show()
 
 
 print("################## Example3 ####################")  
@@ -93,16 +93,16 @@ print('sample4WEC.Lw', sample4WEC.Lw)
 #sample4WEC.info.to_excel('sample4WEC_info.xlsx')
 #sample4WEC.df.to_excel('sample4WEC_df.xlsx')
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example4')
+#ax.set_title('Example4')
 #ax.plot(WunderlichC(sample4WEC.df.water, 0.006, 0.05, sample4WEC.df.water_ec, sample4WEC.Lw), sample4WEC.water, 'bo', alpha=0.3, markersize=8)
-ax.plot(sample4WEC.bulk_ec, sample4WEC.water, 'bo',  markersize=4)
-ax.plot(sample4WEC.bulk_ec, water4, 'ro', alpha=0.3, markersize=8)
-ax.set_xlim(-1*1e-3, 32*1e-3)
-ax.set_ylim(-0.1, 0.65)
-plt.show()
+#ax.plot(sample4WEC.bulk_ec, sample4WEC.water, 'bo',  markersize=4)
+#ax.plot(sample4WEC.bulk_ec, water4, 'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(-1*1e-3, 32*1e-3)
+#ax.set_ylim(-0.1, 0.65)
+#plt.show()
 
 
 print("################## Example4b ####################") 
@@ -140,15 +140,15 @@ print("water5", water5) #
 #sample5WEC.info.to_excel('sample5WEC_info.xlsx')
 #sample5WEC.df.to_excel('sample5WEC_df.xlsx')
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example5')
-ax.plot(sample5WEC.bulk_ec, [0.557, 0.65,  0.65,  0.65,  0.421, 0.074, 0.639, 0.65,  0.32,  0.65,  0.65 ], 'bo',  markersize=4)
-ax.plot(sample5WEC.bulk_ec, [0.566, 0.65,  0.65,  0.65,  0.421, 0.15,  0.639, 0.65,  0.316, 0.65,  0.65 ], 'ro', alpha=0.3, markersize=8)
-ax.set_xlim(-1*1e-3, 32*1e-3)
-ax.set_ylim(-0.1, 0.65)
-plt.show()
+#ax.set_title('Example5')
+#ax.plot(sample5WEC.bulk_ec, [0.557, 0.65,  0.65,  0.65,  0.421, 0.074, 0.639, 0.65,  0.32,  0.65,  0.65 ], 'bo',  markersize=4)
+#ax.plot(sample5WEC.bulk_ec, [0.566, 0.65,  0.65,  0.65,  0.421, 0.15,  0.639, 0.65,  0.316, 0.65,  0.65 ], 'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(-1*1e-3, 32*1e-3)
+#ax.set_ylim(-0.1, 0.65)
+#plt.show()
 
 
 print("################## Example5b ####################")
@@ -184,15 +184,15 @@ print("sample6WEC.Lw", sample6WEC.Lw) #
 #sample6WEC.info.to_excel('sample6WEC_info.xlsx')
 #sample6WEC.df.to_excel('sample6WEC_df.xlsx')
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example6')
-ax.plot(sample6WEC.bulk_ec, sample6WEC.water, 'bo',            markersize=4)
-ax.plot(sample6WEC.bulk_ec, water6,        'ro', alpha=0.3, markersize=8)
-ax.set_xlim(0, 32*1e-3)
-ax.set_ylim(0, 0.65)
-plt.show()
+#ax.set_title('Example6')
+#ax.plot(sample6WEC.bulk_ec, sample6WEC.water, 'bo',            markersize=4)
+#ax.plot(sample6WEC.bulk_ec, water6,        'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(0, 32*1e-3)
+#ax.set_ylim(0, 0.65)
+#plt.show()
 
 
 print("################## Example6b ####################")
@@ -211,15 +211,15 @@ print("water6b", water6b)               #
 #sample6bWEC.df.to_excel('sample6bWEC_df.xlsx')
 print('sample6bWEC', sample6bWEC.Lw)
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example6b')
-ax.plot(sample6bWEC.bulk_ec, sample6bWEC.water, 'bo',            markersize=4)
-ax.plot(sample6bWEC.bulk_ec, water6b,        'ro', alpha=0.3, markersize=8)
-ax.set_xlim(0, 32*1e-3)
-ax.set_ylim(0, 0.65)
-plt.show()
+#ax.set_title('Example6b')
+#ax.plot(sample6bWEC.bulk_ec, sample6bWEC.water, 'bo',            markersize=4)
+#ax.plot(sample6bWEC.bulk_ec, water6b,        'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(0, 32*1e-3)
+#ax.set_ylim(0, 0.65)
+#plt.show()
 
 
 print("################## Example6c ####################")
@@ -236,14 +236,14 @@ print("water6c", water6c) #
 #sample6cWEC.info.to_excel('sample6cWEC_info.xlsx')
 #sample6cWEC.df.to_excel('sample6cWEC_df.xlsx')
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example6c')
-ax.plot(sample6cWEC.bulk_ec, water6c, 'ro', alpha=0.3, markersize=8)
-ax.set_xlim(0, 32*1e-3)
-ax.set_ylim(0, 0.65)
-plt.show()
+#ax.set_title('Example6c')
+#ax.plot(sample6cWEC.bulk_ec, water6c, 'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(0, 32*1e-3)
+#ax.set_ylim(0, 0.65)
+#plt.show()
 
 
 print("################## Example7 ####################")
@@ -264,18 +264,18 @@ print('water7', water7) #                     [0.05  0.11  0.08  0.11    0.071  
 #sample7WEC.info.to_excel('sample7WEC_info.xlsx')
 #sample7WEC.df.to_excel('sample7WEC_df.xlsx')
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example7')
+#ax.set_title('Example7')
 
-ax.plot([0.0056, 0.01014, 0.00826, np.nan, 0.00078, np.nan, 0.00732, 0.00798, 0.00798,  0.0076], sample7WEC.df.water.values, '*',  markersize=4)
+#ax.plot([0.0056, 0.01014, 0.00826, np.nan, 0.00078, np.nan, 0.00732, 0.00798, 0.00798,  0.0076], sample7WEC.df.water.values, '*',  markersize=4)
 
-ax.plot(sample7WEC.df.bulk_ec, sample7WEC.water, 'bo',  markersize=4)
-ax.plot(sample7WEC.df.bulk_ec, sample7WEC.df.water.values, 'ro', alpha=0.3, markersize=8)
-ax.set_xlim(0, 20*1e-3)
-ax.set_ylim(0, 0.30)
-plt.show()
+#ax.plot(sample7WEC.df.bulk_ec, sample7WEC.water, 'bo',  markersize=4)
+#ax.plot(sample7WEC.df.bulk_ec, sample7WEC.df.water.values, 'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(0, 20*1e-3)
+#ax.set_ylim(0, 0.30)
+#plt.show()
 
 
 print("################## Example7b ####################")
@@ -295,15 +295,15 @@ print('water7b', water7b) #
 #sample7bWEC.info.to_excel('sample7bWEC_info.xlsx')
 #sample7bWEC.df.to_excel('sample7bWEC_df.xlsx')
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('Example7b')
-ax.plot(sample7bWEC.df.bulk_ec, sample7bWEC.water, 'bo',  markersize=4)
-ax.plot(sample7bWEC.df.bulk_ec, sample7bWEC.df.water.values, 'ro', alpha=0.3, markersize=8)
-ax.set_xlim(0, 32*1e-3)
-ax.set_ylim(-0.1, 0.65)
-plt.show()
+#ax.set_title('Example7b')
+#ax.plot(sample7bWEC.df.bulk_ec, sample7bWEC.water, 'bo',  markersize=4)
+#ax.plot(sample7bWEC.df.bulk_ec, sample7bWEC.df.water.values, 'ro', alpha=0.3, markersize=8)
+#ax.set_xlim(0, 32*1e-3)
+#ax.set_ylim(-0.1, 0.65)
+#plt.show()
 
 
 print("################## ExampleSandValthe ####################")
@@ -321,12 +321,12 @@ print("waterv", waterv) #
 #samplevWEC.info.to_excel('samplevWEC_info.xlsx')
 #samplevWEC.df.to_excel('samplevWEC_df.xlsx')
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax = fig.add_subplot(1, 1, 1)
 
-ax.set_title('ExampleSandValthe')
-ax.plot(samplevWEC.bulk_ec, waterv, 'ro', alpha=0.3, markersize=8)
+#ax.set_title('ExampleSandValthe')
+#ax.plot(samplevWEC.bulk_ec, waterv, 'ro', alpha=0.3, markersize=8)
 
-ax.set_xlim(0, 32*1e-3)
-ax.set_ylim(0, 0.65)
-plt.show()
+#ax.set_xlim(0, 32*1e-3)
+#ax.set_ylim(0, 0.65)
+#plt.show()

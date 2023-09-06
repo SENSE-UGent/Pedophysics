@@ -9,22 +9,19 @@ from pedophysics.simulate import Soil
 from pedophysics.pedophysical_models.bulk_ec import Rhoades
 
 
-RMSE_MM = np.sqrt((0.004**2+0.001**2+0.002**2+0.004**2+0.003**2+0.003**2+0.006**2+0.004**2+0.002**2+0.004**2+0.007**2+0+0.005**2+0.002**2+0.002**2+0.009**2+0.008**2+0.001**2+0.005**2+0.001**2+0.008**2)/21)
-print(RMSE_MM)
-
-
 ##############
 ########################## Testing DC frequency, fitting and non-fitting ###############################
 ##############
 
+def test_sampleC0():
+        sampleC0 = Soil(water = 0.1, 
+                        bulk_ec= [ 0.0072,    0.007,   0.0075,  0.008], 
+                        sand=20.0,
+                        silt = 40)
 
-print("############ Example0 ##################")
-sampleC0 = Soil(water = 0.1, 
-                bulk_ec=np.array([ 0.0072,    0.007,   0.0075,  0.008]), 
-                sand=20.0,
-                silt = 40)
+        assert BulkEC(sampleC0) == np.array([0.0072, 0.007,  0.0075, 0.008])
 
-print("BulkEC(sampleC0) :", BulkEC(sampleC0)) # [0.0072 0.007  0.0075 0.008 ]
+
 #sampleC0.info.to_excel('sampleC0_info.xlsx')
 #sampleC0.df.to_excel('sampleC0_df.xlsx')
 
@@ -139,17 +136,17 @@ print("sampleC4.Lw :", sampleC4.Lw)
 
 sample4_Rhoades = Rhoades(sampleC4.df.water, 0.0264, 0.00628, 1.0, 0.38)
 
-fig = plt.figure()
-ax2e = fig.add_subplot(1, 1, 1)
+#fig = plt.figure()
+#ax2e = fig.add_subplot(1, 1, 1)
 
-aa = 0.5
-ss = 50
-ax2e.set_title('Example 4')
-ax2e.scatter(sampleC4.df.water, sampleC4.bulk_ec, marker='D', color='black', s=ss)
-ax2e.plot(sampleC4.df.water, sample4EC, 'ro', alpha=aa, markersize=8)
-ax2e.plot(sampleC4.df.water, sample4_Rhoades, 'gD', alpha=aa, markersize=8)
+#aa = 0.5
+#ss = 50
+#ax2e.set_title('Example 4')
+#ax2e.scatter(sampleC4.df.water, sampleC4.bulk_ec, marker='D', color='black', s=ss)
+#ax2e.plot(sampleC4.df.water, sample4EC, 'ro', alpha=aa, markersize=8)
+#ax2e.plot(sampleC4.df.water, sample4_Rhoades, 'gD', alpha=aa, markersize=8)
 
-plt.show()
+#plt.show()
 
 
 print("################## Example5 ###################")
@@ -402,12 +399,12 @@ pred_ls12g = BulkEC(sample12g)
 pred_ls13g = BulkEC(sample13g)
 pred_ls14g = BulkEC(sample14g)
 
-plt.semilogx(sample11g.frequency_ec, pred_ls11g, 'bo', markersize=2)
-plt.semilogx(sample12g.frequency_ec, pred_ls12g, 'ro', markersize=2)
-plt.semilogx(sample13g.frequency_ec, pred_ls13g, 'go', markersize=2)
-plt.semilogx(sample14g.frequency_ec, pred_ls14g, 'yo', markersize=4)
+#plt.semilogx(sample11g.frequency_ec, pred_ls11g, 'bo', markersize=2)
+#plt.semilogx(sample12g.frequency_ec, pred_ls12g, 'ro', markersize=2)
+#plt.semilogx(sample13g.frequency_ec, pred_ls13g, 'go', markersize=2)
+#plt.semilogx(sample14g.frequency_ec, pred_ls14g, 'yo', markersize=4)
 
-locs, labels = plt.xticks()  # Get the current locations and labels.
-plt.xticks(np.logspace(0, 8, 90), rotation='vertical')  # Set label locations.
+#locs, labels = plt.xticks()  # Get the current locations and labels.
+#plt.xticks(np.logspace(0, 8, 90), rotation='vertical')  # Set label locations.
 
-plt.show()
+#plt.show()
