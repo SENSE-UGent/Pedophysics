@@ -4,7 +4,7 @@ import sys
 #sys.path.insert(0, 'F:\\Users\\gamendoz\\OneDrive - UGent\\Documentos\\PhD\\Pedophysics_code')
 sys.path.insert(0, 'C:\\Users\\gmendoza\\OneDrive - UGent\\Documentos\\PhD\\Pedophysics_code')
 
-from pedophysics.simulate_old import Soil
+from pedophysics.simulate import Soil
 from pedophysics.predict import Water
 
 
