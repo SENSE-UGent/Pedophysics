@@ -1,5 +1,5 @@
 import numpy as np
-from pedophysics import pedotransfer_functions as ptf
+from pedophysics.pedotransfer_functions.particle_density import Schjonnen
 from .texture import Texture
 
 def ParticleDensity(soil):
@@ -13,7 +13,7 @@ def ParticleDensity(soil):
                                          or soil.info.particle_density[x] == "Calculated using Schjonnen function (RMSE = 0.011 g/cm3)"
                                          else soil.info.particle_density[x] for x in range(soil.n_states)]
         
-        soil.df['particle_density'] = [ptf.Schjonnen(soil.df.clay.values[x], soil.df.orgm.values[x]) if np.isnan(soil.df.particle_density[x])  
+        soil.df['particle_density'] = [Schjonnen(soil.df.clay.values[x], soil.df.orgm.values[x]) if np.isnan(soil.df.particle_density[x])  
                                        else soil.df.particle_density[x] for x in range(soil.n_states)]
         
         soil.info['particle_density'] = ["Set as 2.65 by default" if np.isnan(soil.df.particle_density[x]) or soil.info.particle_density[x] == "Set as 2.65 by default"

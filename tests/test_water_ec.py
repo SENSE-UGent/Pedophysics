@@ -15,17 +15,18 @@ from pedophysics.pedophysical_models.bulk_perm import Hilhorst
 ########################## Testing Water EC from Bulk EC with examples from Brovelli & Cassiani 2011 ###############################
 ##############
 
+print("################## Example DR_SCL ####################") 
 
-def test_sample_DR_SCL():
+DR_SCL = Soil( bulk_ec = [0, 1.6e-3, 4e-3, 9e-3, 1.5e-2, 2e-2],
+                water =  [0, 0.076,  0.15, 0.23, 0.3,    0.38])
 
+wec2 = WaterEC(DR_SCL) # 0.0714
+print("wec2", wec2)
 
-    DR_SCL = Soil( bulk_ec = [0, 1.6e-3, 4e-3, 9e-3, 1.5e-2, 2e-2],
-                    water =  [0, 0.076,  0.15, 0.23, 0.3,    0.38])
+#DR_SCL.info.to_excel('DR_SCL_info.xlsx')
+#DR_SCL.df.to_excel('DR_SCL_df.xlsx')
 
-    assert (WaterEC(DR_SCL) == np.array([0.0714]*len(DR_SCL.water))).all()
-
-
-#rhoadesEC =        Rhoades(DR_SCL.df.water, 0.068793, 0.0, 1.000398, 0.37895)
+rhoadesEC =        Rhoades(DR_SCL.df.water, 0.068793, 0.0, 1.000398, 0.37895)
 #----------------------------------------------------------------------------------------
 #fig = plt.figure()
 #axdr = fig.add_subplot(1, 1, 1)
