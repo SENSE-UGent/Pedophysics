@@ -15,6 +15,7 @@ class Soil(object):
                 'bulk_density': [float, np.ndarray, int, list],
                 'particle_density': [float, np.ndarray, int, list],
                 'CEC': [float, np.ndarray, int, list],
+                'orgm': [float, np.ndarray, int, list],
                 'bulk_perm': [float, np.ndarray, int, list],
                 'bulk_perm_inf': [float, np.ndarray, int, list],
                 'air_perm': [float, np.ndarray, int, list],
@@ -79,8 +80,8 @@ class Soil(object):
         
         ### Fill the state variables with nans when are shorter than n_states
         state_attribute = ['temperature', 'water', 'salinity', 'sand', 'silt', 'clay', 'bulk_density', 'particle_density', 'CEC',
-                'bulk_perm', 'bulk_perm_inf', 'air_perm', 'water_perm', 'solid_perm', 'offset_perm', 'bulk_ec', 'water_ec',
-                'solid_ec', 'dry_ec', 'sat_ec', 's_ec', 'frequency_perm', 'frequency_ec']
+                            'orgm', 'bulk_perm', 'bulk_perm_inf', 'air_perm', 'water_perm', 'solid_perm', 'offset_perm', 'bulk_ec', 
+                            'water_ec', 'solid_ec', 'dry_ec', 'sat_ec', 's_ec', 'frequency_perm', 'frequency_ec']
 
         # calculate the max length of the input arrays
         n_states = max([len(getattr(self, attr)) for attr in state_attribute])
