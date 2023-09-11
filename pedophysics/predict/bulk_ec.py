@@ -39,14 +39,16 @@ def non_dc_freq(soil):
     SolidEC(soil)
 
     bulk_ec_dc = [round(Fu(soil.df.water[x], soil.df.clay[x], soil.df.bulk_density[x], soil.df.particle_density[x], soil.df.water_ec[x], soil.df.solid_ec[x], soil.df.dry_ec[x], soil.df.sat_ec[x]), soil.roundn+3) 
-                  if np.isnan(soil.df.bulk_ec[x]) else soil.df.bulk_ec[x] for x in range(soil.n_states)]
+                  if np.isnan(soil.df.bulk_ec[x]) and soil.df.frequency_ec[x] >= 5 else soil.df.bulk_ec[x] for x in range(soil.n_states)]
+
+#    frequency_ec = [0 if np.isnan(soil.df.bulk_ec[x]) and soil.df.frequency_ec[x] >= 5 else soil.df.frequency_ec[x] for x in range(soil.n_states)]    
 
     # Calculating bulk EC non-DC using LongmireSmithEC function and save the information
     soil.info['bulk_ec'] = [str(soil.info.bulk_ec[x]) + "--> Calculated using LongmireSmithEC function in predict.bulk_ec.non_dc_freq" if (soil.df.frequency_ec[x]>=5 and np.isnan(soil.df.bulk_ec[x])) or 
                             soil.info.bulk_ec[x] == str(soil.info.bulk_ec[x]) + "--> Calculated using LongmireSmithEC function in predict.bulk_ec.non_dc_freq"
                             else soil.info.bulk_ec[x] for x in range(soil.n_states)]
 
-    soil.df['bulk_ec'] = [round(LongmireSmithEC(bulk_ec_dc[x], soil.df.frequency_ec[x]), soil.roundn+3) if soil.df.frequency_ec[x]>=5 else soil.df.bulk_ec[x] for x in range(soil.n_states)]
+#    soil.df['bulk_ec'] = [round(LongmireSmithEC(bulk_ec_dc[x], soil.df.frequency_ec[x]), soil.roundn+3) if (frequency_ec[x] != soil.df.frequency_ec[x]) else soil.df.bulk_ec[x] for x in range(soil.n_states)]
 
 
 ##########################################    DC frequency   ###########################################
