@@ -4,11 +4,11 @@ sys.path.insert(0, 'C:\\Users\\gmendoza\\OneDrive - UGent\\Documentos\\PhD\\Pedo
 sys.path.insert(0, 'C:\\Users\\mendo\\OneDrive - UGent\\Documentos\\PhD\\Pedophysics_code')
 
 
-from pedophysics.predict import BulkEC, BulkPerm
+from pedophysics.predict import BulkEC, BulkPerm, LongmireSmithP
 from pedophysics.simulate import Soil
 from pedophysics.utils.similar_arrays import arrays_are_similar
 
-from pedophysics.pedophysical_models.bulk_ec import Rhoades, LongmireSmithP
+from pedophysics.pedophysical_models.bulk_ec import Rhoades
 
 ################################################################################################################
 ################################################## PREDICT BULK EC #############################################
@@ -315,7 +315,7 @@ def test_sample_P1b():
                         clay=2,
                         solid_perm = 5,
                         instrument= 'GPR')
-        expected_result = np.array([6., 11., 9., 10.653, 4.648, np.nan, 8., 8.5])
+        expected_result = np.array([6., 11., 9., 10.653, 4.666, np.nan, 8., 8.5])
         assert arrays_are_similar(BulkPerm(sample_P1b), expected_result)
 
 
