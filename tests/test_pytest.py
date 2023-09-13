@@ -4,11 +4,12 @@ sys.path.insert(0, 'C:\\Users\\gmendoza\\OneDrive - UGent\\Documentos\\PhD\\Pedo
 sys.path.insert(0, 'C:\\Users\\mendo\\OneDrive - UGent\\Documentos\\PhD\\Pedophysics_code')
 
 
-from pedophysics.predict import BulkEC, BulkPerm, LongmireSmithP
+from pedophysics.predict import BulkEC, BulkPerm, ParticleDensity, Salinity, WaterEC, Water
 from pedophysics.simulate import Soil
 from pedophysics.utils.similar_arrays import arrays_are_similar
 
 from pedophysics.pedophysical_models.bulk_ec import Rhoades
+from pedophysics.pedophysical_models.bulk_perm import LongmireSmithP
 
 ################################################################################################################
 ################################################## PREDICT BULK EC #############################################
@@ -423,5 +424,436 @@ def test_sample_P8():
         assert arrays_are_similar(LongmireSmithP(sample_P8.bulk_ec, sample_P8.bulk_perm_inf, sample_P8.frequency_perm), np.array([47.58214722, 47.58214722, 14.04895663, 12.27116452, 8.88788941, 8.13446703]))
         #sampleP8.info.to_excel('sampleP8_info.xlsx')
         #sampleP8.df.to_excel('sampleP8_df.xlsx')
+
+################################################################################################################
+############################################### PREDICT PARTICLE DENSITY #######################################
+################################################################################################################
+
+def test_sample_PD1():
+        sample_PD1 = Soil(water = np.append(np.random.rand(15)*40, np.full((4,1),np.nan)), 
+                                bulk_perm = np.array([15, np.nan, 20, np.nan, 40]), 
+                                instrument='TDR', 
+                                particle_density=np.array([2, 2.2, 3, np.nan, 2.6]))
+
+        expected_result = np.array([2., 2.2, 3., 2.65, 2.6, 2.65, 2.65, 2.65, 2.65, 2.65, 2.65, 2.65, 2.65, 2.65, 2.65, 2.65, 2.65, 2.65, 2.65])
+        assert arrays_are_similar(ParticleDensity(sample_PD1), expected_result)
+
+
+def test_sample_PD2():
+        sample_PD2 = Soil(water = np.append(np.random.rand(12)*40, np.full((4,1),np.nan)), 
+                                sand = np.array([ np.nan, 30, 30,     20,     np.nan,  30,     np.nan, 20     ]), 
+                                silt = np.array([ 10    , 30, np.nan, np.nan, np.nan,  np.nan, 20,     20     ]), 
+                                clay = np.array([ np.nan, 30, 30,     np.nan, 20,      30,     20,     np.nan ]), 
+                                orgm = np.array([ np.nan, 1,  np.nan, 1,      np.nan,  1,      0.5,    np.nan ]), 
+                                particle_density=[2,      2,  2.2,    np.nan, np.nan,  np.nan, np.nan, np.nan] )
+
+        expected_result = np.array([2., 2., 2.2, 2.65, 2.65, 1.5, 2.35752157, 2.65, 2.65, 2.65, 2.65, 2.65, 2.65, 2.65, 2.65, 2.65])
+        assert arrays_are_similar(ParticleDensity(sample_PD2), expected_result)
+
+################################################################################################################
+############################################### PREDICT SALINITY ###############################################
+################################################################################################################
+
+
+def test_sample_S1():
+        sample_S1 = Soil( water_ec = np.array([100, 200, 50,  300,  60, 40,  150, 250, 220,  280, 300, 500 ])*10**-3, )
+
+        expected_result = np.array([0.00846, 0.01718, 0.00419, 0.02609, 0.00503, 0.00334, 0.0128, 0.02161, 0.01895, 0.02429, 0.02609, 0.04432])
+        assert arrays_are_similar(Salinity(sample_S1), expected_result)
+
+
+def test_sample_S2():
+        sample_S2 = Soil( water_ec = np.array(  [100, 200, 50,  300,  60, 40,  150, 250, 220,  280, 300, 500 ])*10**-3,
+                        temperature = np.array([15,  10,  0,   40,   15, 15]) + 273 )
+
+        expected_result = np.array([0.01089, 0.02589, 0.00937, 0.01966, 0.00647, 0.00429, 0.0128, 0.02161, 0.01895, 0.02429, 0.02609, 0.04432])
+        assert arrays_are_similar(Salinity(sample_S2), expected_result)
+
+
+def test_sample_Ss():
+        sample_Ss = Soil( bulk_ec =  [0.02, 0.03, 0.04, 0.05, 0.06   ],
+                        bulk_perm = [11.5, 14.8, 17,   20,   23    ],
+                        clay=5,
+                        bulk_density=1.48,
+                        instrument = 'TDR')
+
+        expected_result = np.array([0.02462, 0.02462, 0.02462, 0.02462, 0.02462])
+        assert arrays_are_similar(Salinity(sample_Ss), expected_result)
+        assert arrays_are_similar(WaterEC(sample_Ss), np.array([0.283688, 0.283688, 0.283688, 0.283688, 0.283688]))
+
+
+################################################################################################################
+############################################### PREDICT WATEREC ################################################
+################################################################################################################
+# Testing Water EC from Bulk EC with examples from Brovelli & Cassiani 2011
+
+
+def test_sample_ECW_DR_SCL():
+        sample_ECW_DR_SCL = Soil( bulk_ec = [0, 1.6e-3, 4e-3, 9e-3, 1.5e-2, 2e-2],
+                        water =  [0, 0.076,  0.15, 0.23, 0.3,    0.38])
+
+        expected_result = np.array([0.068793, 0.068793, 0.068793, 0.068793, 0.068793, 0.068793])
+        assert arrays_are_similar(WaterEC(sample_ECW_DR_SCL), expected_result)
+
+
+def test_sample_ECW_DR_L():
+        sample_ECW_DR_L = Soil( bulk_ec =  [0, 7*10**-3, 1.3*10**-2, 2*10**-2, 3*10**-2, 3.3*10**-2],
+                        water = [0, 0.088,    0.18,       0.26,     0.35,     0.44      ])
+
+        expected_result = np.array([0.09324, 0.09324, 0.09324, 0.09324, 0.09324, 0.09324])
+        assert arrays_are_similar(WaterEC(sample_ECW_DR_L), expected_result)
+
+
+def test_sample_ECW_DR_S():
+        sample_ECW_DR_S = Soil( bulk_ec =  [0, 8*10**-4, 3*10**-3, 6.5*10**-3, 1.3*10**-2, 1.8*10**-2],
+                        water = [0, 0.072,       0.144,       0.22,       0.29,       0.36])
+
+        expected_result = np.array([0.063443, 0.063443, 0.063443, 0.063443, 0.063443, 0.063443])
+        assert arrays_are_similar(WaterEC(sample_ECW_DR_S), expected_result)
+
+
+def test_sample_ECW_DR_Sa():
+        sample_ECW_DR_Sa = Soil( bulk_ec =  [0, 8*10**-4, np.nan, 6.5*10**-3, 1.3*10**-2, 1.8*10**-2],
+                        water =  [0, 0.072,    0.144,  np.nan,     0.29,       0.36      ])
+
+        expected_result = np.array([0.066926, 0.066926, 0.066926, 0.066926, 0.066926, 0.066926])
+        assert arrays_are_similar(WaterEC(sample_ECW_DR_Sa), expected_result)
+
+
+def test_sample_ECW_Odarslov_top():
+        sample_ECW_Odarslov_top = Soil( bulk_ec = [0.02, 0.03, 0.04, 0.05, 0.06],
+                        bulk_perm =           [11.5, 14.8,   17,   20,   23],
+                        clay=5,
+                        bulk_density=1.48,
+                        instrument = 'TDR')
+
+        expected_result = np.array([0.283688, 0.283688, 0.283688, 0.283688, 0.283688])
+        assert arrays_are_similar(WaterEC(sample_ECW_Odarslov_top), expected_result)
+
+
+def test_sample_ECW_Hil_ex():
+        sample_ECW_Hil_ex = Soil( bulk_ec =        [0.025, 0.038, 0.065, 0.079, 0.1  ],
+                        bulk_perm = [11.5,  15,    19,    22 ,   26   ],
+                        clay=0,
+                        bulk_density=1.8,
+                        instrument = 'TDR')
+
+        expected_result = np.array([0.427517, 0.427517, 0.427517, 0.427517, 0.427517])
+        assert arrays_are_similar(WaterEC(sample_ECW_Hil_ex), expected_result)
+
+
+def test_sample_ECW1():
+        sample_ECW1 = Soil( salinity = [0.008, 0.017, 0.004, 0.026, 0.005, 0.003, 0.012, 0.021, 0.019, 0.024, 0.026, 0.044])
+
+        expected_result = np.array([0.09465033, 0.19791962, 0.04781566, 0.29905224, 0.05959418, 0.03598161,
+        0.14085731, 0.24309688, 0.22055698, 0.27673502, 0.29905224, 0.49653988])
+        assert arrays_are_similar(WaterEC(sample_ECW1), expected_result)
+
+
+def test_sample_ECW2():
+        sample_ECW2 = Soil( salinity = [0.008, 0.017, 0.004, 0.026, 0.005, 0.003, 0.012, 0.021, 0.019, 0.024, 0.026, 0.044],
+                        temperature = np.array([15,  10,  0,   40,   15, 15]) + 273)
+
+        expected_result = np.array([0.07392045, 0.13297065, 0.02165263, 0.39356058, 0.04654703, 0.02810654,
+        0.14085731, 0.24309688, 0.22055698, 0.27673502, 0.29905224, 0.49653988])
+        assert arrays_are_similar(WaterEC(sample_ECW2), expected_result)   
+
+
+################################################################################################################
+####################################### PREDICT WATER FROM BULK PERM ###########################################
+################################################################################################################
+
+
+def test_sample_WP0():
+        sample_WP0 = Soil( bulk_perm =        [10,   15, 20,   25,   7,  1,  12,  22,  5,  20,  30   ], 
+                                bulk_density=1.7, texture = 'Sand', solid_perm = 5, instrument = 'GPR')
+
+        expected_result = np.array([0.129, 0.21, 0.283, 0.35, 0.074, 0., 0.162, 0.31, 0.034, 0.283, 0.414])
+        assert arrays_are_similar(Water(sample_WP0), expected_result)  
+
+
+def test_sample_WP0b():
+      sample_WP0b = Soil(water = [    0.05, 0.11, 0.08, 0.11,   np.nan, np.nan, np.nan, 0.07, np.nan, np.nan], 
+                  bulk_perm=np.array([6,    11,   9,    np.nan, 1,      np.nan, 8,      8.5,  8.5,    8.5 ]), 
+                  solid_perm = 5)
+
+      expected_result = np.array([0.05, 0.11, 0.08, 0.11, np.nan, np.nan, np.nan, 0.07, np.nan, np.nan])
+      assert arrays_are_similar(Water(sample_WP0b), expected_result)  
+
+
+def test_sample_WP1():
+      sample_WP1 = Soil(water =[0.05, 0.11, 0.08, np.nan, np.nan, 0.07      ], 
+                  bulk_perm=   [6,    11,   9,    np.nan, 8,      8.5,    12], 
+                  bulk_density=1.7,
+                  instrument = 'TDR')
+
+      expected_result = np.array([0.05, 0.11, 0.08, np.nan, 0.071, 0.07, 0.117])  
+      assert arrays_are_similar(Water(sample_WP1), expected_result)  
+
+
+def test_sample_WP1b():
+      sample_WP1b = Soil(water =     [0.05, 0.11, 0.08, np.nan, np.nan, 0.07,   np.nan, 0.2,    0.02,   np.nan ], 
+                  bulk_perm=         [6,    11,   9,    np.nan, 8,      8.5,    14,     np.nan, np.nan, 1      ], 
+                  bulk_density=1.7,
+                  texture = 'Sand',
+                  solid_perm = 5,
+                  instrument = 'TDR')
+
+      expected_result = np.array([0.05, 0.11, 0.08, np.nan, 0.071, 0.07, 0.194, 0.2, 0.02, 0.])
+      assert arrays_are_similar(Water(sample_WP1b), expected_result)  
+
+
+def test_sample_WP1c():
+      sample_WP1c = Soil(water =    [0.20, 0.31, 0.36, 0.38, 0.05                        ], 
+                        bulk_perm=  [10,   15,   20,   25,   7,   1, 12, 22, 5, 20, 30   ], 
+                        bulk_density=1.7,
+                        texture = 'Sand',
+                        solid_perm = 5)
+
+      expected_result = np.array([0.2, 0.31, 0.36, 0.38, 0.05, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan])
+      assert arrays_are_similar(Water(sample_WP1c), expected_result)  
+
+
+def test_sample_WP3():
+      sample_WP3 = Soil(water =     [0.20, 0.30, 0.35                                             ], 
+                        bulk_perm = [10,   15,   20,   8.5, 8,    1,   12,   22,   5,    20,   30   ], 
+                        bulk_density=1.7,
+                        texture = 'Sand',
+                        solid_perm = 5,
+                        instrument = 'GPR')
+
+      expected_result = np.array([0.2, 0.3, 0.35, 0.173, 0.164, 0., 0.234, 0.392, 0.104, 0.362, 0.414])
+      assert arrays_are_similar(Water(sample_WP3), expected_result)  
+
+
+def test_sample_WP4():
+      sample_WP4 = Soil(water =            [0.20, 0.30, 0.35                                             ], 
+                        bulk_perm=         [10,   15,   20,  8.5,   8,   1,   12,   22,   5,    20,   30 ], 
+                        bulk_density=1.7,
+                        clay = 40,
+                        solid_perm = 5,
+                        instrument = 'TDR')
+
+      expected_result = np.array([0.2, 0.3, 0.35, 0.173, 0.164, 0., 0.234, 0.392, 0.104, 0.362, 0.459])
+      assert arrays_are_similar(Water(sample_WP4), expected_result)  
+
+
+def test_sample_WP5():
+      sample_WP5 = Soil(water =     [0.20, 0.30, 0.35                              ], 
+                        bulk_perm = [10,   15,   20,  8.5, 8, 1, 12, 22, 5, 20, 30 ], 
+                        bulk_density=1.7, alpha = 0.3, frequency_perm = [150e6])
+
+      expected_result = np.array([0.2, 0.3, 0.35, 0.173, 0.164, 0., 0.234, 0.392, 0.104, 0.362, 0.534])
+      assert arrays_are_similar(Water(sample_WP5), expected_result)  
+
+
+def test_sample_WP7b():
+      sample_WP7b = Soil(water =     [0.05, 0.11, 0.08, 0.11,   np.nan, np.nan, np.nan, 0.07, np.nan, np.nan], 
+                  bulk_perm =        [6,    11,   9,    np.nan, 1,      np.nan, 8,      8.5,  8.5,    8.5   ], 
+                  frequency_perm =   [50e6, 50e6, 50e6, 200e6,  200e6,  200e6,  50e6,   50e6, 50e6,   200e6 ],
+                  bulk_density=1.7,
+                  texture = 'Sand',
+                  solid_perm = 5)
+
+      expected_result = np.array([0.05, 0.11, 0.08, 0.11, np.nan, np.nan, np.nan, 0.07, np.nan, np.nan]) # no water ec
+      assert arrays_are_similar(Water(sample_WP7b), expected_result)  
+
+
+def test_sample_WP7c():
+      sample_WP7c = Soil(water =     [0.05,   0.11,   0.08,   0.11,   np.nan, np.nan, np.nan, 0.07,   np.nan, np.nan], 
+                  bulk_perm =        [6,      11,     9,      np.nan, 1,      np.nan, 8,      8.5,    8.5,    8.5   ],
+                  bulk_ec =          [np.nan, np.nan, np.nan, 0.002,  np.nan, np.nan, 0.003, np.nan, np.nan, np.nan],
+                  frequency_perm =   [50e6,   50e6,   50e6,   200e6,  200e6,  200e6,  50e6,   50e6,   50e6,   200e6 ],
+                  frequency_ec =     [50e2,   50e2,   50e2,   200e1,  200e3,  200e4,  50e3,   50e3,   50e3,   20    ],
+                  bulk_density=1.7, texture = 'Sand', solid_perm = 5, water_ec = 0.05)
+      
+      expected_result = np.array([0.05, 0.11, 0.08, 0.11, 0., np.nan, 0.111, 0.07, 0., 0.117])
+      assert arrays_are_similar(Water(sample_WP7c), expected_result)  
+
+
+def test_sample_WP8():
+      sample_WP8 = Soil( bulk_perm = [10,   15,    20,    25,    7,     1,    12,    20,    5,      20,    22 ], 
+            bulk_density=1.7,
+            texture = 'Sand',
+            solid_perm = 5,
+            frequency_perm =         [1e6,  2e6,   2.5e6, 3e6,   3.5e6, 10e6, 25e6,  25e6,  np.nan, 100e6, 200e6])
+
+      expected_result = np.array([np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan , np.nan , np.nan , np.nan])
+      assert arrays_are_similar(Water(sample_WP8), expected_result)  
+
+
+def test_sample_WP8b():
+        sample_WP8b = Soil( bulk_perm =    [10,   15,    20,    25,    7,     1,    12,    20,    5,      20,    22 ], 
+                        frequency_perm = [1e6,  2e6,   2.5e6, 3e6,   3.5e6, 10e6, 25e6,  25e6,  np.nan, 100e6, 200e6],
+                        bulk_density=1.7, texture = 'Sand', solid_perm = 5, water_ec = 0.1)
+
+        expected_result = np.array([0.019, 0.034, 0.081, 0.169, 0.018, 0.018, 0.105, 0.437, np.nan, 0.65, 0.65])
+        assert arrays_are_similar(Water(sample_WP8b), expected_result)  
+
+
+def test_sample_WP8c():
+      sample_WP8c = Soil( bulk_perm =    [10,    15,    20,    25,    7,     1,    12,    np.nan, 5,      20,    22 ], 
+                        frequency_perm = [1e6,   2e6,   2.5e6, 3e6,   3.5e6, 10e6, 25e6,  25e6,   np.nan, 100e6, 200e6],
+                        bulk_density=1.7, texture = 'Clay', solid_perm = 5, water_ec = 0.1)
+
+      expected_result = np.array([0., 0.001, 0.003, 0.011, 0., 0., 0.005, np.nan, np.nan, 0.272, 0.65])
+      assert arrays_are_similar(Water(sample_WP8c), expected_result) 
+
+
+def test_sample_WP9():
+      sample_WP9 = Soil( bulk_perm = [10,    15,    20,    25,    7,     1,    12,    20,    5,    20,    22 ], 
+            bulk_density=1.7, texture = 'Sand', solid_perm = 5, water_ec = 0.1, frequency_perm = 20e6)
+
+      expected_result = np.array([0.044, 0.196, 0.376, 0.623, 0.019, 0.018, 0.085, 0.376, 0.018, 0.376, 0.457])
+      assert arrays_are_similar(Water(sample_WP9), expected_result) 
+
+
+def test_sample_WP9b():
+      sample_WP9b = Soil( bulk_perm = [10,    15,    20,    25,    7,     1,    12,    20,    5,    20,    22 ], 
+            bulk_density=1.7, texture = 'Sand', solid_perm = 5, water_ec = 0.1, frequency_perm = 1e6)
+
+      expected_result = np.array([0.019, 0.025, 0.039, 0.073, 0.018, 0.018, 0.019, 0.039, 0.018, 0.039, 0.055])
+      assert arrays_are_similar(Water(sample_WP9b), expected_result) 
+
+
+def test_sample_WPv():
+      sample_WPv = Soil( bulk_perm = [3,    8,       15,    20,    22,    7,    12,    18     ], 
+                        bulk_density=1.4, texture = 'Sand', solid_perm = 5, CEC = 1.6, frequency_perm = 50e6)
+
+      expected_result = np.array([0.005, 0.148, 0.282, 0.359, 0.386, 0.124, 0.23, 0.329])
+      assert arrays_are_similar(Water(sample_WPv), expected_result) 
+
+################################################################################################################
+####################################### PREDICT WATER FROM BULK EC #############################################
+################################################################################################################
+
+
+def test_sample_WEC1():
+      sample_WEC1 = Soil( bulk_ec = np.array([10,    15,    20,    25,    7,     1,    12,    20,    5,    20,    22 ])*1e-3, 
+                bulk_density=1.7,
+                texture = 'Sand',
+                water_ec = 0.1)
+
+      expected_result = np.array([0.264, 0.335, 0.394, 0.447, 0.213, 0.065, 0.293, 0.394, 0.173, 0.394, 0.416])
+      assert arrays_are_similar(Water(sample_WEC1), expected_result) 
+
+
+def test_sample_WEC1b():
+      sample_WEC1b = Soil( bulk_ec=np.array(  [10,   15,   20,   25,     7,    1,     12,    22,    5,    20,    30   ])*1e-3, 
+                bulk_density=1.7, texture = 'Sand',
+                water_ec = np.array( [ 0.05, 0.06, 0.07, np.nan, 0.01, 0.1]))
+
+      expected_result = np.array([0.35, 0.413, 0.459, np.nan, 0.442, 0.065, np.nan, np.nan, np.nan, np.nan, np.nan])
+      assert arrays_are_similar(Water(sample_WEC1b), expected_result) 
+
+
+def test_sample_WEC2():
+      sample_WEC2 = Soil(water = np.array([0.20, 0.31, 0.36, 0.38, 0.05                                   ]), 
+                        bulk_ec= np.array([10,   15,   20,   25,   7,    1,   12,   22,   5,   20,   30   ])*1e-3, 
+                        bulk_density=1.7, texture = 'Sand')
+
+      expected_result = np.array([0.2, 0.31, 0.36, 0.38, 0.05, 0., 0.186, 0.396, 0., 0.357, 0.539])
+      assert arrays_are_similar(Water(sample_WEC2), expected_result) 
+
+
+def test_sample_WEC3():
+      sample_WEC3 = Soil(water = np.array([0.20, 0.31, 0.36, 0.38, 0.05                                 ]), 
+                        bulk_ec=np.array([10,   15,   20,   25,   7,    1,   12,   22,   5,   20, 30   ])*1e-3, 
+                        bulk_density=1.7, water_ec=0.5, texture = 'Sand')
+
+      expected_result = np.array([0.2, 0.31, 0.36, 0.38, 0.05, 0., 0.214, 0.373, 0., 0.349, 0.446])
+      assert arrays_are_similar(Water(sample_WEC3), expected_result) 
+
+
+def test_sample_WEC4():
+      sample_WEC4 = Soil(water =    [0.05, 0.11, 0.08, 0.11,   np.nan, np.nan, np.nan, 0.07], 
+                  bulk_ec=np.array([6,    11,   9,    np.nan, 1,      np.nan, 8,      8.5 ])*1e-3, 
+                  water_ec = 0.05)
+
+      expected_result = np.array([0.05, 0.11, 0.08, 0.11, np.nan, np.nan, 0.067, 0.07])
+      assert arrays_are_similar(Water(sample_WEC4), expected_result) 
+
+
+def test_sample_WEC4b():
+      sample_WEC4b = Soil(water = np.array([     0.05, 0.11, 0.08, 0.11,   np.nan, np.nan, np.nan, 0.07, np.nan, np.nan]), 
+                              bulk_ec=np.array([6,    11,   9,    np.nan, 1,      np.nan, 8,      8.5,  8.5,    8.5 ])*1e-3, 
+                              bulk_density=1.7, texture = 'Sand', water_ec = 0.05)
+
+      expected_result = np.array([0.05, 0.11, 0.08, 0.11, 0.079, np.nan, 0.067, 0.07, 0.073, 0.073])
+      assert arrays_are_similar(Water(sample_WEC4b), expected_result) 
+
+
+def test_sample_WEC5():
+      sample_WEC5 = Soil( bulk_ec=np.array([          10,   15,   20,   25,   7,    1,    12,    20,  5,    20,    22 ])*1e-3, 
+                              bulk_density=1.7, texture = 'Sand', water_ec = 0.01, frequency_ec = 500)
+
+      expected_result = np.array([0.566, 0.65, 0.65, 0.65, 0.421, 0.15, 0.639, 0.65, 0.316, 0.65, 0.65 ])
+      assert arrays_are_similar(Water(sample_WEC5), expected_result) 
+
+
+def test_sample_WEC5b():
+      sample_WEC5b = Soil( bulk_ec=np.array([           10,    0,    np.nan, np.nan,   7,     1,    12,    20,    5,    20,    22 ])*1e-3, 
+                              bulk_density=1.7, texture = 'Sand', solid_perm = 5, water_ec = 0.1, frequency_ec = np.array([2e6]))
+
+      expected_result = np.array([0.216, 0.018, np.nan, np.nan, 0.168, 0.029, 0.242, 0.34, 0.13, 0.34, 0.361])
+      assert arrays_are_similar(Water(sample_WEC5b), expected_result) 
+
+
+def test_sample_WEC6():
+      sample_WEC6 = Soil(water = np.array([0.20, 0.30, 0.35]), 
+            bulk_ec=np.array( [10,   15,   20,   8.5,  8,    1,    12,   22,   5,    20,   30   ])*1e-3, 
+            bulk_density=1.7, clay = 40, water_ec=0.4, frequency_ec=5e3)
+
+      expected_result = np.array([0.2, 0.3, 0.35, 0.162, 0.148, 0.005, 0.241, 0.374, 0.033, 0.354, 0.131])
+      assert arrays_are_similar(Water(sample_WEC6), expected_result) 
+
+
+def test_sample_WEC6b():
+      sample_WEC6b = Soil( bulk_ec=np.array([   10,   15,    20,    25,    7,     1,    12,    20,    5,    20,    22 ])*1e-3, 
+                                    water =         [0.1,  0.12], bulk_density=1.7, texture = 'Sand', water_ec = 0.1,
+                        frequency_ec=np.array([1,    2,     2.5,   3,     3.5,   10,   25,    25,    50,   100,   200]))
+
+      print('sample_WEC6b.Lw', sample_WEC6b.Lw)
+      expected_result = np.array([0.1, 0.12, 0.394, 0.447, 0.213, 0.063, 0.287, 0.388, 0.168, 0.386, 0.406])
+      assert arrays_are_similar(Water(sample_WEC6b), expected_result)    
+
+test_sample_WEC6b()
+def test_sample_WEC6c():
+      sample_WEC6c = Soil( bulk_ec=np.array([           10,    15,    20,    25,    7,     1,    12,    20,    5,    20,    22 ])*1e-3, 
+            frequency_ec = np.array([1,    2,      2.5,   3,     3.5,   10,   25,    25,    50,   100,   200]),
+            bulk_density=1.7, texture = 'Clay', water_ec = 0.1)
+
+      expected_result = np.array([0.023, 0.034, 0.045, 0.056, 0.016, 0.002, 0.026, 0.044, 0.011, 0.043, 0.047])
+      assert arrays_are_similar(Water(sample_WEC6c), expected_result)  
+
+
+def test_sample_WEC7():
+      sample_WEC7 = Soil(water =           [0.05, 0.11, 0.08, 0.11,   np.nan, np.nan, np.nan, 0.07, np.nan, np.nan], 
+                        bulk_ec =np.array([6,    11,   9,    np.nan, 1,      np.nan, 8,      8.5,  8.5,    8.5 ])*1e-3, 
+                        bulk_density=1.7, texture = 'Sand', solid_perm = 5, water_ec = 0.05,
+                        frequency_ec =    [50e1, 50e2, 50e2, 200e2,  200e2,  200e2,  50e2,   50e1, 50e1,   200e2] )
+      
+      expected_result = np.array([0.05, 0.11, 0.08, 0.11, 0.071, np.nan, 0.028, 0.07, 0.028, 0.028])
+      assert arrays_are_similar(Water(sample_WEC7), expected_result)  
+
+
+def test_sample_WEC7b():
+      sample_WEC7b = Soil(water = np.array(    [0.05, 0.11, 0.08, 0.11,   np.nan, np.nan, np.nan, 0.07, np.nan, np.nan]), 
+                              bulk_ec=np.array([6,    11,   9,    np.nan, 1,      np.nan, 8,      8.5,  8.5,    8.5 ])*1e-3, 
+                              bulk_density=1.7, texture = 'Sand', solid_perm = 5, water_ec = 0.05,
+                        frequency_ec =         [50,   5,   50,    200e2,  200e2,  200e2,  50e2,   50e1, 50,     20])
+
+      expected_result = np.array([0.05, 0.11, 0.08, 0.11, 0.071, np.nan, 0.063, 0.07, 0.072, 0.073])
+      assert arrays_are_similar(Water(sample_WEC7b), expected_result)  
+
+
+def test_sample_WECv():
+      sample_WECv = Soil( bulk_ec=np.array([3,    8,    15,   20,   22,    7,     12,    18,   10,   2     ])*1e-3, 
+                  frequency_ec = np.array( [50,   500,  5000, 2000, 50000, 55000, 25000, 100,  10,   50]),
+                  bulk_density=1.4, texture = 'Sand', CEC = 1.6, water_ec = 0.1)
+
+      expected_result = np.array([0.111, 0.209, 0.306, 0.366, 0.378, 0.18, 0.262, 0.348, 0.245, 0.083])
+      assert arrays_are_similar(Water(sample_WECv), expected_result) 
+
 
 
