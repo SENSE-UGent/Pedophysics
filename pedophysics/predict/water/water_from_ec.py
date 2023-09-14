@@ -128,6 +128,7 @@ def fitting(soil, bulk_ec_dc):
 
         # Defining minimization function to obtain water
         def objective_Lw(Lw):
+            print('Lw', Lw)
             wund_eval = [WunderlichEC(soil.df.water[x], bulk_ec_init, water_init, soil.df.water_ec[x], Lw)[0] if valids[x] else np.nan for x in range(soil.n_states)]    
             Lw_RMSE = np.sqrt(np.nanmean((np.array(wund_eval) - bulk_ec_dc)**2))
             return Lw_RMSE

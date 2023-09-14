@@ -817,7 +817,7 @@ def test_sample_WEC6b():
       expected_result = np.array([0.1, 0.12, 0.394, 0.447, 0.213, 0.063, 0.287, 0.388, 0.168, 0.386, 0.406])
       assert arrays_are_similar(Water(sample_WEC6b), expected_result)    
 
-test_sample_WEC6b()
+
 def test_sample_WEC6c():
       sample_WEC6c = Soil( bulk_ec=np.array([           10,    15,    20,    25,    7,     1,    12,    20,    5,    20,    22 ])*1e-3, 
             frequency_ec = np.array([1,    2,      2.5,   3,     3.5,   10,   25,    25,    50,   100,   200]),
