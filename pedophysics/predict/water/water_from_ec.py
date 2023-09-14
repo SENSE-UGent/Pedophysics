@@ -7,6 +7,8 @@ from pedophysics.predict.water_ec import WaterEC
 from pedophysics.predict.frequency_ec import *
 from pedophysics.predict.particle_density import *
 from pedophysics.predict.solid_ec import *
+from pedophysics.predict.bulk_ec import *
+
 #from pedophysics.predict.cation_exchange_capacity import *
 
 from pedophysics.pedophysical_models.bulk_ec import LongmireSmithEC, Fu, WunderlichEC
@@ -30,34 +32,6 @@ def WaterFromEC(soil):
 
     print('bulk_ec_dc', bulk_ec_dc)
     dc_freq(soil, bulk_ec_dc)
-
-
-######################################    non DC frequency   #####################################
-
-# This is a special function to be used in non_dc_freq function
-def non_dc_to_dc(soil):
-    '''
-    '''
-    # Defining minimization function to obtain DC bulk EC 
-    def objective_func_ec_dc(bulk_ec_dc, frequency_ec, bulk_ec):
-        return (LongmireSmithEC(bulk_ec_dc, frequency_ec) - bulk_ec)**2
-    ec_dc = []
-
-    for i in range(soil.n_states):
-        if soil.df.frequency_ec[i] <= 5 or np.isnan(soil.df.bulk_ec[i]):
-            ec_dc.append(soil.df.bulk_ec[i])
-
-        elif soil.df.frequency_ec[i] > 5 and not np.isnan(soil.df.bulk_ec[i]):
-            res = minimize(objective_func_ec_dc, 0.05, args=(soil.df.frequency_ec[i], soil.df.bulk_ec[i]), bounds=[(0, 1)])
-            ec_dc.append(np.nan if np.isnan(res.fun) else round(res.x[0], soil.roundn+2) )
-
-    soil.info['bulk_ec'] = [str(soil.info.bulk_ec[x]) + "--> EM frequency shift done using LongmireSmithEC function in predict.water.water_from_ec.non_dc_freq_to_dc_freq" if 
-                    soil.df.frequency_ec[x] > 5 and not np.isnan(soil.df.bulk_ec[x]) or 
-                    soil.info.bulk_ec[x] == str(soil.info.bulk_ec[x]) + "--> EM frequency shift done using LongmireSmithEC function in predict.water.water_from_ec.non_dc_freq_to_dc_freq" 
-                    else soil.info.bulk_ec[x] for x in range(soil.n_states)]
-            
-    ec_dc = np.array(ec_dc)
-    return ec_dc
 
 
 ######################################    DC frequency   #####################################

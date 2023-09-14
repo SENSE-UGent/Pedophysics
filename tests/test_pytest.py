@@ -49,7 +49,7 @@ def test_sample_C0c():
                         silt = 60, 
                         CEC = 20)
 
-        expected_result = np.array([0.00866,  0.008765, 0.008815, 0.008867, 0.008924, 0.008988, np.nan, 0.008388, 0.009239, 0.009355, 0.009528, 0.009774])
+        expected_result = np.array([0.00866, 0.008765, 0.008815, 0.008867, 0.008924, 0.008988, np.nan, 0.008388, 0.009239, 0.009355, 0.009528, 0.009774])
         assert arrays_are_similar(BulkEC(sample_C0c), expected_result)
 
 
