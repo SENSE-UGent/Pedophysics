@@ -6,27 +6,6 @@
 
     :REQUIRES: numpy, scipy
 """
-
-# Import
-import numpy as np
-e = 2.718280828
-
-def NelsonSomers(orgm):
-    """
-        Nelson and Somers, 1996
-
-        Parameters
-        ----------
-        orgm: float
-            Soil volumetric organic matter [%m**3/m**3]
-            
-        Returns
-        -------
-        Organic carbon: float  
-    """
-    return 0.58*orgm
-
-
 def Schjonnen(clay, org, densorg = 1.4, denspart = 2.65, densclay = 2.86):
     """
         Schjonnen et al. 2017
