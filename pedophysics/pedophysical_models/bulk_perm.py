@@ -6,7 +6,7 @@ def WunderlichP(water, perm_init, wat_init, wp, Lw):
 
     This is a effective medium model that uses a differential 
     approach to compute the dielectric permittivity based on the initial 
-    conditions and the water content [1]. 
+    conditions and the water content [1]. Reported RMSE = 0.009
 
     Parameters
     ----------
@@ -66,7 +66,7 @@ def LR_MV(water, bd, pdn, ap, sp, wp, CEC):
     This function computes the bulk real relative dielectric permittivity of a soil 
     mixture using the volumetric mixing model of Lichtenecker and Rother [1], and Mendoza Veirana [2] alpha correction model (LR_MV). 
     The model incorporates the water content, bulk and particle densities, and 
-    permittivities of air, solid, and water, as well as the soil cation exchange capacity.
+    permittivities of air, solid, and water, as well as the soil cation exchange capacity. Reported R2 = 0.94
 
     Parameters
     ----------
@@ -156,6 +156,9 @@ def LR(water, bd, pdn, ap, sp, wp, alpha):
     15.006
 
     """
+    if isinstance(alpha, np.floating):
+        alpha = alpha[0]
+    
     por = 1 - bd/pdn    
     bulk_perm = ( water*wp**alpha + (1-por)*sp**alpha + (por-water)*ap**(alpha))**(1/alpha)
 

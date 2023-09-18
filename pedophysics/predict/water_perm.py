@@ -18,13 +18,7 @@ def WaterPerm(soil):
                                     else soil.info.water_perm[x] for x in range(soil.n_states)]
                 
         soil.df['water_perm'] = [Olhoeft(soil.df.temperature.values[x], soil.df.salinity[x]) if np.isnan(soil.df.water_perm[x]) & ~np.isnan(soil.df.salinity[x]) & (soil.df.frequency_perm[x] < 100e6) else soil.df.water_perm[x] for x in range(soil.n_states)]
-        
-        #soil.info['water_perm'] = ["Calculated using Stogryn function" if (np.isnan(soil.df.water_perm[x]) & ~np.isnan(soil.df.salinity[x]) & (soil.df.frequency_perm[x] >= 100e6))
-        #                            or soil.info.water_perm[x] == "Calculated using Stogryn function"
-        #                            else soil.info.water_perm[x] for x in range(soil.n_states)]
-        
-        #soil.df['water_perm'] = [Stogryn(soil.df.temperature.values[x], soil.df.salinity[x], soil.df.frequency_perm.values[x]) if (np.isnan(soil.df.water_perm[x]) & ~np.isnan(soil.df.salinity[x]) & (soil.df.frequency_perm[x] >= 100e6)) else soil.df.water_perm[x] for x in range(soil.n_states)]
-         
+                
         soil.info['water_perm'] = ["Set as 80 by default" if np.isnan(soil.df.water_perm[x])
                                     or soil.info.water_perm[x] == "Set as 80 by default"
                                     else soil.info.water_perm[x] for x in range(soil.n_states)]
