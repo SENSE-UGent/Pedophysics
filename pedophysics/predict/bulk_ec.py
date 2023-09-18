@@ -133,10 +133,6 @@ def non_fitting(soil, bulk_ec_dc):
     WaterEC(soil)
     SolidEC(soil)
 
-    # Calculating bulk EC DC using Fu function and save the information
-    #bulk_ec_dc = [Fu(soil.df.water[x], soil.df.clay[x], soil.df.bulk_density[x], soil.df.particle_density[x], soil.df.water_ec[x], soil.df.solid_ec[x], soil.df.dry_ec[x], soil.df.sat_ec[x]) 
-    #              if np.isnan(bulk_ec_dc[x]) else bulk_ec_dc[x] for x in range(soil.n_states)]   
-
     soil.info['bulk_ec'] = [str(soil.info.bulk_ec[x]) + "--> Calculated using Fu function (reported R2=0.98) in predict.bulk_ec.non_fitting" if np.isnan(bulk_ec_dc[x]) 
                             or soil.info.bulk_ec[x] == str(soil.info.bulk_ec[x]) + "--> Calculated using Fu function (reported R2=0.98) in predict.bulk_ec.non_fitting"
                             else soil.info.bulk_ec[x] for x in range(soil.n_states)]
