@@ -59,7 +59,6 @@ def changing_freq(soil):
             bulk_ec.append(np.nan)
 
 
-    print('bulk_ec', bulk_ec)
     # Saving calculated bulk_ec and its info
     soil.info['bulk_ec'] = [str(soil.info.bulk_ec[x]) + "--> Calculated using LongmireSmithP function in predict.water.water_from_perm.changing_freq" if np.isnan(soil.df.bulk_ec[x])
                             or soil.info.bulk_ec[x] == str(soil.info.bulk_ec[x]) + "--> Calculated using LongmireSmithP function in predict.water.water_from_perm.changing_freq"
@@ -74,16 +73,12 @@ def changing_freq(soil):
         
     soil.df['frequency_ec'] = [0 if not np.isnan(bulk_ec[x]) else soil.df.frequency_ec[x] for x in range(soil.n_states)]
 
-    print('soil.df.bulk_ec', soil.df.bulk_ec)
-    print('soil.df.frequency_ec', soil.df.frequency_ec)
-
 
 ##################################### Fixed frequnecy ##########################################
 
 def fixed_freq(soil):
     '''
     '''            
-    print('fixed_freq')
     # Condition for fitting approach
     if sum(not np.isnan(soil.water[x]) and not np.isnan(soil.bulk_perm[x]) for x in range(soil.n_states)) >= 3:
         fitting(soil)
@@ -126,6 +121,8 @@ def fitting(soil):
 
     # If Lw is known
     if ~np.isnan(soil.Lw):
+        if not isinstance(soil.Lw, np.floating):
+            soil.Lw = soil.Lw[0]
         Wat_wund = []
 
         # Defining minimization function to obtain water
@@ -143,7 +140,9 @@ def fitting(soil):
                 Wat_wund.append(np.nan)
 
         # Calculating the R2 score of the model fitting
-        R2 = round(R2_score(soil.df.water, Wat_wund), soil.roundn)
+        print("soil.df.water.values", soil.df.water.values)
+        print('Wat_wund', Wat_wund)
+        R2 = round(R2_score(soil.df.water.values, Wat_wund), soil.roundn)
 
         # Saving calculated bulk_perm and its info with R2 and valid bulk_perm range
         soil.info['water'] = [str(soil.info.water[x]) + "--> Calculated by fitting (R2="+str(R2)+") WunderlichP function in predict.water.water_from_perm.fitting, for soil.bulk_perm values between: "+str(bulk_perm_range) if min(bulk_perm_range) <= soil.df.bulk_perm[x] <= max(bulk_perm_range) and ~np.isnan(soil.df.bulk_perm[x]) and np.isnan(soil.df.water[x])
