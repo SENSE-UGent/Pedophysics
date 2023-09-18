@@ -84,7 +84,8 @@ def fitting(soil):
 
     # If Lw is known
     if ~np.isnan(soil.Lw):
-
+        if not isinstance(soil.Lw, np.floating):
+            soil.Lw = soil.Lw[0]
         # Calculating the R2 score of the model fitting
         R2 = round(R2_score(soil.df.bulk_perm, WunderlichP(soil.df.water, bulk_perm_init, water_init, soil.df.water_perm, soil.Lw)), soil.roundn)
 
