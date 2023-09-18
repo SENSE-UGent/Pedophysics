@@ -30,7 +30,6 @@ def WaterFromEC(soil):
     else:
         bulk_ec_dc = soil.df.bulk_ec
 
-    print('bulk_ec_dc', bulk_ec_dc)
     dc_freq(soil, bulk_ec_dc)
 
 
@@ -85,8 +84,6 @@ def fitting(soil, bulk_ec_dc):
     '''
     WaterEC(soil) 
     print('water EC fitting')
-    print('bulk_ec_dc', bulk_ec_dc)
-    print('soil.df.frequency_ec', soil.df.frequency_ec)
     # Defining model parameters
     valids = ~np.isnan(soil.df.water) & ~np.isnan(bulk_ec_dc) # States where calibration data are
     water_init = np.nanmin(soil.df.water[valids])
@@ -102,7 +99,6 @@ def fitting(soil, bulk_ec_dc):
 
         # Defining minimization function to obtain water
         def objective_Lw(Lw):
-            print('Lw', Lw)
             wund_eval = [WunderlichEC(soil.df.water[x], bulk_ec_init, water_init, soil.df.water_ec[x], Lw)[0] if valids[x] else np.nan for x in range(soil.n_states)]    
             Lw_RMSE = np.sqrt(np.nanmean((np.array(wund_eval) - bulk_ec_dc)**2))
             return Lw_RMSE
@@ -113,6 +109,8 @@ def fitting(soil, bulk_ec_dc):
         
     # If Lw is known
     if ~np.isnan(soil.Lw):
+        if not isinstance(soil.Lw, np.floating):
+            soil.Lw = soil.Lw[0]
         Wat_wund = []
 
         # Defining minimization function to obtain water
