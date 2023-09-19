@@ -3,10 +3,60 @@ from pedophysics.pedotransfer_functions.particle_density import Schjonnen
 from .texture import Texture
 
 def ParticleDensity(soil):
-    '''
-    
-    '''
-    if (np.isnan(soil.df.particle_density)).any():  # Go over if any value is missing 
+    """
+    Return or compute missing values of the soil.particle_density attribute.
+
+    If any value of the particle_density attribute is missing (NaN), it will first
+    be computed using the Schjonnen function based on the clay and organic matter values.
+    If it remains missing, it's set to a default value of 2.65. 
+
+    Parameters
+    ----------
+    soil : object
+        A custom soil object that contains:
+
+        - particle_density : array-like
+            Soil particle density [kg/m**3]
+        - clay : array-like
+            Soil clay content [g/g]*100
+        - orgm : array-like
+            Soil organic matter [g/g]*100
+        - df : DataFrame
+            Data Frame containing all the quantitative information of soil array-like attributes for each state
+        - info : DataFrame
+            Data Frame containing the qualitative information about all array-like soil attributes for each state
+        - n_states : int
+            Number of states or records in the dataframe.
+
+    Returns
+    -------
+    np.ndarray
+        An array of updated soil particle density values
+
+    Notes
+    -----
+    This function modifies the soil object in-place, updating the `df` dataframe and `info`
+    dataframe if necessary.
+
+    See Also
+    --------
+    Texture : Function to calculate missing clay, silt or sand attributes based on soil.texture
+    Schjonnen : Function to calculate particle_density based on soil.clay and soil.orgm
+
+    Example
+    -------
+    >>> sample = Soil()
+    >>> sample.df.particle_density
+    0   NaN
+    Name: particle_density, dtype: float64
+    >>> ParticleDensity(sample)
+    >>> sample.df.particle_density
+    0    2.65
+    Name: particle_density, dtype: float64
+    """
+
+    # Check if any value of particle_density is missing
+    if (np.isnan(soil.df.particle_density)).any(): 
         Texture(soil)
 
         soil.info['particle_density'] = ["Calculated using Schjonnen function (RMSE = 0.011 g/cm3)" if np.isnan(soil.df.particle_density[x]) 

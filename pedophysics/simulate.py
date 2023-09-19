@@ -2,6 +2,90 @@ import numpy as np
 import pandas as pd
 
 class Soil(object):
+    """
+    A class to represent soil characteristics.
+
+    Attributes
+    ----------
+    temperature : array-like
+        Soil bulk temperature [K]
+    water : array-like
+        Soil volumetric water content [m**3/m**3]
+    salinity : array-like
+        Soil salinity (NaCl) of the bulk pore fluid [mol/L]
+    sand : array-like
+        Soil sand content [g/g]*100
+    silt : array-like
+        Soil silt content [g/g]*100
+    clay : array-like
+        Soil clay content [g/g]*100
+    bulk_density : array-like 
+        Soil bulk density [kg/m**3]
+    particle_density : array-like
+        Soil particle density [kg/m**3]
+    CEC : array-like
+        Soil cation exchange capacity [meq/100g]
+    orgm : array-like
+        Soil organic matter [g/g]*100
+    bulk_perm : array-like
+        Soil bulk real relative dielectric permittivity [-]
+    bulk_perm_inf : array-like
+        Soil bulk real relative permittivity at infinite frequency [-]
+    water_perm : array-like
+        Soil water phase real dielectric permittivity [-]
+    solid_perm : array-like
+        Soil solid real relative dielectric permittivity phase [-]
+    air_perm : array-like
+        Soil air real relative dielectric permittivity phase [-]
+    offset_perm : array-like
+        Soil bulk real relative dielectric permittivity when soil bulk real electrical conductivity is zero [-]
+    bulk_ec : array-like
+        Soil bulk real electrical conductivity [S/m]
+    water_ec : array-like
+        Soil water real electrical conductivity [S/m]
+    s_ec : array-like
+        Soil bulk real surface electrical conductivity [S/m]
+    solid_ec : array-like
+        Soil solid real electrical conductivity [S/m]
+    dry_ec : array-like
+        Soil bulk real electrical conductivity at zero water content [S/m]
+    sat_ec : array-like 
+        Soil bulk real electrical conductivity at saturation water content [S/m]
+    frequency_perm : array-like
+        Frequency of dielectric permittivity measurement [Hz]
+    frequency_ec : array-like
+        Frequency of electric conductivity measurement [Hz]
+    L : single-value
+        Soil scalar depolarization factor of solid particles (effective medium theory) [-]
+    Lw : single-value 
+        Soil scalar depolarization factor of water aggregates (effective medium theory) [-]
+    m : single-value
+        Soil cementation factor as defined in Archie law [-]
+    n : single-value
+        Soil saturation factor as defined in Archie second law [-]
+    alpha : single-value
+        Soil alpha exponent as defined in volumetric mixing theory [-]
+    texture : str
+        Soil texture according to USDA convention: "Sand", "Loamy sand", "Sandy loam", "Loam", "Silt loam", "Silt", "Sandy clay loam", "Clay loam", "Silty clay loam", "Sandy clay", "Clay", "Silty clay"
+    instrument : str
+        Instrument utilized: 'HydraProbe', 'TDR', 'GPR', 'Miller 400D', 'Dualem'
+    info : DataFrame
+        Data Frame containing the qualitative information of all soil array-like attributes for each state
+    df : DataFrame
+        Data Frame containing the quantitative information of all soil array-like attributes for each state
+    roundn : int
+        N digits after the decimal point
+    range_ratio : single-value
+        Factor for extending extrapolation domain during fitting modelling
+    n_states : int
+        Number of soil states
+
+    Notes
+    -----
+    Attributes provided by the user that do not match the expected types or values 
+    will raise a ValueError.
+    """
+
     def __init__(self, **kwargs):
         # Define acceptable types for each argument
 
@@ -35,12 +119,10 @@ class Soil(object):
                 'm': [float, int],
                 'n': [float, int],
                 'alpha': [float, int],
-                'E': [float, int],
-                'F': [float, int],
-                'range_ratio': [float, int],
-                'n_states': [float, int],
                 'texture': [str],
                 'instrument': [str],
+                'range_ratio': [float, int],
+                'n_states': [float, int],
                 'roundn': [int],
                 }
 
@@ -97,7 +179,7 @@ class Soil(object):
             if ~np.isnan(attr[0]) and (np.isnan(attr[1:(n_states)])).all():
                 setattr(self, attribute, np.append(attr[0], [attr[0]]*(n_states - 1)))     
 
-        ### Defining Soil.df and Soil.info ##### 
+        ### Defining special attributes ### 
         self.df = pd.DataFrame({attr: getattr(self, attr) for attr in state_attribute})
 
         # defining soil.info
@@ -106,11 +188,36 @@ class Soil(object):
         
     # Simplify the getter methods using __getattr__
     def __getattr__(self, name):
+        """
+        Custom attribute access mechanism.
+
+        Parameters
+        ----------
+        name : str
+            Name of the attribute to be accessed.
+
+        Returns
+        -------
+        np.ndarray
+            The value of the attribute.
+
+        Raises
+        ------
+        AttributeError
+            If the attribute does not exist.
+        """
         if name in self.__dict__:
             return self.__dict__[name]
         else:
             raise AttributeError(f"No such attribute: {name}")        
         
     def __str__(self):                                                   
-        """ Returns a string representation of self """
+        """
+        Return a string representation of the class.
+
+        Returns
+        -------
+        str
+            String representation of the class as Soil.df
+        """
         return str(self.df)

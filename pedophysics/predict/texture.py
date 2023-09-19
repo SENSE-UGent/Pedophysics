@@ -2,9 +2,56 @@ import numpy as np
 import warnings
 
 def Texture(soil):
-    '''
-    
-    '''
+    """
+    Determine the texture fractions (soil.sand, soil.silt, soilclay attributes).
+
+    If any value of the sand, silt, or clay attribute is missing, this function will:
+    1. Warn if the sum of texture fractions does not equate to 100%.
+    2. Calculate missing texture fraction if only two out of three are given.
+    3. Assign default texture fractions based on the `texture` attribute of the soil object.
+
+    Parameters
+    ----------
+    soil : object
+        A custom soil object that contains:
+
+        - clay : array-like
+            Soil clay content [g/g]*100
+        - sand : array-like
+            Soil sand content [g/g]*100
+        - silt : array-like
+            Soil silt content [g/g]*100
+        - texture : str
+            Soil texture according to USDA convention: "Sand", "Loamy sand", "Sandy loam", "Loam", "Silt loam", "Silt", "Sandy clay loam", "Clay loam", "Silty clay loam", "Sandy clay", "Clay", "Silty clay"
+        - df : DataFrame
+            Data Frame containing all the quantitative information of soil array-like attributes for each state
+        - info : DataFrame
+            Data Frame containing the qualitative information about all array-like soil attributes for each state
+        - n_states : int
+            Number of states or records in the dataframe.
+
+    Notes
+    -----
+    This function modifies the soil object in-place, updating the `df` and `info` dataframes.
+
+    See Also
+    --------
+    warnings.warn : Issue a warning, or maybe ignore it or raise an exception.
+
+    Example
+    -------
+    >>> sample = Soil(clay = 20,
+                    silt = 40)
+    >>> sample.df.sand
+    0   NaN
+    Name: sand, dtype: float64
+    >>> Texture(sample)
+    >>> sample.df.sand
+    0    40
+    Name: sand , dtype: float64
+    """
+
+    # Check if any value of sand, silt, or clay is missing
     if (np.isnan(soil.df.sand)).any() or (np.isnan(soil.df.silt)).any() or (np.isnan(soil.df.clay)).any() :  # Go over if any value is missing 
         
     # Warn texture fractions that does not sum 100
