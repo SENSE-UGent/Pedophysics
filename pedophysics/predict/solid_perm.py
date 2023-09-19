@@ -2,7 +2,7 @@ import numpy as np
 
 def SolidPerm(soil):
     """
-    Return and set missing values of the soil.solid_perm attribute.
+    Return and set missing values of the soil.df.solid_perm attribute.
 
     If any value of the solid_perm attribute is missing (NaN), 
     it will be set to a default value of 4. Corresponding information 

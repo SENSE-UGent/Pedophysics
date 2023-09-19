@@ -3,7 +3,7 @@ from pedophysics import instruments
 
 def FrequencyPerm(soil): 
     """
-    Return or compute missing values of the soil.frequency_perm attribute.
+    Return or compute missing values of the soil.df.frequency_perm attribute.
 
     If any value of the frequency_perm attribute is missing (NaN), 
     it will be computed using the `Inst2FreqP` function from the `instruments` module. 
@@ -28,7 +28,7 @@ def FrequencyPerm(soil):
     This function modifies the soil object in-place, updating the `df` dataframe 
     if necessary.
 
-    See Also
+    External functions
     --------
     Inst2FreqP : Function to calculate missing frequency_perm attribute based on soil.instrument
 

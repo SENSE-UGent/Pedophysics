@@ -7,7 +7,7 @@ from .water_ec import *
 
 def Salinity(soil):
     """
-    Return or compute missing values of the soil.salinity attribute.
+    Return or compute missing values of the soil.df.salinity attribute.
 
     If any value of the salinity attribute is missing (NaN), it will first compute 
     the missing values by optimizing the SenGoode function based on the soil's water 
@@ -27,7 +27,7 @@ def Salinity(soil):
         - df : DataFrame
             Data Frame containing all the quantitative information of soil array-like attributes for each state
         - info : DataFrame
-            Data Frame containing the qualitative information about all array-like soil attributes for each state
+            Data Frame containing descriptive information about how each array-like attribute was determined or modified.
         - n_states : int
             Number of states or records in the dataframe.
 
@@ -41,11 +41,11 @@ def Salinity(soil):
     This function modifies the soil object in-place, updating the `df` dataframe and `info`
     dataframe if necessary.
 
-    See Also
+    External functions
     --------
     WaterEC : Function to return or compute the water's electrical conductivity.
     Temperature : Function to return or compute the soil's temperature.
-    SenGoode : Function to calculte water_ec based on soil.salinity and soil.temperature
+    SenGoode : Function to calculte water_ec based on soil.df.salinity and soil.df.temperature
 
     Example
     -------

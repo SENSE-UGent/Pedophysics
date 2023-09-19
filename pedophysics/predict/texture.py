@@ -3,7 +3,7 @@ import warnings
 
 def Texture(soil):
     """
-    Determine the texture fractions (soil.sand, soil.silt, soilclay attributes).
+    Determine the texture fractions (soil.df.sand, soil.df.silt, soil.df.clay attributes).
 
     If any value of the sand, silt, or clay attribute is missing, this function will:
     1. Warn if the sum of texture fractions does not equate to 100%.
@@ -26,7 +26,7 @@ def Texture(soil):
         - df : DataFrame
             Data Frame containing all the quantitative information of soil array-like attributes for each state
         - info : DataFrame
-            Data Frame containing the qualitative information about all array-like soil attributes for each state
+            Data Frame containing descriptive information about how each array-like attribute was determined or modified.
         - n_states : int
             Number of states or records in the dataframe.
 
@@ -34,7 +34,7 @@ def Texture(soil):
     -----
     This function modifies the soil object in-place, updating the `df` and `info` dataframes.
 
-    See Also
+    External functions
     --------
     warnings.warn : Issue a warning, or maybe ignore it or raise an exception.
 

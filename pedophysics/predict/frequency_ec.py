@@ -3,7 +3,7 @@ from pedophysics import instruments
 
 def FrequencyEC(soil): 
     """
-    Return and set missing values of the soil.frequency_ec attribute.
+    Return and set missing values of the soil.df.frequency_ec attribute.
 
     If any value of the frequency_ec attribute is missing (NaN), 
     it will be set to a default value of 0. Corresponding information 
@@ -19,7 +19,7 @@ def FrequencyEC(soil):
         - df : DataFrame
             Data Frame containing all the quantitative information of soil array-like attributes for each state
         - info : DataFrame
-            Data Frame containing the qualitative information about all array-like soil attributes for each state
+            Data Frame containing descriptive information about how each array-like attribute was determined or modified.
         - n_states : int
             Number of states or records in the dataframe.
 
@@ -28,7 +28,7 @@ def FrequencyEC(soil):
     np.ndarray
         An array of updated frequency of electric conductivity measurement values
 
-    See Also
+    External functions
     --------
     Inst2FreqC : Function to calculate missing frequency_ec attribute based on soil.instrument
 

@@ -2,7 +2,7 @@ import numpy as np
 
 def SolidEC(soil):
     """
-    Return and set missing values of the soil.solid_ec attribute.
+    Return and set missing values of the soil.df.solid_ec attribute.
 
     If any value of the solid_ec attribute is missing (NaN), 
     it will be set to a default value of 0. Corresponding information 
@@ -18,7 +18,7 @@ def SolidEC(soil):
         - df : DataFrame
             Data Frame containing all the quantitative information of soil array-like attributes for each state
         - info : DataFrame
-            Data Frame containing the qualitative information about all array-like soil attributes for each state
+            Data Frame containing descriptive information about how each array-like attribute was determined or modified.
         - n_states : int
             Number of states or records in the dataframe.
 

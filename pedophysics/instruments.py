@@ -2,7 +2,7 @@ import numpy as np
 
 def Inst2FreqP(soil):
     """
-    Return or compute missing values of the soil.frequency_perm attribute.
+    Return or compute missing values of the soil.df.frequency_perm attribute.
 
     If the `frequency_perm` value of the soil is missing (`np.nan`), this function assigns 
     a default frequency based on the type of instrument used to measure the soil:

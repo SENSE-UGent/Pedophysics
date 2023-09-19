@@ -2,7 +2,7 @@ import numpy as np
 
 def AirPerm(soil): 
     """
-    Return and set missing values of the soil.air_perm attribute.
+    Return and set missing values of the soil.df.air_perm attribute.
 
     If any value of the air_perm attribute is missing (NaN), 
     it will be set to a default value of 1.2. Corresponding information 
@@ -12,13 +12,13 @@ def AirPerm(soil):
     ----------
     soil : object
         A custom soil object that contains:
-        
+
         - air_perm : array-like
             Soil air real relative dielectric permittivity phase [-]
         - df : DataFrame
             Data Frame containing all the quantitative information of soil array-like attributes for each state
         - info : DataFrame
-            Data Frame containing the qualitative information about all array-like soil attributes for each state
+            Data Frame containing descriptive information about how each array-like attribute was determined or modified.
         - n_states : int
             Number of states or records in the dataframe.
 

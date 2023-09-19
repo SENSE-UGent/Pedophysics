@@ -8,18 +8,59 @@ from ..particle_density import ParticleDensity
 from ..air_perm import AirPerm
 from ..solid_perm import SolidPerm
 from ..water_perm import WaterPerm
-#from ..cation_exchange_capacity import CEC
 from ..texture import Texture
 
 from pedophysics.pedophysical_models.water import LR, LR_W, LR_MV
 from pedophysics.pedophysical_models.bulk_perm import WunderlichP, LongmireSmithP
 
 
-############################# Water prediction from permittivity ###################################### 
-
 def WaterFromPerm(soil):
     """ 
+    Compute missing values of soil.df.water based on soil.df.bulk_perm
+
+    Depending on the consistency of the permittivity frequency provided, this function decides 
+    whether to apply a fixed frequency or changing frequency method to predict soil volumetric water content.
+
+    Parameters
+    ----------
+    soil : object
+        A custom soil object that contains:
+
+        - df : DataFrame
+            Data Frame containing all the quantitative information of soil array-like attributes for each state.
+            Includes: water and frequency_perm.
+        - info : DataFrame
+            Data Frame containing descriptive information about how each attribute was determined or modified.
+        - n_states : int
+            Number of states or records in the dataframe.
+
+    Notes
+    -----
+    This function modifies the soil object in-place by updating the `df` and `info` dataframes.
+
+    Two main methods are applied based on the nature of the permittivity frequency:
+    - `fixed_freq`: applied when the permittivity frequency is constant across the soil states.
+    - `changing_freq`: applied when the permittivity frequency varies across the soil states.
+
+    External functions
+    --------
+    fixed_freq: Function to predict water content based on a constant permittivity frequency.
+    changing_freq: Function to predict water content based on varying permittivity frequencies.
+
+    Example
+    -------
+    >>> sample = Soil(frequency_perm = 1e9, 
+                    clay = 15,             
+                    bulk_density = 1.5,
+                    bulk_perm = [8, 10, 15])
+    >>> WaterFromPerm(sample) 
+    >>> sample.df.water
+    0    0.125
+    1    0.162
+    2    0.246
+    Name: water, dtype: float64
     """
+
     # Condition for constant permittivity frequency
     if np.all(soil.df.frequency_perm == soil.df.frequency_perm[0]):
         fixed_freq(soil)
@@ -36,12 +77,37 @@ def WaterFromPerm(soil):
     soil.df['water'] = [ 0 if soil.df.water[x]<0 else soil.df.water[x] for x in range(soil.n_states)] 
 
 
-######################################  Changing frequency module #####################################
-
 def changing_freq(soil):    
-    '''
-    '''
-    print('Water perm changing freq')    
+    """ 
+    Predict soil attributes when permittivity frequency is changing.
+
+    Determines bulk electrical conductivity (bulk_ec) using the LongmireSmithP function, given the changing 
+    nature of permittivity frequency in the provided soil data.
+
+    Parameters
+    ----------
+    soil : object
+        A custom soil object that contains:
+
+        - df : DataFrame
+            Data Frame containing the quantitative information of all soil array-like attributes for each state.
+            Includes: frequency_perm, frequency_ec, bulk_ec, and bulk_perm.
+        - info : DataFrame
+            Data Frame containing descriptive information about how each array-like attribute was determined or modified.
+        - n_states : int
+            Number of soil states.
+
+    Notes
+    -----
+    This function modifies the soil object in-place by updating the `df` and `info` dataframes.
+    The minimization function `objective` computes the difference between the LongmireSmithP predicted 
+    permittivity and actual permittivity to obtain the best bulk_ec for each soil state.
+
+    External functions
+    --------
+    LongmireSmithP: Function used to predict soil bulk real relative dielectric permittivity given bulk_ec, perm_inf, and frequency.
+    """
+
     BulkPermInf(soil)    
     bulk_ec = []
 
@@ -58,7 +124,6 @@ def changing_freq(soil):
         else:
             bulk_ec.append(np.nan)
 
-
     # Saving calculated bulk_ec and its info
     soil.info['bulk_ec'] = [str(soil.info.bulk_ec[x]) + "--> Calculated using LongmireSmithP function in predict.water.water_from_perm.changing_freq" if np.isnan(soil.df.bulk_ec[x])
                             or soil.info.bulk_ec[x] == str(soil.info.bulk_ec[x]) + "--> Calculated using LongmireSmithP function in predict.water.water_from_perm.changing_freq"
@@ -74,11 +139,38 @@ def changing_freq(soil):
     soil.df['frequency_ec'] = [0 if not np.isnan(bulk_ec[x]) else soil.df.frequency_ec[x] for x in range(soil.n_states)]
 
 
-##################################### Fixed frequnecy ##########################################
-
 def fixed_freq(soil):
-    '''
-    '''            
+    """ 
+    Decide between fitting and non-fitting approaches to calculate soil.df.water.
+
+    Determines the soil's water content based on the bulk permittivity and the permittivity frequency.
+    The approach to estimate water content depends on the available data: 
+    1) Fitting approach: Used if there are at least 3 non-NaN values of water and bulk permittivity (calibration data).
+    2) Non-fitting approach: Used if there's any soil state with NaN water, non-NaN bulk permittivity, 
+       and a frequency_perm value between 5 and 30e9.
+
+    Parameters
+    ----------
+    soil : object
+        A custom soil object that contains:
+
+        - df : DataFrame
+            Data Frame containing the quantitative information of all soil array-like attributes for each state.
+            Includes: water, bulk_perm, and frequency_perm.
+        - n_states : int
+            Number of soil states
+
+    Notes
+    -----
+    This function modifies the soil object in-place, using either the `fitting` or the `non_fitting` function
+    depending on the criteria described above.
+
+    External functions
+    --------
+    fitting: Function used to fit soil data and predict missing water content values.
+    non_fitting: Function used to predict water content without a fitting approach.
+    """
+
     # Condition for fitting approach
     if sum(not np.isnan(soil.water[x]) and not np.isnan(soil.bulk_perm[x]) for x in range(soil.n_states)) >= 3:
         fitting(soil)
@@ -88,12 +180,46 @@ def fixed_freq(soil):
         non_fitting(soil)
 
 
-######################################  fixed frequency fitting  #####################################
-
 def fitting(soil):
-    '''
-    '''
-    print('fitting')
+    """ 
+    Computes soil.df.water using a fitting approach.
+
+    This function utilizes the WunderlichP model to estimate the soil's volumetric water 
+    content based on its bulk real relative dielectric permittivity at constant frequency. 
+    It calculates the model's parameters and fits them to the provided calibration data.
+    The accuracy of the fitting is determined by the R2 score. 
+
+    Parameters
+    ----------
+    soil : object
+        A custom soil object that contains:
+
+        - df : DataFrame
+            Data Frame containing all the quantitative information of soil array-like attributes for each state.
+            Includes: water, bulk_perm, and water_perm.
+        - info : DataFrame
+            Data Frame containing descriptive information about how each array-like attribute was determined or modified.
+        - Lw : float
+            Soil scalar depolarization factor of water aggregates (effective medium theory)
+        - roundn : int
+            Number of decimal places to round results.
+        - range_ratio : float
+            Ratio to extend the domain of the regression by fitting approach.
+        - n_states : int
+            Number of soil states
+
+    Notes
+    -----
+    This function modifies the soil object in-place by updating the `df` and `info` dataframes.
+    The function either estimates or uses the known Lw parameter for the WunderlichP model and 
+    fits the model to the calibration data.
+
+    External functions
+    --------
+    WunderlichP: Function that defines the relationship between water content and relative dielectric permittivity.
+    WaterPerm: Function to compute soil water real relative dielectric permittivity.
+    """
+
     WaterPerm(soil)                   
 
     # Defining model parameters
@@ -152,12 +278,40 @@ def fitting(soil):
         soil.df['water'] = [Wat_wund[x] if np.isnan(soil.df.water[x]) else soil.df.water[x] for x in range(soil.n_states)]
 
 
-######################################  fixed frequency non-fitting  #####################################
-
 def non_fitting(soil):
-    '''
-    '''
-    print('non-fitting')
+    """ 
+    Return and compute soil.df.water using a non-fitting approach.
+
+    Uses various methods to calculate water content and bulk electrical conductivity (bulk_ec) based on 
+    different electromagnetic (EM) frequency ranges and other given soil attributes.
+
+    Parameters
+    ----------
+    soil : object
+        A custom soil object containing:
+
+        - df : DataFrame
+            Data Frame containing the quantitative information of all soil array-like attributes for each state. 
+            Includes: water, bulk_perm, frequency_perm, and bulk_ec for each soil state.
+        - n_states : int
+            Number of soil states.
+        - info : DataFrame
+            Data Frame containing descriptive information about how each array-like attribute was determined or modified.
+        - roundn : int
+            Number of decimal places to round results.
+
+    Notes
+    -----
+    The function works based on electromagnetic (EM) frequency conditions and modifies the soil 
+    object in-place by updating the `df` and `info` attributes. Various prediction methods like LongmireSmithP,
+    LR_MV, LR, and LR_W are utilized based on the frequency ranges.
+
+    External Functions
+    ------------------
+    ParticleDensity, AirPerm, SolidPerm, WaterPerm, Texture, BulkPermInf : Functions used to estimate various soil attributes.
+    LongmireSmithP, LR_MV, LR, LR_W : Pedophysical models for predictions based on frequency ranges and other attributes.
+
+    """
     ParticleDensity(soil)                     
     AirPerm(soil)                      
     SolidPerm(soil)                   

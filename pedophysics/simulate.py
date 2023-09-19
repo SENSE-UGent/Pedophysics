@@ -70,11 +70,11 @@ class Soil(object):
     instrument : str
         Instrument utilized: 'HydraProbe', 'TDR', 'GPR', 'Miller 400D', 'Dualem'
     info : DataFrame
-        Data Frame containing the qualitative information of all soil array-like attributes for each state
+        Data Frame containing descriptive information about how each array-like attribute was determined or modified.
     df : DataFrame
-        Data Frame containing the quantitative information of all soil array-like attributes for each state
+        Data Frame containing the quantitative information of all soil array-like attributes for each state.
     roundn : int
-        N digits after the decimal point
+        Number of decimal places to round results.
     range_ratio : single-value
         Factor for extending extrapolation domain during fitting modelling
     n_states : int

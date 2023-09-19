@@ -6,8 +6,53 @@ from ..frequency_perm import FrequencyPerm
 
 def Water(soil):
     """
-        Soil volumetric water content prediction
+    Return and compute missing values of the soil.df.water attribute using soil.df.bulk_perm or soil.df.bulk_ec.
+
+    The function first checks the availability of soil.df.frequency_perm, if it's missing
+    it prompts the user to provide the values. 
+    Next, the function attempts to calculate missing water content values from the provided soil.df.bulk_perm values, 
+    and then from the provided soil.df.bulk_ec values, if necessary.
+
+    Parameters
+    ----------
+    soil : object
+        A custom soil object that contains:
+
+        - water : array-like
+            Soil volumetric water content [m**3/m**3]
+        - bulk_perm : array-like
+            Soil bulk real relative dielectric permittivity [-]
+        - bulk_ec : array-like
+            Soil bulk real electrical conductivity [S/m]
+        - frequency_perm : array-like
+            Frequency of dielectric permittivity measurement [Hz]
+        - df : DataFrame
+            Data Frame containing all the quantitative information of soil array-like attributes for each state
+        - info : DataFrame
+            Data Frame containing descriptive information about how each array-like attribute was determined or modified.
+        - n_states : int
+            Number of states or records in the dataframe.
+
+    Returns
+    -------
+    np.ndarray
+        An array of updated or original soil volumetric water content values
+
+    Notes
+    -----
+    This function modifies the soil object in-place by updating the `df` and `info` dataframes.
+
+    Example
+    -------
+    >>> sample = Soil( bulk_ec = [0.01, 0.02, 0.025, 0.030, 0.040],
+                    clay = 10,
+                    bulk_density = 1.4,
+                    water_ec = 0.5)
+
+    >>> Water(sample) 
+    array([0.105, 0.162, 0.185, 0.206, 0.243])
     """
+
     # Condition to obtain water from bulk_perm 
     FrequencyPerm(soil)
 

@@ -4,7 +4,7 @@ from .texture import Texture
 
 def ParticleDensity(soil):
     """
-    Return or compute missing values of the soil.particle_density attribute.
+    Return or compute missing values of the soil.df.particle_density attribute.
 
     If any value of the particle_density attribute is missing (NaN), it will first
     be computed using the Schjonnen function based on the clay and organic matter values.
@@ -24,7 +24,7 @@ def ParticleDensity(soil):
         - df : DataFrame
             Data Frame containing all the quantitative information of soil array-like attributes for each state
         - info : DataFrame
-            Data Frame containing the qualitative information about all array-like soil attributes for each state
+            Data Frame containing descriptive information about how each array-like attribute was determined or modified.
         - n_states : int
             Number of states or records in the dataframe.
 
@@ -38,10 +38,10 @@ def ParticleDensity(soil):
     This function modifies the soil object in-place, updating the `df` dataframe and `info`
     dataframe if necessary.
 
-    See Also
+    External functions
     --------
     Texture : Function to calculate missing clay, silt or sand attributes based on soil.texture
-    Schjonnen : Function to calculate particle_density based on soil.clay and soil.orgm
+    Schjonnen : Function to calculate particle_density based on soil.df.clay and soil.df.orgm
 
     Example
     -------

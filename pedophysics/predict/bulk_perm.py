@@ -12,11 +12,53 @@ from pedophysics.utils.stats import R2_score
 import numpy as np
 
 
-############################# Bulk permittivity prediction ######################################
-
 def BulkPerm(soil):
     """ 
+    Return and decides for different approaches to calculate soil.df.bulk_perm.
+
+    Uses the given electromagnetic frequency to determine the method to estimate bulk permittivity. 
+    If no frequency is provided or all frequencies are the same, different methods or conditions 
+    are invoked.
+
+    Parameters
+    ----------
+    soil : object
+        A custom soil object containing:
+
+        - df : DataFrame
+            Data Frame containing the quantitative information of all soil array-like attributes for each state.
+            Includes: bulk_perm and frequency_perm.
+        - n_states : int
+            Number of soil states
+        - info : DataFrame
+            Data Frame containing descriptive information about how each array-like attribute was determined or modified.
+
+    Returns
+    -------
+    numpy.ndarray
+        Array containing updated soil bulk real relative dielectric permittivity values
+
+    Notes
+    -----
+    The function modifies the soil object in-place by updating the `df` and `info` attributes based 
+    on the given conditions and returns the updated values of bulk permittivity.
+
+    External Functions
+    ------------------
+    - FrequencyPerm : Function used to estimate the EM frequency if it's missing.
+    - fixed_freq, changing_freq : Functions invoked based on the condition of the EM frequency provided.
+
+    Example
+    -------
+    >>> sample = Soil( water = [0.3, 0.1, 0.15, 0.23, 0.02],
+                bulk_density = 1.5,
+                texture = 'Silt loam',
+                instrument = 'GPR')
+
+    >>> predict.BulkPerm(sample) 
+    array([18.563,  6.781,  9.328, 13.973,  3.357])
     """
+
     if (np.isnan(soil.df.bulk_perm)).any():  # Go over if any value is missing        
         FrequencyPerm(soil)
 
@@ -36,12 +78,34 @@ def BulkPerm(soil):
     return soil.df.bulk_perm.values
 
 
-############################################ Fixed frequency ##########################################
-
 def fixed_freq(soil):
-    '''
-    
-    '''
+    """ 
+    Decide between fitting and non-fitting approaches based on conditions.
+
+    Based on the given soil state data, chooses between two methodologies - fitting or non-fitting 
+    to determine the bulk permittivity values for a fixed frequency.
+
+    Parameters
+    ----------
+    soil : object
+        A custom soil object containing:
+
+        - df : DataFrame
+            Data Frame containing the quantitative information of all soil array-like attributes for each state.
+            Includes: bulk_perm, water, and frequency_perm.
+        - n_states : int
+            Number of soil states
+
+    Notes
+    -----
+    The function modifies the soil object in-place based on the given conditions.
+
+    External Functions
+    ------------------
+    - fitting : Function that uses a fitting approach.
+    - non_fitting : Function that uses a non-fitting approach.
+    """
+
     # Condition for fitting approach
     if sum(not np.isnan(soil.water[x]) and not np.isnan(soil.bulk_perm[x]) for x in range(soil.n_states)) >= 3 :
         fitting(soil)
@@ -51,11 +115,44 @@ def fixed_freq(soil):
         non_fitting(soil)
 
         
-########################################### Fitting routine ##################################################
-
 def fitting(soil):
-    '''
-    '''
+    """ 
+    Computes soil.df.bulk_perm using a fitting approach.
+
+    This function fits the WunderlichP function to the soil data to determine the bulk permittivity values.
+    It can either calculate the Lw parameter or use a provided value. The accuracy of the fitting is 
+    determined by the R2 score. 
+
+    Parameters
+    ----------
+    soil : object
+        A custom soil object containing:
+
+        - df : DataFrame
+            Data Frame containing all the quantitative information of soil array-like attributes for each state.
+            Includes: water, water_perm, and bulk_perm
+        - info : DataFrame
+            Data Frame containing descriptive information about how each array-like attribute was determined or modified.
+        - Lw : float
+            Soil scalar depolarization factor of water aggregates (effective medium theory)
+        - roundn : int
+            Number of decimal places to round results.
+        - range_ratio : float
+            Ratio to extend the domain of the regression by fitting approach.
+        - n_states : int
+            Number of soil states
+
+    Notes
+    -----
+    The function modifies the soil object in-place by updating the `df` and `info` attributes based on the fitting results.
+    
+    External Functions
+    ------------------
+    - Temperature : Adjusts the temperature of the soil, if needed.
+    - WaterPerm : Function to compute soil water real relative dielectric permittivity.
+    - WunderlichP : Function that defines the relationship between water content and relative dielectric permittivity.
+    """
+
     Temperature(soil)
     WaterPerm(soil)                      
 
@@ -98,12 +195,38 @@ def fitting(soil):
                               if (min(water_range) <= soil.water[x] <= max(water_range)) and np.isnan(soil.df.bulk_perm[x]) else soil.df.bulk_perm[x] for x in range(soil.n_states)]
 
 
-############################################# Non fitting ###############################################
-
 def non_fitting(soil):
-    '''
+    """ 
+    Computes soil.df.bulk_perm using a non fitting approach.
+
+    This function determines the bulk permittivity of soil based on given conditions and known empirical relationships. 
+    Depending on the electromagnetic (EM) frequency range provided, various functions are used.
+
+    Parameters
+    ----------
+    soil : object
+        A custom soil object containing:
+
+        - df : DataFrame
+            Data Frame containing the quantitative information of all soil array-like attributes for each state.
+            Includes: water, bulk_perm, frequency_perm, bulk_ec, bulk_perm_inf, bulk_density, particle_density, 
+            air_perm, solid_perm, water_perm, and CEC.
+        - roundn : int
+            Number of decimal places to round results.
+
+    Notes
+    -----
+    The function modifies the soil object in-place by updating the `df` and `info` attributes based on the chosen approach.
     
-    '''
+    External Functions
+    ------------------
+    - BulkPermInf : Determines the bulk permittivity at infinite frequency.
+    - BulkEC : Estimates the soil's bulk electrical conductivity.
+    - Temperature, ParticleDensity, AirPerm, SolidPerm, WaterPerm, Texture : Various functions to ensure the soil's attributes 
+      are determined for the given conditions.
+    - LongmireSmithP, LR_MV, LR, LR_W : Pedophysical models used for the estimation.
+    """
+
     # Condition for lowest EM frequency
     if any(np.isnan(soil.df.bulk_perm[x]) and soil.df.frequency_perm[x] >= 5 and soil.df.frequency_perm[x] < 30e6 for x in range(soil.n_states)):
 
@@ -156,11 +279,35 @@ def non_fitting(soil):
                                     if np.isnan(soil.df.bulk_perm[x]) else soil.df.bulk_perm[x] for x in range(soil.n_states)] 
 
 
-########################################### Changing frequency ############################################
-
 def changing_freq(soil):
-    '''
-    '''
+    """ 
+    Estimate soil.df.bulk_perm for varying EM frequencies.
+
+    This function determines the bulk permittivity of soil based on given conditions and the LongmireSmithP pedophysical model. 
+    It specifically addresses cases where the electromagnetic (EM) frequency is not constant.
+
+    Parameters
+    ----------
+    soil : object
+        A custom soil object containing:
+
+        - df : DataFrame
+            Data Frame containing the quantitative information of all soil array-like attributes for each state.
+            Includes: bulk_perm, frequency_perm, bulk_ec, and bulk_perm_inf.
+        - roundn : int
+            Number of decimal places to round results.
+
+    Notes
+    -----
+    The function modifies the soil object in-place by updating the `df` and `info` attributes.
+
+    External Functions
+    ------------------
+    - BulkPermInf : Determines the bulk permittivity at infinite frequency.
+    - BulkEC : Estimates the soil's bulk electrical conductivity.
+    - LongmireSmithP : Pedophysical model used for the estimation.
+    """
+    
     BulkPermInf(soil)             
     BulkEC(soil)
 
