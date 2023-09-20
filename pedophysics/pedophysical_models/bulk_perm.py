@@ -44,7 +44,6 @@ def WunderlichP(water, perm_init, wat_init, wp, Lw):
     -------
     >>> WunderlichP(0.3, 7, 0.05, 80, 0.01)
     24.591
-
     """
     diff = water - wat_init                                        # Diference utilized just for simplicity
     bulk_perm = perm_init                                          # Initial permitivity = epsilon sub 1  
@@ -104,7 +103,6 @@ def LR_MV(water, bd, pdn, ap, sp, wp, CEC):
     -------
     >>> LR_MV(0.3, 1.3, 2.65, 1, 4, 80, 20)
     28.577  
-
     """
     por = 1 - bd/pdn    
     alpha = 0.248*np.log(CEC) + 0.366
@@ -154,7 +152,6 @@ def LR(water, bd, pdn, ap, sp, wp, alpha):
     -------
     >>> LR(0.3, 1.3, 2.65, 1, 4, 80, 0.5)
     15.006
-
     """
     if isinstance(alpha, np.floating):
         alpha = alpha[0]
@@ -209,7 +206,6 @@ def LR_W(water, bd, pdn, ap, sp, wp, clay):
     -------
     >>> LR_W(0.3, 1.3, 2.65, 1, 4, 80, 20)
     17.505 
-
     """
     por = 1 - bd/pdn    
     alpha = -0.46*(clay/100)+0.71
@@ -260,7 +256,6 @@ def LongmireSmithP(bulk_ec_dc, bulk_perm_inf, frequency_perm):
     -------
     >>> LongmireSmithP(0.1, 5, 50e6)
     23.328
-
     """
     if (bulk_ec_dc == 0).all():
         return bulk_perm_inf
@@ -312,7 +307,6 @@ def Hilhorst(bulk_ec, water_ec, water_perm, offset_perm):
     -------
     >>> Hilhorst(0.05, 0.5, 80, 4)
     12.0
-
     """
 
     bulk_perm = bulk_ec*water_perm/water_ec + offset_perm

@@ -37,7 +37,6 @@ def SenGoode(T, C_f):
     -------
     >>> SenGoode(298.15, 0.01)
     0.117822
-    
     """
     T_celsius = T-273.15 
     d1 = 5.6 

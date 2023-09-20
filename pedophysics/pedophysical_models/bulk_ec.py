@@ -45,7 +45,6 @@ def WunderlichEC(water, ec_init, wat_init, wc, Lw):
     -------
     >>> WunderlichEC(0.3, 0.08, 0.05, 0.50, 0.01)
     0.182634
-
     """
     diff = water - wat_init                                               # Diference utilized just for simplicity
     bulk_ec = ec_init                                                     # Initial permitivity = Epsilon sub 1  
@@ -116,7 +115,6 @@ def Fu(water, clay, bd, pd, wc, solid_ec, dry_ec, sat_ec, s=1, w=2):
     -------
     >>> Fu(0.3, 30, 1.3, 2.65, 0.3, 0, np.nan, np.nan)
     0.072626
-
     """
     d = 0.6539
     e = 0.0183
@@ -176,7 +174,6 @@ def LongmireSmithEC(bulk_ec_dc, frequency_ec):
     -------
     >>> LongmireSmithEC(np.array([0.05, 0.10]), 130)
     array([0.05153802, 0.10245936])
-
     """
     if (bulk_ec_dc == 0).all():
         return 0
@@ -234,7 +231,6 @@ def Rhoades(water, wc, s_ec, E, F):
     -------
     >>> Rhoades(0.3, 0.5, 0.001, 1, 0.5)
     0.121
-
     """
     bulk_ec = wc*(E*(water**2)+F*water) + s_ec
     

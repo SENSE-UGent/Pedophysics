@@ -37,7 +37,6 @@ def AirPerm(soil):
     >>> sample.df.air_perm
     0    1.2
     Name: air_perm, dtype: float64
-
     """
 
     # Check if any value of air_perm is missing

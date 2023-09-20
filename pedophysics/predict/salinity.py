@@ -38,8 +38,7 @@ def Salinity(soil):
 
     Notes
     -----
-    This function modifies the soil object in-place, updating the `df` dataframe and `info`
-    dataframe if necessary.
+    This function modifies the soil object in-place, updating the `df` dataframe and `info` dataframe if necessary.
 
     External functions
     --------

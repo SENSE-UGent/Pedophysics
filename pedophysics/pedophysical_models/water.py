@@ -94,7 +94,6 @@ def LR(bp, bd, pdn, ap, sp, wp, alpha):
     -------
     >>> LR(10, 1.3, 2.65, 1, 4, 80, 0.5)
     0.210
-
     """
     if isinstance(alpha, np.floating):
         alpha = alpha[0]
@@ -152,7 +151,6 @@ def LR_MV(bp, bd, pdn, ap, sp, wp, CEC):
     -------
     >>> LR_MV(10, 1.3, 2.65, 1, 4, 80, 20)
     0.078
-
     """
     por = 1 - bd/pdn  
     alpha = 0.248*np.log(CEC) + 0.366  

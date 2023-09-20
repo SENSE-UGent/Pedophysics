@@ -16,7 +16,7 @@ from pedophysics.pedophysical_models.bulk_perm import WunderlichP, LongmireSmith
 
 def WaterFromPerm(soil):
     """ 
-    Compute missing values of soil.df.water based on soil.df.bulk_perm
+    Compute missing values of soil.df.water based on soil.df.bulk_perm and soil.df.frequency_perm
 
     Depending on the consistency of the permittivity frequency provided, this function decides 
     whether to apply a fixed frequency or changing frequency method to predict soil volumetric water content.
@@ -310,8 +310,8 @@ def non_fitting(soil):
     ------------------
     ParticleDensity, AirPerm, SolidPerm, WaterPerm, Texture, BulkPermInf : Functions used to estimate various soil attributes.
     LongmireSmithP, LR_MV, LR, LR_W : Pedophysical models for predictions based on frequency ranges and other attributes.
-
     """
+
     ParticleDensity(soil)                     
     AirPerm(soil)                      
     SolidPerm(soil)                   
