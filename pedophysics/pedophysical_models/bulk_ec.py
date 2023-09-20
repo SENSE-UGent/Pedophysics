@@ -7,7 +7,7 @@ def WunderlichEC(water, ec_init, wat_init, wc, Lw):
 
     This is a effective medium model that uses a differential 
     approach to compute the electrical conductivity based on the initial 
-    conditions and the water content [1]. 
+    conditions and the water content [1]. Reported RMSE = 0.0055
 
     Parameters
     ----------
@@ -66,7 +66,7 @@ def Fu(water, clay, bd, pd, wc, solid_ec, dry_ec, sat_ec, s=1, w=2):
 
     This is a volumetric mixing model that takes into account various soil properties 
     such as clay content, bulk density, particle density, and water content. 
-    It was exhaustively validated using several soil samples [1].
+    It was exhaustively validated using several soil samples [1]. Reported R2 = 0.98
 
     Parameters
     ----------

@@ -16,7 +16,7 @@ def SenGoode(T, C_f):
     Returns
     -------
     water_ec : array_like
-        Soil water real electrical conductivity [S/m]].
+        Soil water real electrical conductivity [S/m].
 
     References
     ----------

@@ -9,51 +9,148 @@ from pedophysics.predict.particle_density import *
 from pedophysics.predict.solid_ec import *
 from pedophysics.predict.bulk_ec import *
 
-#from pedophysics.predict.cation_exchange_capacity import *
+from pedophysics.pedophysical_models.bulk_ec import Fu, WunderlichEC
 
-from pedophysics.pedophysical_models.bulk_ec import LongmireSmithEC, Fu, WunderlichEC
-
-
-############################# Water prediction from electrical ecuctivity ###################################### 
 
 def WaterFromEC(soil):
     """ 
-        Soil volumetric water content prediction from real bulk electrical ecuctivity
+    Compute missing values of soil.df.water based on soil.df.bulk_ec.
+
+    The function determines if the provided electrical conductivity is at non-DC or DC frequency. 
+    If non-DC, it converts it to DC frequency. Then, it predicts the soil water content based on this 
+    DC frequency electrical conductivity.
+
+    Parameters
+    ----------
+    soil : object
+        A custom soil object that contains:
+
+        - df : DataFrame
+            Data Frame containing all the quantitative information of soil array-like attributes for each state.
+            Includes: water, bulk_ec, and frequency_ec.
+        - n_states : int
+            Number of states or records in the dataframe.
+
+    Notes
+    -----
+    This function modifies the soil object in-place by updating the `df` and `info` dataframes.
+
+    External functions
+    ------
+    FrequencyEC: Function to compute soil.df.frequency_ec missing values
+
+    Example
+    -------
+    >>> sample = Soil( bulk_ec = [0.01, np.nan, 0.025, 0.030, 0.040],
+                clay = 10,
+                bulk_density = 1.4,
+                water_ec = 0.5)
+
+    >>> WaterFromEC(sample) 
+    >>> sample.df.water
+    0    0.105
+    1    Nan
+    2    0.185
+    3    0.206
+    4    0.243
+    Name: water, dtype: float64
     """
+
     FrequencyEC(soil)
-    # Condition for non-DC frequency
-    print('WaterFromEC')
+    
+    # Check for non-DC frequency conditions
     if any(np.isnan(soil.df.water[x]) and not np.isnan(soil.df.bulk_ec[x]) and soil.df.frequency_ec[x] >= 5 for x in range(soil.n_states)):
         bulk_ec_dc = non_dc_to_dc(soil) 
-
-    # Condition for DC frequency
     else:
+        # If already in DC frequency
         bulk_ec_dc = soil.df.bulk_ec
 
     dc_freq(soil, bulk_ec_dc)
 
 
-######################################    DC frequency   #####################################
-
 def dc_freq(soil, bulk_ec_dc):
-    '''
-    '''
-    print('dc_freq')
-    # Condition for fitting approach
+    """ 
+    Decide between fitting and non-fitting approaches to calculate soil.df.water.
+
+    Based on the frequency of the electrical conductivity measuments, this function determines 
+    whether to employ a fitting or non-fitting approach to estimate the soil's 
+    volumetric water content.
+
+    Parameters
+    ----------
+    soil : object
+        A custom soil object that contains:
+
+        - df : DataFrame
+            Data Frame containing all the quantitative information of soil array-like attributes for each state.
+            Includes: water
+        - n_states : int
+            Number of states or records in the dataframe.
+
+    bulk_ec_dc : array-like
+        Array containing soil bulk real electrical conductivity at DC frequency [S/m] for each soil state.
+
+    Notes
+    -----
+    This function modifies the soil object in-place by updating the `df` and `info` dataframes.
+    The function checks the number of non-missing records for water and bulk_ec_dc. If there are at least three,
+    the fitting approach is taken, otherwise the non-fitting approach is considered.
+
+    External functions
+    --------
+    fitting: Function that employs a fitting approach for prediction.
+    non_fitting: Function that employs a non-fitting approach for prediction.
+    """
+
+    # Check for conditions to use a fitting approach
     if sum(not np.isnan(soil.water[x]) and not np.isnan(bulk_ec_dc[x]) for x in range(soil.n_states)) >= 3:
         fitting(soil, bulk_ec_dc)
 
-    # Condition for non-fitting approach
+    # Check for conditions to use a non-fitting approach
     if any(np.isnan(soil.df.water[x]) and not np.isnan(bulk_ec_dc[x]) for x in range(soil.n_states)):
         non_fitting(soil, bulk_ec_dc)
 
 
-######################################  DC frequency - non fitting  #####################################
-
 def non_fitting(soil, bulk_ec_dc):
-    '''
-    '''
-    print('non_fitting')
+    """ 
+    Return and compute soil.df.water using a non-fitting approach.
+
+    This function employs the Fu function (reported with an R^2 of 0.98) to estimate the 
+    soil's volumetric water content based on its bulk real electrical conductivity at DC frequency.
+
+    Parameters
+    ----------
+    soil : object
+        A custom soil object that contains:
+
+        - df : DataFrame
+            Data Frame containing all the quantitative information of soil array-like attributes for each state.
+            Includes: water, clay, bulk_density, particle_density, bulk_ec, water_ec, solid_ec, dry_ec, and sat_ec.
+        - info : DataFrame
+            Data Frame containing descriptive information about how each array-like attribute was determined or modified.
+        - roundn : int
+            Number of decimal places to round results.
+        - n_states : int
+            Number of soil states.
+
+    bulk_ec_dc : array-like
+        Soil bulk real electrical conductivity at DC frequency [S/m].
+
+    Notes
+    -----
+    This function modifies the soil object in-place by updating the `df` and `info` dataframes.
+    The function uses optimization techniques to minimize the difference between the Fu function output 
+    and the provided bulk real DC electrical conductivity to determine the volumetric water content.
+
+    External functions
+    --------
+    Fu: Function that defines the relationship between water content and electrical conductivity.
+    Texture: Function to derive soil texture properties.
+    ParticleDensity: Function to compute particle_density.
+    WaterEC: Function to compute water_ec
+    SolidEC: Function to compute solid_ec
+    """
+
     Texture(soil)
     ParticleDensity(soil)
     WaterEC(soil)
@@ -77,13 +174,52 @@ def non_fitting(soil, bulk_ec_dc):
     soil.df['water'] = [round(wat[i], soil.roundn) if np.isnan(soil.df.water[i]) else soil.df.water[i] for i in range(soil.n_states) ]
 
 
-######################################  DC fitting  #####################################
 
 def fitting(soil, bulk_ec_dc):
-    '''
-    '''
+    """ 
+    Computes soil.df.water using a fitting approach.
+
+    This function utilizes the WunderlichEC model to estimate the soil's volumetric water 
+    content based on its electrical conductivity at DC frequency. It calculates the model's 
+    parameters and fits them to the provided calibration data. The accuracy of the fitting 
+    is determined by the R2 score. 
+
+    Parameters
+    ----------
+    soil : object
+        A custom soil object that contains:
+
+        - df : DataFrame
+            Data Frame containing all the quantitative information of soil array-like attributes for each state.
+            Includes: water and water_ec.
+        - info : DataFrame
+            Data Frame containing descriptive information about how each array-like attribute was determined or modified.
+        - Lw : float
+            Soil scalar depolarization factor of water aggregates (effective medium theory)
+        - roundn : int
+            Number of decimal places to round results.
+        - range_ratio : float
+            Ratio to extend the domain of the regression by fitting approach.
+        - n_states : int
+            Number of soil states. 
+
+    bulk_ec_dc : array-like
+        Soil bulk real electrical conductivity at DC frequency [S/m].
+
+    Notes
+    -----
+    This function modifies the soil object in-place by updating the `df` and `info` dataframes.
+    The function either estimates or uses the known Lw parameter for the WunderlichEC model and 
+    fits the model to the calibration data.
+
+    External Functions
+    ------------------
+    WunderlichEC: Function that defines the relationship between water content and electrical conductivity.
+    WaterEC: Function to compute soil water real electrical conductivity.
+    """
+
     WaterEC(soil) 
-    print('water EC fitting')
+    
     # Defining model parameters
     valids = ~np.isnan(soil.df.water) & ~np.isnan(bulk_ec_dc) # States where calibration data are
     water_init = np.nanmin(soil.df.water[valids])
