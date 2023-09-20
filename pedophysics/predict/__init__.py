@@ -11,5 +11,5 @@ from .temperature import *
 from .texture import *
 from .water_ec import *
 from .water_perm import *
-from .water.main import *
+from .water.main_water import *
 from .salinity import *
