@@ -2,7 +2,7 @@ import numpy as np
 
 from .water_from_ec import WaterFromEC
 from .water_from_perm import WaterFromPerm
-from ..frequency_perm import FrequencyPerm
+from .frequency_perm import FrequencyPerm
 
 def Water(soil):
     """

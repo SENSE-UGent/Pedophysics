@@ -1,3 +1,8 @@
+import numpy as np
+
+from pedophysics.pedophysical_models.bulk_perm import WunderlichP, LongmireSmithP, LR, LR_W, LR_MV
+from pedophysics.utils.stats import R2_score
+
 from .water_perm import *
 from .frequency_perm import *
 from .bulk_ec import *
@@ -5,11 +10,6 @@ from .bulk_perm_inf import *
 from .particle_density import *
 from .air_perm import *
 from .solid_perm import *
-
-from pedophysics.pedophysical_models.bulk_perm import WunderlichP, LongmireSmithP, LR, LR_W, LR_MV
-from pedophysics.utils.stats import R2_score
-
-import numpy as np
 
 
 def BulkPerm(soil):
