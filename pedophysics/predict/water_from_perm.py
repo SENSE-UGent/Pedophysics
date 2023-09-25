@@ -68,13 +68,6 @@ def WaterFromPerm(soil):
     else:
         changing_freq(soil)
 
-    # Converting negative results due to fitting to zero
-    soil.info['water'] = [str(soil.info.water[x]) + "--> Set to 0 because of < 0 results" if soil.df.water[x]<0 
-                          or soil.info.water[x] ==str(soil.info.water[x]) + "--> Set to 0 because of < 0 results"
-                            else soil.info.water[x] for x in range(soil.n_states)]
-
-    soil.df['water'] = [ 0 if soil.df.water[x]<0 else soil.df.water[x] for x in range(soil.n_states)] 
-
 
 def changing_freq(soil):    
     """ 
