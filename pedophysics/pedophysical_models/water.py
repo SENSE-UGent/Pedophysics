@@ -96,11 +96,12 @@ def LR(bp, bd, pdn, ap, sp, wp, alpha):
     0.210
 
     """
-    if isinstance(alpha, np.floating):
+    if not isinstance(alpha, np.floating):
         alpha = alpha[0]
 
     if np.isnan(alpha):
         alpha = 0.5
+    print('alpha', alpha, type(alpha))
     por = 1 - bd/pdn    
     water = (bp**alpha - (1-por)*sp**alpha - por*ap**alpha) / (wp**alpha - ap**alpha)
 

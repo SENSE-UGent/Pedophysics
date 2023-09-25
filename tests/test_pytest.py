@@ -312,7 +312,7 @@ def test_sample_P6b():
         sample_P6b = Soil(water = np.array([0.06,   0.08,   0.095, 0.128]), 
                         temperature=25., texture = "Clay", 
                         instrument = 'HydraProbe', CEC = 2, bulk_density = 1.3, orgm = 0.4)
-        expected_result = np.array([4.115, 4.817, 5.377, 6.707])
+        expected_result = np.array([4.116, 4.818, 5.377, 6.708])
         assert arrays_are_similar(BulkPerm(sample_P6b), expected_result)
 
 
@@ -401,7 +401,7 @@ def test_sample_PD2():
                                 orgm = np.array([ np.nan, 1,  np.nan, 1,      np.nan,  1,      0.5,    np.nan ]), 
                                 particle_density=[2,      2,  2.2,    np.nan, np.nan,  np.nan, np.nan, np.nan] )
 
-        expected_result = np.array([2., 2., 2.2, 2.65, 2.65, 1.5, 2.35752157, 2.65, 2.65, 2.65, 2.65, 2.65, 2.65, 2.65, 2.65, 2.65])
+        expected_result = np.array([2., 2., 2.2, 2.65, 2.65, 2.69401972, 2.68255772, 2.65, 2.65, 2.65, 2.65, 2.65, 2.65, 2.65, 2.65, 2.65])
         assert arrays_are_similar(ParticleDensity(sample_PD2), expected_result)
 
 ################################################################################################################

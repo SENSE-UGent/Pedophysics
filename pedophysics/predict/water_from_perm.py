@@ -356,6 +356,7 @@ def non_fitting(soil):
         soil.info['water'] = [str(soil.info.water[x]) + "--> Calculated using LR function (reported RMSE=0.032) in predict.water.water_from_perm.non_fitting" if np.isnan(soil.df.water[x]) 
                         or soil.info.water[x] ==str(soil.info.water[x]) + "--> Calculated using LR function (reported RMSE=0.032) in predict.water.water_from_perm.non_fitting" else soil.info.water[x] for x in range(soil.n_states)]
                 
+        print('LR', [LR(soil.df.bulk_perm[x], soil.df.bulk_density[x], soil.df.particle_density[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.alpha) for x in range(soil.n_states)])        
         soil.df['water'] = [round(LR(soil.df.bulk_perm[x], soil.df.bulk_density[x], soil.df.particle_density[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.alpha), soil.roundn) if np.isnan(soil.df.water[x]) else soil.df.water[x] for x in range(soil.n_states)]
 
     # Condition for EM frequencies between 200e6 and 30e9

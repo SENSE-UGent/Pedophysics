@@ -47,7 +47,7 @@ def BulkEC(soil):
     if (np.isnan(soil.df.bulk_ec)).any():  # Go over if any value is missing        
         FrequencyEC(soil)
 
-        if any(soil.df.frequency_ec[x] >= 5 and np.isnan(soil.df.bulk_ec[x]) and not np.isnan(soil.df.water[x]) for x in range(soil.n_states)):
+        if any(np.isnan(soil.df.bulk_ec[x]) and not np.isnan(soil.df.water[x]) and soil.df.frequency_ec[x] >= 5 for x in range(soil.n_states)):
             bulk_ec_dc = non_dc_to_dc(soil)
 
         else:

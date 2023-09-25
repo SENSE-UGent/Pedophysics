@@ -156,7 +156,7 @@ def LR(water, bd, pdn, ap, sp, wp, alpha):
     15.006
 
     """
-    if isinstance(alpha, np.floating):
+    if not isinstance(alpha, np.floating):
         alpha = alpha[0]
     
     por = 1 - bd/pdn    
