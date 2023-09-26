@@ -174,7 +174,6 @@ def non_fitting(soil, bulk_ec_dc):
     soil.df['water'] = [round(wat[i], soil.roundn) if np.isnan(soil.df.water[i]) else soil.df.water[i] for i in range(soil.n_states) ]
 
 
-
 def fitting(soil, bulk_ec_dc):
     """ 
     Computes soil.df.water using a fitting approach.

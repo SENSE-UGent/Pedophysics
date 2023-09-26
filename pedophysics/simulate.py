@@ -184,7 +184,7 @@ class Soil(object):
 
         # defining soil.info
         self.info = self.df.where(pd.notna(self.df), np.nan)
-        self.info = self.info.where(pd.isna(self.info), 'Values given by the user')
+        self.info = self.info.where(pd.isna(self.info), 'Value given by the user')
         
     # Simplify the getter methods using __getattr__
     def __getattr__(self, name):
