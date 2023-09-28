@@ -70,7 +70,7 @@ def WaterFromEC(soil):
 
 def dc_freq(soil, bulk_ec_dc):
     """ 
-    Decide between fitting and non-fitting approaches to calculate soil.df.water.
+    Decide between fitting and non-fitting approaches to calculate soil.df.water
 
     Based on the frequency of the electrical conductivity measuments, this function determines 
     whether to employ a fitting or non-fitting approach to estimate the soil's 
@@ -168,11 +168,10 @@ def non_fitting(soil, bulk_ec_dc):
         wat.append(np.nan if np.isnan(res.fun) else round(res.x[0], soil.roundn) )
 
    # Saving calculated water and its info
-    soil.info['water'] = [str(soil.info.water[x]) + "--> Calculated using Fu function (reported R2=0.98) in predict.water.water_from_ec.non_fitting" if  np.isnan(soil.df.water[x]) or 
-                          soil.info.water[x] == str(soil.info.water[x]) + "--> Calculated using Fu function (reported R2=0.98) in predict.water.water_from_ec.non_fitting" else soil.info.water[x] for x in range(soil.n_states)]
+    soil.info['water'] = [str(soil.info.water[x]) + "--> Calculated using Fu function (reported R2=0.98) in predict.water_from_ec.non_fitting" if  np.isnan(soil.df.water[x]) or 
+                          soil.info.water[x] == str(soil.info.water[x]) + "--> Calculated using Fu function (reported R2=0.98) in predict.water_from_ec.non_fitting" else soil.info.water[x] for x in range(soil.n_states)]
     
     soil.df['water'] = [round(wat[i], soil.roundn) if np.isnan(soil.df.water[i]) else soil.df.water[i] for i in range(soil.n_states) ]
-
 
 
 def fitting(soil, bulk_ec_dc):
@@ -267,9 +266,9 @@ def fitting(soil, bulk_ec_dc):
         R2 = round(R2_score(soil.df.water[valids], np.array(Wat_wund)[valids]), soil.roundn)
 
         # Saving calculated bulk_perm and its info with R2 and valid bulk_ec range
-        soil.info['water'] = [str(soil.info.water[x]) + "--> Calculated by fitting (R2="+str(R2)+") WunderlichEC function in predict.water.water_from_ec.fitting, for soil.bulk_ec values between: "+str(bulk_ec_range) 
+        soil.info['water'] = [str(soil.info.water[x]) + "--> Calculated by fitting (R2="+str(R2)+") WunderlichEC function in predict.water_from_ec.fitting, for soil.bulk_ec values between: "+str(bulk_ec_range) 
                               if min(bulk_ec_range) <= bulk_ec_dc[x] <= max(bulk_ec_range) and np.isnan(soil.df.water[x])
-                                or soil.info.water[x] == str(soil.info.water[x]) + "--> Calculated by fitting (R2="+str(R2)+") WunderlichEC function in predict.water.water_from_ec.fitting, for soil.bulk_ec values between: "+str(bulk_ec_range)
+                                or soil.info.water[x] == str(soil.info.water[x]) + "--> Calculated by fitting (R2="+str(R2)+") WunderlichEC function in predict.water_from_ec.fitting, for soil.bulk_ec values between: "+str(bulk_ec_range)
                                 else soil.info.water[x] for x in range(soil.n_states)]
         
         soil.df['water'] = [Wat_wund[x] if np.isnan(soil.df.water[x]) else soil.df.water[x] for x in range(soil.n_states)]

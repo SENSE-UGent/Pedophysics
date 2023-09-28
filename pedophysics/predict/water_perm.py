@@ -58,11 +58,11 @@ def WaterPerm(soil):
     """
     if (np.isnan(soil.df.water_perm)).any(): # Go over if any value is missing 
 
-        soil.info['water_perm'] = ["Calculated using MalmbergMaryott function (RMSE = 0.0046)" if np.isnan(soil.df.water_perm[x]) & (soil.df.salinity[x] == 0) & (soil.df.frequency_perm[x]  <= 100e6) & (soil.df.frequency_perm[x] >= 1e5) 
+        soil.info['water_perm'] = ["Calculated using MalmbergMaryott function (RMSE = 0.0046)" if np.isnan(soil.df.water_perm[x]) & ((soil.df.salinity[x] == 0) or np.isnan(soil.df.salinity[x])) & (soil.df.frequency_perm[x]  <= 100e6) & (soil.df.frequency_perm[x] >= 1e5) 
                                     or soil.info.water_perm[x] == "Calculated using MalmbergMaryott function (RMSE = 0.0046)"
                                     else soil.info.water_perm[x] for x in range(soil.n_states)]
         
-        soil.df['water_perm'] = [MalmbergMaryott(soil.df.temperature.values[x]) if np.isnan(soil.df.water_perm[x]) & (soil.df.salinity[x] == 0) & (soil.df.frequency_perm[x]  <= 100e6) & (soil.df.frequency_perm[x] >= 1e5) else soil.df.water_perm[x] for x in range(soil.n_states)]
+        soil.df['water_perm'] = [MalmbergMaryott(soil.df.temperature.values[x]) if np.isnan(soil.df.water_perm[x]) & ((soil.df.salinity[x] == 0) or np.isnan(soil.df.salinity[x])) & (soil.df.frequency_perm[x]  <= 100e6) & (soil.df.frequency_perm[x] >= 1e5) else soil.df.water_perm[x] for x in range(soil.n_states)]
         
         soil.info['water_perm'] = ["Calculated using Olhoeft function" if np.isnan(soil.df.water_perm[x]) & ~np.isnan(soil.df.salinity[x]) & (soil.df.frequency_perm[x] < 100e6)
                                     or soil.info.water_perm[x] == "Calculated using Olhoeft function"
