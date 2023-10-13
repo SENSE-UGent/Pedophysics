@@ -16,6 +16,8 @@
     <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pedophysics.utils package" href="pedophysics.utils.html" />
+    <link rel="prev" title="pedophysics.pedotransfer_functions package" href="pedophysics.pedotransfer_functions.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
@@ -825,7 +827,8 @@ electrical conductivity and temperature.</p>
 <dt>np.ndarray</dt><dd><p>An array of soil salinity (NaCl) of the bulk pore fluid values</p>
 </dd>
 </dl>
-<p>This function modifies the soil object in-place, updating the <cite>df</cite> dataframe and <cite>info</cite> dataframe if necessary.</p>
+<p>This function modifies the soil object in-place, updating the <cite>df</cite> dataframe and <cite>info</cite>
+dataframe if necessary.</p>
 <p>WaterEC : Function to return or compute the water’s electrical conductivity.
 Temperature : Function to return or compute the soil’s temperature.
 SenGoode : Function to calculte water_ec based on soil.df.salinity and soil.df.temperature</p>
@@ -1070,37 +1073,280 @@ in the soil’s info dataframe will be updated accordingly.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pedophysics.predict.water_ec.WaterEC">
 <span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water_ec.</span></span><span class="sig-name descname"><span class="pre">WaterEC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water_ec.WaterEC" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Return and computes soil.df.water_ec based on soil.df.water, soil.df.bulk_ec and soil.df.bulk_perm.</p>
+<p>This function uses either a non-fitting or a fitting approach based on the available soil 
+attributes and conditions to estimate the water EC. The non-fitting approach is employed 
+when either the water EC values are missing and soil salinity values are available, or only 
+one state has non-missing values for water and bulk EC. Otherwise, if there are at least two 
+states with non-missing values for bulk EC and either water or bulk permittivity, the fitting 
+approach is used.</p>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object containing:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing the quantitative information of all soil array-like attributes for each state.
+Includes: water_ec, salinity, water, bulk_ec, frequency_ec, and bulk_perm.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of soil states.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<dl class="simple">
+<dt>numpy.ndarray</dt><dd><p>Array containing the updated soil water pore real electrical conductivity values.</p>
+</dd>
+</dl>
+<p>The function first ensures that the temperature and frequency EC attributes are available.
+Then, based on the conditions specified, it employs the suitable approach to estimate the water EC.</p>
+<ul class="simple">
+<li><p>Temperature : Function to ensure the temperature values are available for the soil.</p></li>
+<li><p>FrequencyEC : Function to ensure the frequency EC values are available for the soil.</p></li>
+<li><p>non_fitting : Non-fitting approach function for estimating water EC.</p></li>
+<li><p>fitting     : Fitting approach function for estimating water EC.</p></li>
+</ul>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">Soil</span><span class="p">(</span> <span class="n">bulk_ec</span><span class="o">=</span><span class="p">[</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.06</span><span class="p">],</span> 
+<span class="go">            bulk_perm=[11.5, 14.8, 17, 20, 22.7],</span>
+<span class="go">            clay=5,</span>
+<span class="go">            bulk_density=1.48,</span>
+<span class="go">            instrument=&#39;TDR&#39;)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predict</span><span class="o">.</span><span class="n">WaterEC</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+<span class="go">array([0.289855, 0.289855, 0.289855, 0.289855, 0.289855])</span>
+</pre></div>
+</div>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pedophysics.predict.water_ec.fitting">
 <span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water_ec.</span></span><span class="sig-name descname"><span class="pre">fitting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water_ec.fitting" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Decides between two different fitting approaches to obtain soil.df.water_ec.</p>
+<p>Depending on the available data within the soil object, this function selects one of two fitting 
+functions: Rhoades function or Hilhorst function. The selection criterion is based on the number of 
+missing water EC values and the availability of certain soil properties (e.g., water content and bulk permittivity).
+If enough data points are available and the conditions are met, the fitting function is applied to estimate the 
+missing water EC values.</p>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object containing:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing the quantitative information of all soil array-like attributes for each state.
+Includes: bulk_ec, water, bulk_perm, and water_ec.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of soil states.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info<span class="classifier">dict</span></dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was determined or modified.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>fitting_rhoades : Function that applies the Rhoades function to estimate missing water EC values using bulk EC and water content.</p></li>
+<li><p>fitting_hilhorst : Function that applies the Hilhorst function to estimate missing water EC values using bulk EC and bulk permittivity.</p></li>
+</ul>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pedophysics.predict.water_ec.fitting_hilhorst">
 <span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water_ec.</span></span><span class="sig-name descname"><span class="pre">fitting_hilhorst</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water_ec.fitting_hilhorst" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculates soil.df.water_ec using the Hilhorst function based on soil properties.</p>
+<p>This function estimates water’s EC by fitting the Hilhorst function to the available bulk EC, 
+bulk permittivity and water permittivity data. Additionally, the function calculates the 
+<cite>offset_perm</cite> parameter essential for the Hilhorst function.</p>
+<p>The function begins by selecting calibration data by identifying valid data points from the soil.df 
+attributes, and subsequently applies a filtering mechanism to eliminate NaN values. The <cite>minimize</cite> 
+method is then used to fit the Hilhorst function, enabling the estimation of the desired parameters. 
+Finally, the derived parameters are stored within the soil object, and the fitting’s R2 score is 
+added to the info attribute of the soil object.</p>
+<dl>
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object containing:</p>
+<dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing the quantitative information of all soil array-like attributes for each state.
+This includes attributes such as bulk_ec, bulk_perm, water_perm, offset_perm, and water_ec.</p>
+</dd>
+<dt>n_states<span class="classifier">int</span></dt><dd><p>The count of soil states.</p>
+</dd>
+<dt>info<span class="classifier">dict</span></dt><dd><p>A dictionary which conveys descriptive data on how each array-like attribute was either determined or modified.</p>
+</dd>
+<dt>roundn<span class="classifier">int</span></dt><dd><p>Number of decimal places to round results.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="simple">
+<dt>WaterPerm<span class="classifier">function</span></dt><dd><p>Used for deriving the water permittivity for each soil state.</p>
+</dd>
+<dt>Hilhorst<span class="classifier">function</span></dt><dd><p>A mathematical equation to relate bulk EC with water content, water EC, water permittivity, and other parameters.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pedophysics.predict.water_ec.fitting_rhoades">
 <span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water_ec.</span></span><span class="sig-name descname"><span class="pre">fitting_rhoades</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water_ec.fitting_rhoades" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculates soil.df.water_ec using the Rhoades function based on soil properties.</p>
+<p>The function estimates water’s EC by fitting the Rhoades function to the available bulk EC and water content data.
+In addition to estimating the missing water EC values, this function calculates other parameters such as s_ec, E, 
+and F that are essential for the Rhoades function.
+The function initially selects calibration data by identifying valid data points from the soil.df attributes. 
+Then, it utilizes the <cite>minimize</cite> method to fit the Rhoades function, allowing for the estimation of the required 
+parameters. Finally, the calculated parameters are stored in the soil object, and the fitting’s R2 score is recorded 
+in the info attribute of the soil object.</p>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object containing:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing the quantitative information of all soil array-like attributes for each state.
+Includes: bulk_ec, water, s_ec, and water_ec.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of soil states.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info<span class="classifier">dict</span></dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was determined or modified.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>E<span class="classifier">float</span></dt><dd><p>An attribute in the soil object where the calculated E value is stored.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>F<span class="classifier">float</span></dt><dd><p>An attribute in the soil object where the calculated F value is stored.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>Rhoades : A mathematical function used to relate bulk EC with water content, water EC, and other parameters.</p></li>
+</ul>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pedophysics.predict.water_ec.from_bulk_ec">
 <span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water_ec.</span></span><span class="sig-name descname"><span class="pre">from_bulk_ec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water_ec.from_bulk_ec" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculates soil.df.water_ec based on soil.df.bulk_ec using the Fu function.</p>
+<p>This function uses the bulk EC and other soil properties to estimate missing water EC values. The 
+Fu function, which is a pedophysical model for bulk electrical conductivity, is used to perform the estimation.
+For each state in the soil object, if the water EC value is missing, a minimization routine is applied 
+to determine the optimal water EC that best fits the observed bulk EC.</p>
+<p>Additionally, an information note is added to the <cite>info</cite> attribute of the soil object indicating the method 
+of calculation for the water EC using the Fu function.</p>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object containing:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing the quantitative information of all soil array-like attributes for each state.
+Includes: water_ec, clay, bulk_density, particle_density, solid_ec, dry_ec, sat_ec, and bulk_ec.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of soil states.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info<span class="classifier">dict</span></dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was determined or modified.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>Texture : Function that provides the texture attributes of the soil.</p></li>
+<li><p>ParticleDensity : Function that provides the particle density of the soil.</p></li>
+<li><p>SolidEC : Function that provides the electrical conductivity of the solid particles.</p></li>
+<li><p>Fu : Model function to estimate bulk EC from various soil properties.</p></li>
+</ul>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pedophysics.predict.water_ec.from_salinity">
 <span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water_ec.</span></span><span class="sig-name descname"><span class="pre">from_salinity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water_ec.from_salinity" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Calculates soil.df.water_ec based on soil.df.salinity using the SenGoode function.</p>
+<p>This function uses the salinity attribute in the soil object to estimate missing water EC values. The 
+SenGoode function is used to perform this conversion. For each state in the soil object, if the water EC 
+value is missing but the salinity value is available, the water EC is calculated using the SenGoode function.</p>
+<p>Additionally, an information note is added to the <cite>info</cite> attribute of the soil object indicating the method 
+of calculation for the water EC.</p>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object containing:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing the quantitative information of all soil array-like attributes for each state.
+Includes: water_ec, salinity, and temperature.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of soil states.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info<span class="classifier">dict</span></dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was determined or modified.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>SenGoode : Function that estimates water EC from the temperature and salinity attributes.</p></li>
+</ul>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pedophysics.predict.water_ec.non_fitting">
 <span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water_ec.</span></span><span class="sig-name descname"><span class="pre">non_fitting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water_ec.non_fitting" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dd><p>Decides between two different non-fitting approaches to obtain soil.df.water_ec.</p>
+<p>This function employs two non-fitting strategies based on the available data in the soil object:
+1. Estimates the water EC using the salinity attribute if water EC values are missing but salinity values are available.
+2. Estimates the water EC from the bulk EC attribute if water EC values are missing but values for water and bulk EC are available.</p>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object containing:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing the quantitative information of all soil array-like attributes for each state.
+Includes: water_ec, salinity, water, bulk_ec, frequency_ec, and bulk_perm.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of soil states.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>from_salinity : Function that estimates water EC from the salinity attribute.</p></li>
+<li><p>from_bulk_ec  : Function that estimates water EC from the bulk EC attribute.</p></li>
+</ul>
+</dd></dl>
 
 </section>
 <section id="module-pedophysics.predict.water_perm">
@@ -1197,11 +1443,24 @@ Olhoeft : Function that computes water permittivity based on temperature and sal
 
 
 <h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pedophysics</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pedophysics.html">pedophysics package</a></li>
+</ul>
+</li>
+</ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">pedophysics</a><ul>
+  <li><a href="pedophysics.html">pedophysics package</a><ul>
+      <li>Previous: <a href="pedophysics.pedotransfer_functions.html" title="previous chapter">pedophysics.pedotransfer_functions package</a></li>
+      <li>Next: <a href="pedophysics.utils.html" title="next chapter">pedophysics.utils package</a></li>
+  </ul></li>
+  </ul></li>
   </ul></li>
 </ul>
 </div>
