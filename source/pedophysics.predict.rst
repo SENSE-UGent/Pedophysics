@@ -116,6 +116,30 @@ pedophysics.predict.water\_perm module
    :undoc-members:
    :show-inheritance:
 
+pedophysics.predict.water module
+-----------------------------------
+
+.. automodule:: pedophysics.predict.water
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedophysics.predict.water\_from\_ec module
+-----------------------------------
+
+.. automodule:: pedophysics.predict.water_from_ec
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+pedophysics.predict.water\_from\_perm module
+-----------------------------------
+
+.. automodule:: pedophysics.predict.water_from_perm
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 
