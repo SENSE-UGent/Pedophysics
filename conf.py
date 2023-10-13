@@ -11,9 +11,9 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 # import os
-import sys
-sys.path.insert(0, 'C:\\\\Users\\\\mendo\\\\OneDrive - UGent\\\\Documentos\\\\PhD\\\\Pedophysics_code')
-sys.path.insert(0, 'C:\\\\Users\\\\gmendoza\\\\OneDrive - UGent\\\\Documentos\\\\PhD\\\\Pedophysics_code')
+#import sys
+#sys.path.insert(0, 'C:\\\\Users\\\\mendo\\\\OneDrive - UGent\\\\Documentos\\\\PhD\\\\Pedophysics_code')
+#sys.path.insert(0, 'C:\\\\Users\\\\gmendoza\\\\OneDrive - UGent\\\\Documentos\\\\PhD\\\\Pedophysics_code')
 
 # -- Project information -----------------------------------------------------
 
