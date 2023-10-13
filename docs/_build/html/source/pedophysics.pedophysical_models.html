@@ -1,0 +1,749 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>pedophysics.pedophysical_models package &#8212; pedophysics 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="pedophysics-pedophysical-models-package">
+<h1>pedophysics.pedophysical_models package<a class="headerlink" href="#pedophysics-pedophysical-models-package" title="Permalink to this heading">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading">¶</a></h2>
+</section>
+<section id="module-pedophysics.pedophysical_models.bulk_ec">
+<span id="pedophysics-pedophysical-models-bulk-ec-module"></span><h2>pedophysics.pedophysical_models.bulk_ec module<a class="headerlink" href="#module-pedophysics.pedophysical_models.bulk_ec" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.pedophysical_models.bulk_ec.Fu">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.pedophysical_models.bulk_ec.</span></span><span class="sig-name descname"><span class="pre">Fu</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">water</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clay</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">solid_ec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dry_ec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sat_ec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.pedophysical_models.bulk_ec.Fu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the soil bulk real electrical conductivity using the Fu model.</p>
+<p>This is a volumetric mixing model that takes into account various soil properties 
+such as clay content, bulk density, particle density, and water content. 
+It was exhaustively validated using several soil samples [1]. Reported R2 = 0.98</p>
+<dl class="simple">
+<dt>water<span class="classifier">array_like</span></dt><dd><p>Soil volumetric water content [m**3/m**3].</p>
+</dd>
+<dt>clay<span class="classifier">array_like</span></dt><dd><p>Soil clay content [g/g]*100.</p>
+</dd>
+<dt>bd<span class="classifier">array_like </span></dt><dd><p>Soil bulk density (g/cm^3).</p>
+</dd>
+<dt>pd<span class="classifier">array_like</span></dt><dd><p>Soil particle density (g/cm^3).</p>
+</dd>
+<dt>wc<span class="classifier">array_like</span></dt><dd><p>Soil water real electrical conductivity [S/m].</p>
+</dd>
+<dt>solid_ec<span class="classifier">array_like</span></dt><dd><p>Soil solid real electrical conductivity [S/m].</p>
+</dd>
+<dt>dry_ec<span class="classifier">array_like</span></dt><dd><p>Soil bulk real electrical conductivity at zero water content [S/m].</p>
+</dd>
+<dt>sat_ec<span class="classifier">array_like</span></dt><dd><p>Soil bulk real electrical conductivity at saturation water content [S/m].</p>
+</dd>
+<dt>s<span class="classifier">float, optional</span></dt><dd><p>Phase exponent of the solid, default is 1.</p>
+</dd>
+<dt>w<span class="classifier">float, optional</span></dt><dd><p>Phase exponent of the water, default is 2.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>array_like</dt><dd><p>The estimated bulk electrical conductivity [S/m].</p>
+</dd>
+</dl>
+<p>The method uses default values for s and w, which are 1 and 2 respectively, 
+but can be modified if necessary. Three different forms of the model are used 
+depending on the soil data availability. The soil electrical conductivity of solid surfaces 
+is calculated as in [1] using the formula of Doussan and Ruy (2009) [2]</p>
+<aside class="footnote brackets" id="id1" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Yongwei Fu, Robert Horton, Tusheng Ren, J.L. Heitman,</p>
+</aside>
+<p>A general form of Archie’s model for estimating bulk soil electrical conductivity,
+Journal of Hydrology, Volume 597, 2021, 126160, ISSN 0022-1694, <a class="reference external" href="https://doi.org/10.1016/j.jhydrol.2021.126160">https://doi.org/10.1016/j.jhydrol.2021.126160</a>.
+.. [2] Doussan, C., and Ruy, S. (2009), 
+Prediction of unsaturated soil hydraulic conductivity with electrical conductivity, 
+Water Resour. Res., 45, W10408, doi:10.1029/2008WR007309.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Fu</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">2.65</span><span class="p">,</span> <span class="mf">0.3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+<span class="go">0.072626</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.pedophysical_models.bulk_ec.LongmireSmithEC">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.pedophysical_models.bulk_ec.</span></span><span class="sig-name descname"><span class="pre">LongmireSmithEC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bulk_ec_dc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency_ec</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.pedophysical_models.bulk_ec.LongmireSmithEC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the soil bulk real electrical conductivity using the Longmire-Smith model.</p>
+<p>This is a semiempirical model that calculates the soil bulk real electrical conductivity at different
+electromagnetic frequencies [1].</p>
+<dl class="simple">
+<dt>bulk_ec_dc<span class="classifier">array_like</span></dt><dd><p>Soil bulk real direct current electrical conductivity [S/m].</p>
+</dd>
+<dt>frequency_ec<span class="classifier">array_like</span></dt><dd><p>Frequency of electric conductivity measurement [Hz].</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>array_like</dt><dd><p>Soil bulk real electrical conductivity [S/m].</p>
+</dd>
+</dl>
+<p>The Longmire-Smith equation uses a set of coefficients to account for the 
+frequency-dependent dielectric dispersion. If all values in the <cite>bulk_ec_dc</cite> 
+array are zero, the function returns 0.</p>
+<dl class="simple">
+<dt>epsilon_0<span class="classifier">float</span></dt><dd><p>The vacuum permittivity constant.</p>
+</dd>
+</dl>
+<aside class="footnote brackets" id="id2" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<ol class="upperalpha simple" start="11">
+<li><ol class="upperalpha simple" start="19">
+<li><p>Smith and C. L. Longmire, “A universal impedance for soils,”</p></li>
+</ol>
+</li>
+</ol>
+</aside>
+<p>Defense Nuclear Agency, Alexandria, VA, USA, Topical 
+Report for Period Jul. 1 1975-Sep. 30 1975, 1975.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LongmireSmithEC</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.10</span><span class="p">]),</span> <span class="mi">130</span><span class="p">)</span>
+<span class="go">array([0.05153802, 0.10245936])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.pedophysical_models.bulk_ec.Rhoades">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.pedophysical_models.bulk_ec.</span></span><span class="sig-name descname"><span class="pre">Rhoades</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">water</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">s_ec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">E</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">F</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.pedophysical_models.bulk_ec.Rhoades" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the bulk electrical conductivity using the Rhoades model.</p>
+<p>This function estimates the bulk electrical conductivity of a soil-water mixture 
+using the Rhoades equation [1]. The model combines the contributions of the water’s 
+electrical conductivity and the soil’s electrical conductivity, adjusted by 
+weighting factors based on the water content.</p>
+<dl class="simple">
+<dt>water<span class="classifier">array_like</span></dt><dd><p>Soil volumetric water content [m**3/m**3].</p>
+</dd>
+<dt>wc<span class="classifier">array_like</span></dt><dd><p>Soil water real electrical conductivity [S/m].</p>
+</dd>
+<dt>s_ec<span class="classifier">array_like</span></dt><dd><p>Soil bulk real surface electrical conductivity [S/m].</p>
+</dd>
+<dt>E<span class="classifier">float</span></dt><dd><p>Weighting factor for the quadratic term of water content in the Rhoades equation.</p>
+</dd>
+<dt>F<span class="classifier">float</span></dt><dd><p>Weighting factor for the linear term of water content in the Rhoades equation.</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>array_like</dt><dd><p>Soil bulk real electrical conductivity [S/m].</p>
+</dd>
+</dl>
+<aside class="footnote brackets" id="id3" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Rhoades, J.D., Raats, P.A.C. and Prather, R.J. (1976),</p>
+</aside>
+<p>Effects of Liquid-phase Electrical Conductivity, Water Content, 
+and Surface Conductivity on Bulk Soil Electrical Conductivity. 
+Soil Science Society of America Journal, 40: 651-655. 
+<a class="reference external" href="https://doi.org/10.2136/sssaj1976.03615995004000050017x">https://doi.org/10.2136/sssaj1976.03615995004000050017x</a></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Rhoades</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.001</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="go">0.121</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.pedophysical_models.bulk_ec.WunderlichEC">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.pedophysical_models.bulk_ec.</span></span><span class="sig-name descname"><span class="pre">WunderlichEC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">water</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ec_init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wat_init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.pedophysical_models.bulk_ec.WunderlichEC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the soil bulk real electrical conductivity using the Wunderlich model.</p>
+<p>This is a effective medium model that uses a differential 
+approach to compute the electrical conductivity based on the initial 
+conditions and the water content [1]. Reported RMSE = 0.0055</p>
+<dl class="simple">
+<dt>water<span class="classifier">array_like</span></dt><dd><p>Soil volumetric water content [m**3/m**3].</p>
+</dd>
+<dt>ec_init<span class="classifier">float</span></dt><dd><p>Initial soil bulk real electrical conductivity [S/m].</p>
+</dd>
+<dt>wat_init<span class="classifier">float</span></dt><dd><p>Initial soil volumetric water content [m**3/m**3].</p>
+</dd>
+<dt>wc<span class="classifier">array_like</span></dt><dd><p>Soil water real electrical conductivity [S/m].</p>
+</dd>
+<dt>Lw<span class="classifier">float</span></dt><dd><p>Soil scalar depolarization factor of water aggregates (effective medium theory) [-]</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>array_like</dt><dd><p>The estimated soil bulk real electrical conductivity [S/m].</p>
+</dd>
+</dl>
+<p>The Wunderlich model is a differential model and the approach used here 
+employs a simple while loop with a step of 0.01 until the differential 
+fraction reaches 1. The method takes into account the initial water content, 
+initial electrical conductivity, and weighting factors to determine the 
+bulk electrical conductivity.</p>
+<aside class="footnote brackets" id="id4" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Tina Wunderlich, Hauke Petersen, Said Attia al Hagrey, Wolfgang Rabbel;</p>
+</aside>
+<p>Pedophysical Models for Resistivity and Permittivity of Partially Water-Saturated Soils. 
+Vadose Zone Journal 2013;; 12 (4): vzj2013.01.0023. doi: <a class="reference external" href="https://doi.org/10.2136/vzj2013.01.0023">https://doi.org/10.2136/vzj2013.01.0023</a></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">WunderlichEC</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.08</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.50</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="go">0.182634</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-pedophysics.pedophysical_models.bulk_perm">
+<span id="pedophysics-pedophysical-models-bulk-perm-module"></span><h2>pedophysics.pedophysical_models.bulk_perm module<a class="headerlink" href="#module-pedophysics.pedophysical_models.bulk_perm" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.pedophysical_models.bulk_perm.Hilhorst">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.pedophysical_models.bulk_perm.</span></span><span class="sig-name descname"><span class="pre">Hilhorst</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bulk_ec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">water_ec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">water_perm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">offset_perm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.pedophysical_models.bulk_perm.Hilhorst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the soil bulk real relative dielectric permittivity using Hilhorst’s model.</p>
+<p>This function calculates the soil bulk real relative dielectric permittivity of a 
+soil-water mixture based on Hilhorst’s model. The relation 
+connects the bulk electrical conductivity of the mixture with the permittivity 
+of the water phase and an offset for the permittivity.</p>
+<dl class="simple">
+<dt>bulk_ec<span class="classifier">array_like</span></dt><dd><p>Soil bulk real relative dielectric permittivity [-].</p>
+</dd>
+<dt>water_ec<span class="classifier">array_like</span></dt><dd><p>Soil water real electrical conductivity [S/m].</p>
+</dd>
+<dt>water_perm<span class="classifier">array_like</span></dt><dd><p>Soil water phase real dielectric permittivity [-].</p>
+</dd>
+<dt>offset_perm<span class="classifier">array_like</span></dt><dd><p>Soil bulk real relative dielectric permittivity when soil bulk real electrical conductivity is zero [-].</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>array_like</dt><dd><p>Soil bulk real relative dielectric permittivity [-].</p>
+</dd>
+</dl>
+<aside class="footnote brackets" id="id5" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Hilhorst, M.A. (2000), A Pore Water Conductivity Sensor.</p>
+</aside>
+<p>Soil Sci. Soc. Am. J., 64: 1922-1925. <a class="reference external" href="https://doi.org/10.2136/sssaj2000.6461922x">https://doi.org/10.2136/sssaj2000.6461922x</a></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Hilhorst</span><span class="p">(</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+<span class="go">12.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.pedophysical_models.bulk_perm.LR">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.pedophysical_models.bulk_perm.</span></span><span class="sig-name descname"><span class="pre">LR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">water</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.pedophysical_models.bulk_perm.LR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the soil bulk real relative dielectric permittivity using the Lichtenecker and Rother model.</p>
+<p>This function computes the bulk real relative dielectric permittivity of a soil 
+mixture using the volumetric mixing model of Lichtenecker and Rother [1] (LR). 
+The model incorporates the water content, bulk and particle densities, and 
+permittivities of air, solid, and water.</p>
+<dl class="simple">
+<dt>water<span class="classifier">array_like</span></dt><dd><p>Soil volumetric water content [m**3/m**3].</p>
+</dd>
+<dt>bd<span class="classifier">array_like </span></dt><dd><p>Soil bulk density (g/cm^3).</p>
+</dd>
+<dt>pd<span class="classifier">array_like</span></dt><dd><p>Soil particle density (g/cm^3).</p>
+</dd>
+<dt>ap<span class="classifier">array_like</span></dt><dd><p>Soil air real relative dielectric permittivity phase [-].</p>
+</dd>
+<dt>sp<span class="classifier">array_like</span></dt><dd><p>Soil solid real relative dielectric permittivity phase [-].</p>
+</dd>
+<dt>wp<span class="classifier">array_like</span></dt><dd><p>Soil water phase real dielectric permittivity [-].</p>
+</dd>
+<dt>alpha<span class="classifier">float</span></dt><dd><p>Soil alpha exponent as defined in volumetric mixing theory [-].</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>array_like</dt><dd><p>The estimated soil bulk real relative dielectric permittivity [-]</p>
+</dd>
+</dl>
+<aside class="footnote brackets" id="id6" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Lichtenecker, K., and K. Rother. 1931.</p>
+</aside>
+<p>Die Herleitung des logarithmischen Mischungsgesetzes aus allgemeinen Prinzipien der staionären Strömung. 
+Phys. Z. 32:255-260.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LR</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">2.65</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="go">15.006</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.pedophysical_models.bulk_perm.LR_MV">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.pedophysical_models.bulk_perm.</span></span><span class="sig-name descname"><span class="pre">LR_MV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">water</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CEC</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.pedophysical_models.bulk_perm.LR_MV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the soil bulk real relative dielectric permittivity using the Lichtenecker and Rother model.</p>
+<p>This function computes the bulk real relative dielectric permittivity of a soil 
+mixture using the volumetric mixing model of Lichtenecker and Rother [1], and Mendoza Veirana [2] alpha correction model (LR_MV). 
+The model incorporates the water content, bulk and particle densities, and 
+permittivities of air, solid, and water, as well as the soil cation exchange capacity. Reported R2 = 0.94</p>
+<dl class="simple">
+<dt>water<span class="classifier">array_like</span></dt><dd><p>Soil volumetric water content [m**3/m**3].</p>
+</dd>
+<dt>bd<span class="classifier">array_like </span></dt><dd><p>Soil bulk density (g/cm^3).</p>
+</dd>
+<dt>pd<span class="classifier">array_like</span></dt><dd><p>Soil particle density (g/cm^3).</p>
+</dd>
+<dt>ap<span class="classifier">array_like</span></dt><dd><p>Soil air real relative dielectric permittivity phase [-].</p>
+</dd>
+<dt>sp<span class="classifier">array_like</span></dt><dd><p>Soil solid real relative dielectric permittivity phase [-].</p>
+</dd>
+<dt>wp<span class="classifier">array_like</span></dt><dd><p>Soil water phase real dielectric permittivity [-].</p>
+</dd>
+<dt>CEC<span class="classifier">array_like</span></dt><dd><p>Soil cation exchange capacity [meq/100g].</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>array_like</dt><dd><p>The estimated soil bulk real relative dielectric permittivity [-]</p>
+</dd>
+</dl>
+<aside class="footnote brackets" id="id7" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Lichtenecker, K., and K. Rother. 1931.</p>
+</aside>
+<p>Die Herleitung des logarithmischen Mischungsgesetzes aus allgemeinen Prinzipien der staionären Strömung. 
+Phys. Z. 32:255-260.
+.. [2] Gaston Mendoza Veirana, Jeroen Verhegge, Wim Cornelis, Philippe De Smedt, 
+Soil dielectric permittivity modelling for 50-MHz instrumentation,
+Geoderma, Volume 438, 2023, 116624, ISSN 0016-7061,
+<a class="reference external" href="https://doi.org/10.1016/j.geoderma.2023.116624">https://doi.org/10.1016/j.geoderma.2023.116624</a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LR_MV</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">2.65</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="go">28.577  </span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.pedophysical_models.bulk_perm.LR_W">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.pedophysical_models.bulk_perm.</span></span><span class="sig-name descname"><span class="pre">LR_W</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">water</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clay</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.pedophysical_models.bulk_perm.LR_W" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the soil bulk real relative dielectric permittivity using the Lichtenecker and Rother model.</p>
+<p>This function computes the bulk real relative dielectric permittivity of a soil 
+mixture using the volumetric mixing model of Lichtenecker and Rother [1], and Wunderlich [2] alpha correction model (LR_W). 
+The model incorporates the water content, bulk and particle densities, and 
+permittivities of air, solid, and water, as well as the soil clay content.</p>
+<dl class="simple">
+<dt>water<span class="classifier">array_like</span></dt><dd><p>Soil volumetric water content [m**3/m**3].</p>
+</dd>
+<dt>bd<span class="classifier">array_like </span></dt><dd><p>Soil bulk density (g/cm^3).</p>
+</dd>
+<dt>pd<span class="classifier">array_like</span></dt><dd><p>Soil particle density (g/cm^3).</p>
+</dd>
+<dt>ap<span class="classifier">array_like</span></dt><dd><p>Soil air real relative dielectric permittivity phase [-].</p>
+</dd>
+<dt>sp<span class="classifier">array_like</span></dt><dd><p>Soil solid real relative dielectric permittivity phase [-].</p>
+</dd>
+<dt>wp<span class="classifier">array_like</span></dt><dd><p>Soil water phase real dielectric permittivity [-].</p>
+</dd>
+<dt>clay<span class="classifier">array_like</span></dt><dd><p>Soil clay content [g/g]*100</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>array_like</dt><dd><p>The estimated soil bulk real relative dielectric permittivity [-]</p>
+</dd>
+</dl>
+<aside class="footnote brackets" id="id8" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Lichtenecker, K., and K. Rother. 1931.</p>
+</aside>
+<p>Die Herleitung des logarithmischen Mischungsgesetzes aus allgemeinen Prinzipien der staionären Strömung. 
+Phys. Z. 32:255-260.
+.. [2] Tina Wunderlich, Hauke Petersen, Said Attia al Hagrey, Wolfgang Rabbel; 
+Pedophysical Models for Resistivity and Permittivity of Partially Water-Saturated Soils. 
+Vadose Zone Journal 2013;; 12 (4): vzj2013.01.0023. doi: <a class="reference external" href="https://doi.org/10.2136/vzj2013.01.0023">https://doi.org/10.2136/vzj2013.01.0023</a></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LR_W</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">2.65</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="go">17.505 </span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.pedophysical_models.bulk_perm.LongmireSmithP">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.pedophysical_models.bulk_perm.</span></span><span class="sig-name descname"><span class="pre">LongmireSmithP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bulk_ec_dc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bulk_perm_inf</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frequency_perm</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.pedophysical_models.bulk_perm.LongmireSmithP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the soil bulk real relative dielectric permittivity using the Longmire-Smith model.</p>
+<p>This is a semiempirical model that calculates the soil bulk real relative dielectric permittivity at different
+electromagnetic frequencies [1].</p>
+<dl class="simple">
+<dt>bulk_ec_dc<span class="classifier">array_like</span></dt><dd><p>Soil bulk real direct current electrical conductivity [-].</p>
+</dd>
+<dt>bulk_perm_inf<span class="classifier">array_like</span></dt><dd><p>Soil bulk real relative permittivity at infinite frequency [-].</p>
+</dd>
+<dt>frequency_perm<span class="classifier">array_like</span></dt><dd><p>Frequency of dielectric permittivity measurement [Hz].</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>array_like</dt><dd><p>Soil bulk real relative dielectric permittivity [-].</p>
+</dd>
+</dl>
+<p>The Longmire-Smith equation uses a set of coefficients to account for the 
+frequency-dependent dielectric dispersion. If all values in the <cite>bulk_ec_dc</cite> 
+array are zero, the function returns ‘bulk_perm_inf’.</p>
+<dl class="simple">
+<dt>epsilon_0<span class="classifier">float</span></dt><dd><p>The vacuum permittivity constant.</p>
+</dd>
+</dl>
+<aside class="footnote brackets" id="id9" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<ol class="upperalpha simple" start="11">
+<li><ol class="upperalpha simple" start="19">
+<li><p>Smith and C. L. Longmire, “A universal impedance for soils,”</p></li>
+</ol>
+</li>
+</ol>
+</aside>
+<p>Defense Nuclear Agency, Alexandria, VA, USA, Topical 
+Report for Period Jul. 1 1975-Sep. 30 1975, 1975.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LongmireSmithP</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">50e6</span><span class="p">)</span>
+<span class="go">23.328</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.pedophysical_models.bulk_perm.WunderlichP">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.pedophysical_models.bulk_perm.</span></span><span class="sig-name descname"><span class="pre">WunderlichP</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">water</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perm_init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wat_init</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">Lw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.pedophysical_models.bulk_perm.WunderlichP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the soil bulk real relative dielectric permittivity using the Wunderlich model.</p>
+<p>This is a effective medium model that uses a differential 
+approach to compute the dielectric permittivity based on the initial 
+conditions and the water content [1]. Reported RMSE = 0.009</p>
+<dl class="simple">
+<dt>water<span class="classifier">array_like</span></dt><dd><p>Soil volumetric water content [m**3/m**3].</p>
+</dd>
+<dt>perm_init<span class="classifier">float</span></dt><dd><p>Initial soil bulk real relative dielectric permittivity [-].</p>
+</dd>
+<dt>wat_init<span class="classifier">float</span></dt><dd><p>Initial soil volumetric water content [m**3/m**3].</p>
+</dd>
+<dt>wp<span class="classifier">array_like</span></dt><dd><p>Soil water phase real dielectric permittivity [-].</p>
+</dd>
+<dt>Lw<span class="classifier">float</span></dt><dd><p>Soil scalar depolarization factor of water aggregates (effective medium theory) [-]</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>array_like</dt><dd><p>The estimated soil bulk real relative dielectric permittivity [-]</p>
+</dd>
+</dl>
+<p>The Wunderlich model is a differential model and the approach used here 
+employs a simple while loop with a step of 0.01 until the differential 
+fraction reaches 1. The method takes into account the initial water content, 
+initial relative dielectric permittivity, and weighting factors to determine the 
+bulk real relative dielectric permittivity.</p>
+<aside class="footnote brackets" id="id10" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Tina Wunderlich, Hauke Petersen, Said Attia al Hagrey, Wolfgang Rabbel;</p>
+</aside>
+<p>Pedophysical Models for Resistivity and Permittivity of Partially Water-Saturated Soils. 
+Vadose Zone Journal 2013;; 12 (4): vzj2013.01.0023. doi: <a class="reference external" href="https://doi.org/10.2136/vzj2013.01.0023">https://doi.org/10.2136/vzj2013.01.0023</a></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">WunderlichP</span><span class="p">(</span><span class="mf">0.3</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="go">24.591</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-pedophysics.pedophysical_models.water">
+<span id="pedophysics-pedophysical-models-water-module"></span><h2>pedophysics.pedophysical_models.water module<a class="headerlink" href="#module-pedophysics.pedophysical_models.water" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.pedophysical_models.water.LR">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.pedophysical_models.water.</span></span><span class="sig-name descname"><span class="pre">LR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.pedophysical_models.water.LR" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the soil volumetric water content using the Lichtenecker and Rother model.</p>
+<p>This function computes the volumetric water content of a soil 
+mixture using the volumetric mixing model of Lichtenecker and Rother [1] (LR). 
+The model incorporates the bulk dielectric permittivity, bulk and particle densities, and 
+permittivities of air, solid, and water.</p>
+<dl class="simple">
+<dt>bp<span class="classifier">array_like</span></dt><dd><p>Soil bulk real relative dielectric permittivity [-]</p>
+</dd>
+<dt>bd<span class="classifier">array_like </span></dt><dd><p>Soil bulk density (g/cm^3).</p>
+</dd>
+<dt>pdn<span class="classifier">array_like</span></dt><dd><p>Soil particle density (g/cm^3).</p>
+</dd>
+<dt>ap<span class="classifier">array_like</span></dt><dd><p>Soil air real relative dielectric permittivity phase [-].</p>
+</dd>
+<dt>sp<span class="classifier">array_like</span></dt><dd><p>Soil solid real relative dielectric permittivity phase [-].</p>
+</dd>
+<dt>wp<span class="classifier">array_like</span></dt><dd><p>Soil water phase real dielectric permittivity [-].</p>
+</dd>
+<dt>alpha<span class="classifier">float</span></dt><dd><p>Soil alpha exponent as defined in volumetric mixing theory [-].</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>array_like</dt><dd><p>Soil volumetric water content [m**3/m**3].</p>
+</dd>
+</dl>
+<aside class="footnote brackets" id="id11" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Lichtenecker, K., and K. Rother. 1931.</p>
+</aside>
+<p>Die Herleitung des logarithmischen Mischungsgesetzes aus allgemeinen Prinzipien der staionären Strömung. 
+Phys. Z. 32:255-260.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LR</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">2.65</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="go">0.210</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.pedophysical_models.water.LR_MV">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.pedophysical_models.water.</span></span><span class="sig-name descname"><span class="pre">LR_MV</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">CEC</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.pedophysical_models.water.LR_MV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the soil volumetric water content using the Lichtenecker and Rother model.</p>
+<p>This function computes the volumetric water content of a soil 
+mixture using the volumetric mixing model of Lichtenecker and Rother [1], and Mendoza Veirana [2] alpha correction model (LR_MV). 
+The model incorporates the bulk dielectric permittivity, bulk and particle densities, and 
+permittivities of air, solid, and water, as well as the soil cation exchange capacity. Reported R2 = 0.94</p>
+<dl class="simple">
+<dt>bp<span class="classifier">array_like</span></dt><dd><p>Soil bulk real relative dielectric permittivity [-]</p>
+</dd>
+<dt>bd<span class="classifier">array_like </span></dt><dd><p>Soil bulk density (g/cm^3).</p>
+</dd>
+<dt>pdn<span class="classifier">array_like</span></dt><dd><p>Soil particle density (g/cm^3).</p>
+</dd>
+<dt>ap<span class="classifier">array_like</span></dt><dd><p>Soil air real relative dielectric permittivity phase [-].</p>
+</dd>
+<dt>sp<span class="classifier">array_like</span></dt><dd><p>Soil solid real relative dielectric permittivity phase [-].</p>
+</dd>
+<dt>wp<span class="classifier">array_like</span></dt><dd><p>Soil water phase real dielectric permittivity [-].</p>
+</dd>
+<dt>CEC<span class="classifier">array_like</span></dt><dd><p>Soil cation exchange capacity [meq/100g].</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>array_like</dt><dd><p>Soil volumetric water content [m**3/m**3].</p>
+</dd>
+</dl>
+<aside class="footnote brackets" id="id12" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Lichtenecker, K., and K. Rother. 1931.</p>
+</aside>
+<p>Die Herleitung des logarithmischen Mischungsgesetzes aus allgemeinen Prinzipien der staionären Strömung. 
+Phys. Z. 32:255-260.
+.. [2] Gaston Mendoza Veirana, Jeroen Verhegge, Wim Cornelis, Philippe De Smedt, 
+Soil dielectric permittivity modelling for 50-MHz instrumentation,
+Geoderma, Volume 438, 2023, 116624, ISSN 0016-7061,
+<a class="reference external" href="https://doi.org/10.1016/j.geoderma.2023.116624">https://doi.org/10.1016/j.geoderma.2023.116624</a>.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LR_MV</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">2.65</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="go">0.078</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.pedophysical_models.water.LR_W">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.pedophysical_models.water.</span></span><span class="sig-name descname"><span class="pre">LR_W</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bd</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pdn</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">clay</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.pedophysical_models.water.LR_W" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the soil volumetric water content using the Lichtenecker and Rother model.</p>
+<p>This function computes the volumetric water content of a soil 
+mixture using the volumetric mixing model of Lichtenecker and Rother [1], and Wunderlich [2] alpha correction model (LR_W). 
+The model incorporates the bulk dielectric permittivity, bulk and particle densities, and 
+permittivities of air, solid, and water, as well as the soil clay content.</p>
+<dl class="simple">
+<dt>bp<span class="classifier">array_like</span></dt><dd><p>Soil bulk real relative dielectric permittivity [-]</p>
+</dd>
+<dt>bd<span class="classifier">array_like </span></dt><dd><p>Soil bulk density (g/cm^3).</p>
+</dd>
+<dt>pd<span class="classifier">array_like</span></dt><dd><p>Soil particle density (g/cm^3).</p>
+</dd>
+<dt>ap<span class="classifier">array_like</span></dt><dd><p>Soil air real relative dielectric permittivity phase [-].</p>
+</dd>
+<dt>sp<span class="classifier">array_like</span></dt><dd><p>Soil solid real relative dielectric permittivity phase [-].</p>
+</dd>
+<dt>wp<span class="classifier">array_like</span></dt><dd><p>Soil water phase real dielectric permittivity [-].</p>
+</dd>
+<dt>clay<span class="classifier">array_like</span></dt><dd><p>Soil clay content [g/g]*100</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>array_like</dt><dd><p>Soil volumetric water content [m**3/m**3].</p>
+</dd>
+</dl>
+<aside class="footnote brackets" id="id13" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Lichtenecker, K., and K. Rother. 1931.</p>
+</aside>
+<p>Die Herleitung des logarithmischen Mischungsgesetzes aus allgemeinen Prinzipien der staionären Strömung. 
+Phys. Z. 32:255-260.
+.. [2] Tina Wunderlich, Hauke Petersen, Said Attia al Hagrey, Wolfgang Rabbel; 
+Pedophysical Models for Resistivity and Permittivity of Partially Water-Saturated Soils. 
+Vadose Zone Journal 2013;; 12 (4): vzj2013.01.0023. doi: <a class="reference external" href="https://doi.org/10.2136/vzj2013.01.0023">https://doi.org/10.2136/vzj2013.01.0023</a></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">LR_W</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mf">1.3</span><span class="p">,</span> <span class="mf">2.65</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="go">0.177</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-pedophysics.pedophysical_models.water_ec">
+<span id="pedophysics-pedophysical-models-water-ec-module"></span><h2>pedophysics.pedophysical_models.water_ec module<a class="headerlink" href="#module-pedophysics.pedophysical_models.water_ec" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.pedophysical_models.water_ec.SenGoode">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.pedophysical_models.water_ec.</span></span><span class="sig-name descname"><span class="pre">SenGoode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C_f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.pedophysical_models.water_ec.SenGoode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate soil water real electrical conductivity using the Sen and Goode model.</p>
+<p>Based on the model proposed by Sen and Goode (1992 a, b) [1][2], this function estimates 
+the oil water real electrical conductivity given the soil temperature and 
+salinity of the bulk pore fluid.</p>
+<dl class="simple">
+<dt>T<span class="classifier">array_like</span></dt><dd><p>Soil bulk temperature [K]</p>
+</dd>
+<dt>C_f<span class="classifier">array_like</span></dt><dd><p>Soil (NaCl) salinity of the bulk pore fluid [mol/L].</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>water_ec<span class="classifier">array_like</span></dt><dd><p>Soil water real electrical conductivity [S/m].</p>
+</dd>
+</dl>
+<aside class="footnote brackets" id="id14" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Sen P and Goode P (1992a)</p>
+</aside>
+<p>Influence of temperature on electrical conductivity on shaly sands. 
+Geophysics 57: 89-96.
+.. [2] Sen P and Goode P (1992b) 
+Errata, to: Influence of temperature on electrical conductivity of shaly sands. 
+Geophysics 57: 1658.</p>
+<p>The function uses specific coefficients based on the Sen and Goode model to 
+compute the electrical conductivity of soil water, taking into account the 
+temperature and salinity effects.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">SenGoode</span><span class="p">(</span><span class="mf">298.15</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span>
+<span class="go">0.117822</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-pedophysics.pedophysical_models.water_perm">
+<span id="pedophysics-pedophysical-models-water-perm-module"></span><h2>pedophysics.pedophysical_models.water_perm module<a class="headerlink" href="#module-pedophysics.pedophysical_models.water_perm" title="Permalink to this heading">¶</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.pedophysical_models.water_perm.MalmbergMaryott">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.pedophysical_models.water_perm.</span></span><span class="sig-name descname"><span class="pre">MalmbergMaryott</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.pedophysical_models.water_perm.MalmbergMaryott" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate soil water phase real dielectric permittivity using the Malmberg &amp; Maryott model.</p>
+<p>This function utilizes the model proposed by Malmberg and Maryott (1956) [1] to estimate 
+the soil water phase real dielectric permittivity based on a given soil temperature. Reported RMSE = 0.0046</p>
+<dl class="simple">
+<dt>T<span class="classifier">array_like</span></dt><dd><p>Soil bulk temperature [K].</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>water_perm<span class="classifier">array_like</span></dt><dd><p>Soil water phase real dielectric permittivity [-]</p>
+</dd>
+</dl>
+<aside class="footnote brackets" id="id15" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Malmberg C and Maryott A (1956)</p>
+</aside>
+<p>Dielectric constant of water from 0 °C to 100 °C. 
+Journal of Research of the National Bureau of Standards 56(1): 1-8, Paper 2641.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">MalmbergMaryott</span><span class="p">(</span><span class="mf">298.15</span><span class="p">)</span>
+<span class="go">78.303</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.pedophysical_models.water_perm.Olhoeft">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.pedophysical_models.water_perm.</span></span><span class="sig-name descname"><span class="pre">Olhoeft</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C_f</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.pedophysical_models.water_perm.Olhoeft" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate soil water phase real dielectric permittivity using the Olhoeft (1986) [1] model.</p>
+<dl class="simple">
+<dt>T<span class="classifier">array_like</span></dt><dd><p>Soil bulk temperature [K].</p>
+</dd>
+<dt>C_f<span class="classifier">array_like</span></dt><dd><p>Soil (NaCl) salinity of the bulk pore fluid [mol/L].</p>
+</dd>
+</dl>
+<dl class="simple">
+<dt>water_perm<span class="classifier">array_like</span></dt><dd><p>Soil water phase real dielectric permittivity [-]</p>
+</dd>
+</dl>
+<aside class="footnote brackets" id="id16" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<p>Revil, A., Schwaeger, H., Cathles, L. M., and Manhardt, P. D. (1999),</p>
+</aside>
+<p>Streaming potential in porous media: 2. Theory and application to geothermal systems, 
+J. Geophys. Res., 104(B9), 20033-20048, doi:10.1029/1999JB900090.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Olhoeft</span><span class="p">(</span><span class="mf">298.15</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="go">76.945</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="module-pedophysics.pedophysical_models">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pedophysics.pedophysical_models" title="Permalink to this heading">¶</a></h2>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">pedophysics</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Gaston Mendoza Veirana.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.0.2</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/source/pedophysics.pedophysical_models.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
