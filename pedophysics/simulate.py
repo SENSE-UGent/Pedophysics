@@ -88,41 +88,42 @@ class Soil(object):
 
     def __init__(self, **kwargs):
         # Define acceptable types for each argument
-
+        array_like_types = [float, np.float64, np.ndarray, int, list]
+        single_value = [float, np.float64, int]
         attributes = {
-                'temperature': [float, np.ndarray, int, list],
-                'water': [float, np.ndarray, int, list],
-                'salinity': [float, np.ndarray, int, list],
-                'sand': [float, int, np.ndarray, list],
-                'silt': [float, int, np.ndarray, list],
-                'clay': [float, int, np.ndarray, list],
-                'bulk_density': [float, np.ndarray, int, list],
-                'particle_density': [float, np.ndarray, int, list],
-                'CEC': [float, np.ndarray, int, list],
-                'orgm': [float, np.ndarray, int, list],
-                'bulk_perm': [float, np.ndarray, int, list],
-                'bulk_perm_inf': [float, np.ndarray, int, list],
-                'air_perm': [float, np.ndarray, int, list],
-                'water_perm': [float, np.ndarray, int, list],
-                'solid_perm': [float, np.ndarray, int, list],
-                'offset_perm': [float, np.ndarray, int, list],
-                'bulk_ec': [float, np.ndarray, int, list],
-                'water_ec': [float, np.ndarray, int, list],
-                'solid_ec': [float, np.ndarray, int, list],
-                'dry_ec': [float, np.ndarray, int, list],
-                'sat_ec': [float, np.ndarray, int, list],
-                's_ec': [float, np.ndarray, int, list],
-                'frequency_perm': [float, np.ndarray, int, list],
-                'frequency_ec': [float, np.ndarray, int, list],
-                'L': [float, int],
-                'Lw': [float, int],
-                'm': [float, int],
-                'n': [float, int],
-                'alpha': [float, int],
+                'temperature': array_like_types,
+                'water': array_like_types,
+                'salinity': array_like_types,
+                'sand': array_like_types,
+                'silt': array_like_types,
+                'clay': array_like_types,
+                'bulk_density': array_like_types,
+                'particle_density': array_like_types,
+                'CEC': array_like_types,
+                'orgm': array_like_types,
+                'bulk_perm': array_like_types,
+                'bulk_perm_inf': array_like_types,
+                'air_perm': array_like_types,
+                'water_perm': array_like_types,
+                'solid_perm': array_like_types,
+                'offset_perm': array_like_types,
+                'bulk_ec': array_like_types,
+                'water_ec': array_like_types,
+                'solid_ec': array_like_types,
+                'dry_ec': array_like_types,
+                'sat_ec': array_like_types,
+                's_ec': array_like_types,
+                'frequency_perm': array_like_types,
+                'frequency_ec': array_like_types,
+                'L': single_value,
+                'Lw': single_value,
+                'm': single_value,
+                'n': single_value,
+                'alpha': single_value,
                 'texture': [str],
                 'instrument': [str],
-                'range_ratio': [float, int],
-                'n_states': [float, int],
+                'range_ratio': single_value,
+                'n_states': single_value,
                 'roundn': [int],
                 }
 
@@ -135,8 +136,8 @@ class Soil(object):
         def to_ndarray(arg, key=None):
             if key in ['texture', 'instrument']:
                 return arg  # return the argument if it is 'texture' or 'instrument'
-            if isinstance(arg, (list, int, float)):
-                return np.array([arg]) if isinstance(arg, (int, float)) else np.array(arg)
+            if isinstance(arg, (list, int, np.float64, float)):
+                return np.array([arg]) if isinstance(arg, (int, np.float64, float)) else np.array(arg)
             return arg
 
         # Check each input argument
@@ -161,16 +162,16 @@ class Soil(object):
         self.range_ratio = 2 if np.isnan(self.range_ratio[0]) else self.range_ratio
         
         ### Fill the state variables with nans when are shorter than n_states
-        state_attribute = ['temperature', 'water', 'salinity', 'sand', 'silt', 'clay', 'bulk_density', 'particle_density', 'CEC',
+        array_like_attributes = ['temperature', 'water', 'salinity', 'sand', 'silt', 'clay', 'bulk_density', 'particle_density', 'CEC',
                             'orgm', 'bulk_perm', 'bulk_perm_inf', 'air_perm', 'water_perm', 'solid_perm', 'offset_perm', 'bulk_ec', 
                             'water_ec', 'solid_ec', 'dry_ec', 'sat_ec', 's_ec', 'frequency_perm', 'frequency_ec']
 
         # calculate the max length of the input arrays
-        n_states = max([len(getattr(self, attr)) for attr in state_attribute])
+        n_states = max([len(getattr(self, attr)) for attr in array_like_attributes])
         self.n_states = n_states                            # Number of states of the soil
 
         # Now loop over each attribute in the list
-        for attribute in state_attribute:
+        for attribute in array_like_attributes:
             attr = getattr(self, attribute)
             
             if len(attr) != n_states:
@@ -180,7 +181,7 @@ class Soil(object):
                 setattr(self, attribute, np.append(attr[0], [attr[0]]*(n_states - 1)))     
 
         ### Defining special attributes ### 
-        self.df = pd.DataFrame({attr: getattr(self, attr) for attr in state_attribute})
+        self.df = pd.DataFrame({attr: getattr(self, attr) for attr in array_like_attributes})
 
         # defining soil.info
         self.info = self.df.where(pd.notna(self.df), np.nan)

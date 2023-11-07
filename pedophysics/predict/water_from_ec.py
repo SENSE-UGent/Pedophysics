@@ -150,7 +150,8 @@ def non_fitting(soil, bulk_ec_dc):
     WaterEC: Function to compute water_ec
     SolidEC: Function to compute solid_ec
     """
-
+    print('bulk_ec_dc:', bulk_ec_dc)
+    
     Texture(soil)
     ParticleDensity(soil)
     WaterEC(soil)
