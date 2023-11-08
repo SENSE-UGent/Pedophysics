@@ -5,6 +5,7 @@ from .water_ec import *
 from .frequency_ec import *
 from .particle_density import *
 from .solid_ec import *
+from .bulk_ec_tc import *
 
 from pedophysics.pedophysical_models.bulk_ec import WunderlichEC, LongmireSmithEC, Fu
 
@@ -56,7 +57,8 @@ def BulkEC(soil):
         bulk_ec_dc = dc_freq(soil, bulk_ec_dc)
         dc_to_non_dc(soil, bulk_ec_dc)
 
-    return soil.df.bulk_ec.values
+    BulkECTC(soil)
+    return soil.df.bulk_ec_tc.values
 
 
 def non_dc_to_dc(soil):

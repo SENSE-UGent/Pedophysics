@@ -1,5 +1,6 @@
 from .air_perm import *
 from .bulk_ec import *
+from .bulk_ec_tc import *
 from .bulk_perm_inf import *
 from .bulk_perm import *
 from .frequency_ec import *

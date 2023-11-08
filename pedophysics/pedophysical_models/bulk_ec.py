@@ -237,13 +237,12 @@ def Rhoades(water, wc, s_ec, E, F):
 
     """
     bulk_ec = wc*(E*(water**2)+F*water) + s_ec
-    
     return bulk_ec
 
 
 def SheetsHendrickx(bulk_ec, temperature):
     """
-    Calculate the temperature-corrected bulk real electrical conductivity of soil using the Sheets-Hendricks model.
+    Calculate the temperature-corrected soil bulk real electrical conductivity using the Sheets-Hendricks model.
 
     This function adjusts the apparent electrical conductivity (ECa) of soil to a standard temperature of 25°C. The adjustment is based on the Sheets-Hendricks model.
 
@@ -257,7 +256,7 @@ def SheetsHendrickx(bulk_ec, temperature):
     Returns
     -------
     array_like
-        Temperature-corrected electrical conductivity at 25°C [S/m].
+        Soil bulk real electrical conductivity temperature corrected [S/m]
 
     Notes
     -----
@@ -270,5 +269,5 @@ def SheetsHendrickx(bulk_ec, temperature):
     """
     temp_c = temperature - 273.15
     ft = 0.447+1.4034*np.exp(-temp_c/26.815) # Temperature conversion factor
-    bulk_ec_25 = bulk_ec*ft
-    return bulk_ec_25
+    bulk_ec_tc = bulk_ec*ft
+    return bulk_ec_tc
