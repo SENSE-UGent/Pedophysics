@@ -41,8 +41,12 @@ class Soil(object):
         Soil bulk real relative dielectric permittivity when soil bulk real electrical conductivity is zero [-]
     bulk_ec : array-like
         Soil bulk real electrical conductivity [S/m]
+    bulk_ec_dc : array-like
+        Soil bulk real electrical conductivity direct current [S/m]
     bulk_ec_tc : array-like
         Soil bulk real electrical conductivity temperature corrected [S/m]
+    bulk_ec_dc_tc : array-like
+        Soil bulk real electrical conductivity direct current temperature corrected [S/m]
     water_ec : array-like
         Soil water real electrical conductivity [S/m]
     s_ec : array-like
@@ -110,7 +114,9 @@ class Soil(object):
                 'solid_perm': array_like_types,
                 'offset_perm': array_like_types,
                 'bulk_ec': array_like_types,
-                'bulk_ec_25c': array_like_types,
+                'bulk_ec_dc': array_like_types,
+                'bulk_ec_tc': array_like_types,
+                'bulk_ec_dc_tc': array_like_types,
                 'water_ec': array_like_types,
                 'solid_ec': array_like_types,
                 'dry_ec': array_like_types,
@@ -167,7 +173,7 @@ class Soil(object):
         ### Fill the state variables with nans when are shorter than n_states
         array_like_attributes = ['temperature', 'water', 'salinity', 'sand', 'silt', 'clay', 'bulk_density', 'particle_density', 'CEC',
                             'orgm', 'bulk_perm', 'bulk_perm_inf', 'air_perm', 'water_perm', 'solid_perm', 'offset_perm', 'bulk_ec', 
-                            'bulk_ec_25c', 'water_ec', 'solid_ec', 'dry_ec', 'sat_ec', 's_ec', 'frequency_perm', 'frequency_ec']
+                            'bulk_ec_dc', 'bulk_ec_tc', 'bulk_ec_dc_tc', 'water_ec', 'solid_ec', 'dry_ec', 'sat_ec', 's_ec', 'frequency_perm', 'frequency_ec']
 
         # calculate the max length of the input arrays
         n_states = max([len(getattr(self, attr)) for attr in array_like_attributes])
