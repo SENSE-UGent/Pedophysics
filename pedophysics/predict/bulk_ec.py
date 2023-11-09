@@ -7,7 +7,7 @@ from .particle_density import *
 from .solid_ec import *
 from .bulk_ec_tc import *
 
-from pedophysics.pedophysical_models.bulk_ec import WunderlichEC, LongmireSmithEC, Fu
+from pedophysics.pedophysical_models.bulk_ec import WunderlichEC, LongmireSmithEC, Fu, SheetsHendrickx
 
 
 def BulkEC(soil):
@@ -48,7 +48,10 @@ def BulkEC(soil):
     if (np.isnan(soil.df.bulk_ec)).any():  # Go over if any value is missing        
         FrequencyEC(soil)
 
-        if any(np.isnan(soil.df.bulk_ec[x]) and not np.isnan(soil.df.water[x]) and soil.df.frequency_ec[x] >= 5 for x in range(soil.n_states)):
+        if any(np.isnan(soil.df.bulk_ec[x]) and (not np.isnan(soil.df.bulk_ec_tc[x])) for x in range(soil.n_states)):
+            temperature_correction(soil)
+
+        elif any(np.isnan(soil.df.bulk_ec[x]) and not np.isnan(soil.df.water[x]) and soil.df.frequency_ec[x] >= 5 for x in range(soil.n_states)):
             bulk_ec_dc = non_dc_to_dc(soil)
 
         else:
@@ -59,6 +62,27 @@ def BulkEC(soil):
 
     BulkECTC(soil)
     return soil.df.bulk_ec_tc.values
+
+
+def temperature_correction(soil):
+    """
+
+    """    
+    # Defining minimization function to obtain DC bulk EC 
+    def objective_func_ec_tc(bulk_ec, bulk_ec_tc, temperature):
+        return (SheetsHendrickx(bulk_ec, temperature) - bulk_ec_tc)**2
+    bulk_ec = []
+
+    for i in range(soil.n_states):
+        res = minimize(objective_func_ec_tc, 0.05, args=(soil.df.bulk_ec_tc[i], soil.df.frequency_ec[i]), bounds=[(0, 1)])
+        bulk_ec.append(np.nan if np.isnan(res.fun) else round(res.x[0], soil.roundn+2) )
+
+    soil.info['bulk_ec'] = [str(soil.info.bulk_ec[x]) + "--> Calculated from soil.df.bulk_ec_tc using SheetsHendrickx function in predict.bulk_ec.temperature_correction" if 
+                    np.isnan(soil.df.bulk_ec[x]) and not np.isnan(soil.df.bulk_ec_tc[x]) or 
+                    soil.info.bulk_ec[x] == str(soil.info.bulk_ec[x]) + "--> Calculated from soil.df.bulk_ec_tc using SheetsHendrickx function in predict.bulk_ec.temperature_correction"  
+                    else soil.info.bulk_ec[x] for x in range(soil.n_states)]
+    
+    soil.df['bulk_ec'] = [round(bulk_ec[i], soil.roundn+3) if np.isnan(soil.df.bulk_ec[i]) and not np.isnan(soil.df.bulk_ec_tc[i]) else soil.df.bulk_ec[i] for i in range(soil.n_states)]
 
 
 def non_dc_to_dc(soil):
