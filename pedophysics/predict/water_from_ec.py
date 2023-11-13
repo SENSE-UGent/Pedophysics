@@ -9,7 +9,7 @@ from .particle_density import ParticleDensity
 from .solid_ec import SolidEC
 from .frequency_ec import FrequencyEC
 from .texture import Texture
-from .bulk_ec import non_dc_to_dc
+from .bulk_ec_dc import non_dc_to_dc
 
 
 def WaterFromEC(soil):
@@ -55,7 +55,6 @@ def WaterFromEC(soil):
     4    0.243
     Name: water, dtype: float64
     """
-
     FrequencyEC(soil)
     
     # Check for non-DC frequency conditions

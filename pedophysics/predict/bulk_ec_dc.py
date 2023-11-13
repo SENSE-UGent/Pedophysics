@@ -1,28 +1,36 @@
 import numpy as np
 from scipy.optimize import minimize
 
-from .water_ec import *
-from .frequency_ec import *
-from .particle_density import *
-from .solid_ec import *
-from .bulk_ec_dc_tc import *
+from .bulk_ec_dc_tc import BulkECDCTC
 
-from pedophysics.pedophysical_models.bulk_ec import WunderlichEC, LongmireSmithEC, Fu, SheetsHendrickx
+from pedophysics.pedophysical_models.bulk_ec import LongmireSmithEC, SheetsHendrickx
 
 
 def BulkECDC(soil):
     """
     
-    """        
-    BulkECDCTC(soil)
-    tc_to_non_tc(soil)
+    """    
+    if any(np.isnan(soil.df.bulk_ec_dc)):
+        #conversion_to_dc(soil)    
+        BulkECDCTC(soil)
+
+        if any(np.isnan(soil.df.bulk_ec_dc[x]) and not np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states)):
+            tc_to_non_tc(soil)
+
+        if any(np.isnan(soil.df.bulk_ec_dc[x]) and not np.isnan(soil.df.bulk_ec[x]) for x in range(soil.n_states)):
+            non_dc_to_dc(soil)
 
     return soil.df.bulk_ec_dc.values
 
-#    soil.info['bulk_ec_dc'] = [str(soil.info.bulk_ec_dc[x]) + "--> Assumed equal to soil.df.bulk_ec because soil.df.frequency_ec[x] >= 5" if any(np.isnan(soil.df.bulk_ec[x]) and not np.isnan(soil.df.water[x]) and soil.df.frequency_ec[x] >= 5) or 
-#            soil.info.bulk_ec_dc[x] == str(soil.info.bulk_ec_dc[x]) + "--> Assumed equal to soil.df.bulk_ec because soil.df.frequency_ec[x] >= 5" else soil.info.bulk_ec_dc[x] for x in range(soil.n_states)]
 
-#    soil.df['bulk_ec_dc'] = soil.df.bulk_ec
+#def conversion_to_dc(soil):
+#    """
+
+#    """    
+#    soil.info['bulk_ec_dc'] = [str(soil.info.bulk_ec_dc[x]) + "--> Equal to soil.df.bulk_ec_dc_tc in predict.bulk_ec_dc.conversion_to_dc" if np.isnan(soil.df.bulk_ec_dc[x]) and soil.df.temperature[x] == 298.15
+#                        or soil.info.bulk_ec_dc[x] == str(soil.info.bulk_ec_dc[x]) + "--> Equal to soil.df.bulk_ec_dc_tc in predict.bulk_ec_dc.conversion_to_dc" else soil.info.bulk_ec_dc[x] for x in range(soil.n_states)]
+
+#    soil.df['bulk_ec_dc'] = [soil.df.bulk_ec_dc_tc[x] if np.isnan(soil.df.bulk_ec_dc[x]) and soil.df.temperature[x] == 298.15 else soil.df.bulk_ec_dc[x] for x in range(soil.n_states)]
 
 
 def tc_to_non_tc(soil):
@@ -30,20 +38,19 @@ def tc_to_non_tc(soil):
 
     """    
     # Defining minimization function to obtain DC bulk EC 
-    def objective_func_ec_tc(bulk_ec_dc, bulk_ec_dc_tc, temperature):
+    def objective_tc_to_non_tc(bulk_ec_dc, bulk_ec_dc_tc, temperature):
         return (SheetsHendrickx(bulk_ec_dc, temperature) - bulk_ec_dc_tc)**2
-    bulk_ec_dc = []
 
     for i in range(soil.n_states):
-        res = minimize(objective_func_ec_tc, 0.05, args=(soil.df.bulk_ec_dc_tc[i], soil.df.frequency_ec[i]), bounds=[(0, 1)])
-        bulk_ec_dc.append(np.nan if np.isnan(res.fun) else round(res.x[0], soil.roundn+2) )
+        if soil.df.temperature[i] == 298.15 and np.isnan(soil.df.bulk_ec_dc[i]):
+            soil.info['bulk_ec_dc'][i] = str(soil.info.bulk_ec_dc[i]) + "--> Equal to soil.df.bulk_ec_dc_tc in predict.bulk_ec_dc.tc_to_non_tc"
+            soil.df['bulk_ec_dc'][i] = soil.df.bulk_ec_dc_tc[i]
 
-    soil.info['bulk_ec_dc'] = [str(soil.info.bulk_ec_dc[x]) + "--> Calculated from soil.df.bulk_ec_dc_tc using SheetsHendrickx function in predict.bulk_ec.tc_to_non_tc" if 
-                    np.isnan(soil.df.bulk_ec_dc[x]) and not np.isnan(soil.df.bulk_ec_dc_tc[x]) or 
-                    soil.info.bulk_ec_dc[x] == str(soil.info.bulk_ec_dc[x]) + "--> Calculated from soil.df.bulk_ec_dc_tc using SheetsHendrickx function in predict.bulk_ec.tc_to_non_tc"  
-                    else soil.info.bulk_ec_dc[x] for x in range(soil.n_states)]
-    
-    soil.df['bulk_ec_dc'] = [round(bulk_ec_dc[i], soil.roundn+3) if np.isnan(soil.df.bulk_ec_dc[i]) and not np.isnan(soil.df.bulk_ec_dc_tc[i]) else soil.df.bulk_ec_dc[i] for i in range(soil.n_states)]
+        elif soil.df.temperature[i] != 298.15 and np.isnan(soil.df.bulk_ec_dc[i]):
+            res = minimize(objective_tc_to_non_tc, 0.05, args=(soil.df.bulk_ec_dc_tc[i], soil.df.temperature[i]), bounds=[(0, 1)])
+
+            soil.info['bulk_ec_dc'][i] = str(soil.info.bulk_ec_dc[i]) + "--> Calculated from soil.df.bulk_ec_dc_tc using SheetsHendrickx function in predict.bulk_ec_dc.tc_to_non_tc"
+            soil.df['bulk_ec_dc'][i] = round(res.x[0], soil.roundn+2)
 
 
 def non_dc_to_dc(soil):
@@ -79,22 +86,17 @@ def non_dc_to_dc(soil):
     """
 
     # Defining minimization function to obtain DC bulk EC 
-    def objective_func_ec_dc(bulk_ec_dc, frequency_ec, bulk_ec):
+    def objective_non_dc_to_dc(bulk_ec_dc, frequency_ec, bulk_ec):
         return (LongmireSmithEC(bulk_ec_dc, frequency_ec) - bulk_ec)**2
-    bulk_ec_dc = []
 
     for i in range(soil.n_states):
-        if soil.df.frequency_ec[i] <= 5 or np.isnan(soil.df.bulk_ec[i]):
-            bulk_ec_dc.append(soil.df.bulk_ec[i])
+        if soil.df.frequency_ec[i] <= 5 and np.isnan(soil.df.bulk_ec_dc[i]):
+            soil.info['bulk_ec_dc'][i] = str(soil.info.bulk_ec_dc[i]) + "--> Equal to soil.df.bulk_ec in predict.bulk_ec_dc.non_dc_to_dc" 
+            soil.df['bulk_ec_dc'][i] = soil.df.bulk_ec[i]
 
-        elif soil.df.frequency_ec[i] > 5 and not np.isnan(soil.df.bulk_ec[i]):
-            res = minimize(objective_func_ec_dc, 0.05, args=(soil.df.frequency_ec[i], soil.df.bulk_ec[i]), bounds=[(0, 1)])
-            bulk_ec_dc.append(np.nan if np.isnan(res.fun) else round(res.x[0], soil.roundn+2) )
+        elif soil.df.frequency_ec[i] > 5 and np.isnan(soil.df.bulk_ec_dc[i]):
+            res = minimize(objective_non_dc_to_dc, 0.05, args=(soil.df.frequency_ec[i], soil.df.bulk_ec[i]), bounds=[(0, 1)])
 
-    soil.info['bulk_ec_dc'] = [str(soil.info.bulk_ec_dc[x]) + "--> EM frequency shift from actual to zero Hz using LongmireSmithEC function in predict.bulk_ec.non_dc_to_dc" if 
-                    soil.df.frequency_ec[x] > 5 and not np.isnan(soil.df.bulk_ec[x]) and np.isnan(soil.df.bulk_ec_dc[x]) or 
-                    soil.info.bulk_ec[x] == str(soil.info.bulk_ec[x]) + "--> EM frequency shift from actual to zero Hz using LongmireSmithEC function in predict.bulk_ec.non_dc_to_dc" else soil.info.bulk_ec[x] for x in range(soil.n_states)]
-            
-    soil.df['bulk_ec_dc'] = [bulk_ec_dc[x] if np.isnan(soil.df.bulk_ec_dc[x]) else soil.df.bulk_ec_dc[x] for x in range(soil.n_states)] 
-
+            soil.info['bulk_ec_dc'][i] = str(soil.info.bulk_ec_dc[i]) + "--> EM frequency shift from actual to zero Hz using LongmireSmithEC function in predict.bulk_ec_dc.non_dc_to_dc"
+            soil.df['bulk_ec_dc'][i] = round(res.x[0], soil.roundn+2)
 

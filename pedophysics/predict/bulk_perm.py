@@ -10,7 +10,7 @@ from .bulk_perm_inf import *
 from .particle_density import *
 from .air_perm import *
 from .solid_perm import *
-
+from .temperature import *
 
 def BulkPerm(soil):
     """ 

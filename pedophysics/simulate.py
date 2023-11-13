@@ -133,7 +133,7 @@ class Soil(object):
                 'instrument': [str],
                 'range_ratio': single_value,
                 'n_states': single_value,
-                'roundn': [int],
+                'roundn': [int]
                 }
 
         accepted_values = {
