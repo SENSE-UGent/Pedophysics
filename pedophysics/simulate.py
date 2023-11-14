@@ -79,6 +79,10 @@ class Soil(object):
         Data Frame containing descriptive information about how each array-like attribute was determined or modified.
     df : DataFrame
         Data Frame containing the quantitative information of all soil array-like attributes for each state.
+    E : single-value
+        Empirical constant as in Rohades model [-]
+    F : single-value
+        Empirical constant as in Rohades model [-]
     roundn : int
         Number of decimal places to round results.
     range_ratio : single-value
@@ -115,7 +119,6 @@ class Soil(object):
                 'offset_perm': array_like_types,
                 'bulk_ec': array_like_types,
                 'bulk_ec_dc': array_like_types,
-                'bulk_ec_tc': array_like_types,
                 'bulk_ec_dc_tc': array_like_types,
                 'water_ec': array_like_types,
                 'solid_ec': array_like_types,
@@ -133,6 +136,8 @@ class Soil(object):
                 'instrument': [str],
                 'range_ratio': single_value,
                 'n_states': single_value,
+                'E': single_value,
+                'F': single_value,
                 'roundn': [int]
                 }
 
@@ -173,7 +178,7 @@ class Soil(object):
         ### Fill the state variables with nans when are shorter than n_states
         array_like_attributes = ['temperature', 'water', 'salinity', 'sand', 'silt', 'clay', 'bulk_density', 'particle_density', 'CEC',
                             'orgm', 'bulk_perm', 'bulk_perm_inf', 'air_perm', 'water_perm', 'solid_perm', 'offset_perm', 'bulk_ec', 
-                            'bulk_ec_dc', 'bulk_ec_tc', 'bulk_ec_dc_tc', 'water_ec', 'solid_ec', 'dry_ec', 'sat_ec', 's_ec', 'frequency_perm', 'frequency_ec']
+                            'bulk_ec_dc', 'bulk_ec_dc_tc', 'water_ec', 'solid_ec', 'dry_ec', 'sat_ec', 's_ec', 'frequency_perm', 'frequency_ec']
 
         # calculate the max length of the input arrays
         n_states = max([len(getattr(self, attr)) for attr in array_like_attributes])

@@ -1,13 +1,13 @@
 import numpy as np
 from scipy.optimize import minimize
 
-from .water_ec import *
 from .frequency_ec import *
 from .particle_density import *
 from .solid_ec import *
 from .temperature import *
 
-from pedophysics.pedophysical_models.bulk_ec import Fu, WunderlichEC, SheetsHendrickx
+from pedophysics.pedophysical_models.bulk_ec import Fu, SheetsHendrickx, WunderlichEC
+from pedophysics.utils.stats import R2_score
 
 
 def BulkECDCTC(soil):
@@ -47,10 +47,8 @@ def BulkECDCTC(soil):
     if (np.isnan(soil.df.bulk_ec_dc_tc)).any():  # Go over if any value is missing        
         FrequencyEC(soil)
         Temperature(soil)
-        conversion_to_dc_tc(soil)
-
-        if any(np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.bulk_ec_dc[x]) for x in range(soil.n_states)):
-            non_tc_to_tc(soil)
+        non_dc_non_tc_to_dc_tc(soil)
+        non_tc_to_tc(soil)
 
         # Condition for fitting routine 
         if sum(not np.isnan(soil.water[x]) and not np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states))>= 3:
@@ -63,31 +61,31 @@ def BulkECDCTC(soil):
     return soil.df.bulk_ec_tc.values
 
 
-def conversion_to_dc_tc(soil):
+def non_dc_non_tc_to_dc_tc(soil):
     """
     
     """
-    soil.info['bulk_ec_dc_tc'] = [str(soil.info.bulk_ec_dc_tc[x]) + "--> Equal to soil.df.bulk_ec in predict.bulk_ec_dc_tc.conversion_to_dc_tc" if np.isnan(soil.df.bulk_ec_dc_tc[x]) and soil.df.temperature[x] == 298.15 and soil.df.frequency_ec[x] <= 5
-                            or soil.info.bulk_ec_dc_tc[x] == str(soil.info.bulk_ec_dc_tc[x]) + "--> Equal to soil.df.bulk_ec in predict.bulk_ec_dc_tc.conversion_to_dc_tc"
+    soil.info['bulk_ec_dc_tc'] = [str(soil.info.bulk_ec_dc_tc[x]) + "--> Equal to soil.df.bulk_ec in predict.bulk_ec_dc_tc.non_dc_non_tc_to_dc_tc" if np.isnan(soil.df.bulk_ec_dc_tc[x]) and soil.df.temperature[x] == 298.15 and soil.df.frequency_ec[x] <= 5
+                            or soil.info.bulk_ec_dc_tc[x] == str(soil.info.bulk_ec_dc_tc[x]) + "--> Equal to soil.df.bulk_ec in predict.bulk_ec_dc_tc.non_dc_non_tc_to_dc_tc"
                             else soil.info.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
     
     soil.df['bulk_ec_dc_tc'] = [soil.df.bulk_ec[x] if np.isnan(soil.df.bulk_ec_dc_tc[x]) and soil.df.temperature[x] == 298.15 and soil.df.frequency_ec[x] <= 5 else soil.df.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
-
-    soil.info['bulk_ec_dc_tc'] = [str(soil.info.bulk_ec_dc_tc[x]) + "--> Equal to soil.df.bulk_ec_dc in predict.bulk_ec_dc_tc.conversion_to_dc_tc" if np.isnan(soil.df.bulk_ec_dc_tc[x]) and soil.df.temperature[x] == 298.15
-                            or soil.info.bulk_ec_dc_tc[x] == str(soil.info.bulk_ec_dc_tc[x]) + "--> Equal to soil.df.bulk_ec_dc in predict.bulk_ec_dc_tc.conversion_to_dc_tc"
-                            else soil.info.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
-     
-    soil.df['bulk_ec_dc_tc'] = [soil.df.bulk_ec_dc[x] if np.isnan(soil.df.bulk_ec_dc_tc[x]) and soil.df.temperature[x] == 298.15 else soil.df.bulk_ec_dc_tc for x in range(soil.n_states)]
-
+    
 
 def non_tc_to_tc(soil):
     """
     
     """
-    soil.info['bulk_ec_dc_tc'] = [str(soil.info.bulk_ec_dc_tc[x]) + "--> Calculated using SheetsHendrickx function in predict.bulk_ec_dc_tc.non_tc_to_tc" if np.isnan(soil.df.bulk_ec_dc_tc) and soil.df.temperature[x] != 298.15
+    soil.info['bulk_ec_dc_tc'] = [str(soil.info.bulk_ec_dc_tc[x]) + "--> Equal to soil.df.bulk_ec_dc in predict.bulk_ec_dc_tc.non_tc_to_tc" if np.isnan(soil.df.bulk_ec_dc_tc[x]) and soil.df.temperature[x] == 298.15
+                            or soil.info.bulk_ec_dc_tc[x] == str(soil.info.bulk_ec_dc_tc[x]) + "--> Equal to soil.df.bulk_ec_dc in predict.bulk_ec_dc_tc.non_tc_to_tc"
+                            else soil.info.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
+     
+    soil.df['bulk_ec_dc_tc'] = [soil.df.bulk_ec_dc[x] if np.isnan(soil.df.bulk_ec_dc_tc[x]) and soil.df.temperature[x] == 298.15 else soil.df.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
+
+    soil.info['bulk_ec_dc_tc'] = [str(soil.info.bulk_ec_dc_tc[x]) + "--> Calculated using SheetsHendrickx function in predict.bulk_ec_dc_tc.non_tc_to_tc" if np.isnan(soil.df.bulk_ec_dc_tc[x]) and soil.df.temperature[x] != 298.15
                         or soil.info.bulk_ec_dc_tc[x] == str(soil.info.bulk_ec_dc_tc[x]) + "--> Calculated using SheetsHendrickx function in predict.bulk_ec_dc_tc.non_tc_to_tc" else soil.info.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
     
-    soil.df['bulk_ec_dc_tc'] = [SheetsHendrickx(soil.df.bulk_ec_dc[x], soil.df.temperature[x]) if np.isnan(soil.df.bulk_ec_dc_tc) and soil.df.temperature[x] != 298.15 else soil.df.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
+    soil.df['bulk_ec_dc_tc'] = [SheetsHendrickx(soil.df.bulk_ec_dc[x], soil.df.temperature[x]) if np.isnan(soil.df.bulk_ec_dc_tc[x]) and soil.df.temperature[x] != 298.15 else soil.df.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
 
 
 #def dc_freq(soil):
@@ -171,6 +169,8 @@ def fitting(soil):
     WunderlichEC: Function that defines the relationship between water content and electrical conductivity.
     WaterEC: Function to compute soil water real electrical conductivity.
     """
+    from .water_ec import WaterEC # Lazy import to avoid circular dependency
+
     WaterEC(soil)                    
 
     # Defining model parameters
@@ -253,6 +253,7 @@ def non_fitting(soil):
     WaterEC: Function to compute water_ec
     SolidEC: Function to compute solid_ec
     """
+    from .water_ec import WaterEC # Lazy import to avoid circular dependency
 
     Texture(soil)
     ParticleDensity(soil)
