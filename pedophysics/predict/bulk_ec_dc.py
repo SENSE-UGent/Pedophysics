@@ -1,8 +1,6 @@
 import numpy as np
 from scipy.optimize import minimize
 
-from .bulk_ec_dc_tc import BulkECDCTC
-
 from pedophysics.pedophysical_models.bulk_ec import LongmireSmithEC, SheetsHendrickx
 
 
@@ -10,6 +8,7 @@ def BulkECDC(soil):
     """
     
     """    
+    from .bulk_ec_dc_tc import BulkECDCTC # Lazy import to avoid circular dependency
     if any(np.isnan(soil.df.bulk_ec_dc)):
         #conversion_to_dc(soil)    
         BulkECDCTC(soil)

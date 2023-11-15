@@ -30,7 +30,7 @@ def conversion(soil):
                         or soil.info.bulk_ec[x] == str(soil.info.bulk_ec[x]) + "--> Equal to soil.df.bulk_ec_dc in predict.bulk_ec.conversion"
                         else soil.info.bulk_ec[x] for x in range(soil.n_states)]
     
-    soil.df['bulk_ec'] = [soil.df.bulk_ec_dc[x] if np.isnan(soil.df.bulk_ec[x]) and soil.df.frequency_ec[x] <= 5 else soil.df.bulk_ec for x in range(soil.n_states)]
+    soil.df['bulk_ec'] = [soil.df.bulk_ec_dc[x] if np.isnan(soil.df.bulk_ec[x]) and soil.df.frequency_ec[x] <= 5 else soil.df.bulk_ec[x] for x in range(soil.n_states)]
 
 
 def dc_to_non_dc(soil):

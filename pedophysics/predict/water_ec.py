@@ -13,8 +13,7 @@ from .texture import Texture
 from .frequency_ec import FrequencyEC
 from .water_perm import WaterPerm
 
-from .bulk_ec_dc import non_dc_to_dc
-from .bulk_ec_dc_tc import non_tc_to_tc, non_dc_non_tc_to_dc_tc
+from .bulk_ec_dc_tc import shift_to_bulk_ec_dc_tc
 
 def WaterEC(soil):
     """
@@ -69,11 +68,7 @@ def WaterEC(soil):
 
     Temperature(soil)
     FrequencyEC(soil)
-    if any(((not np.isnan(soil.df.bulk_ec[x])) or (not np.isnan(soil.df.bulk_ec_dc[x]))) and np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states)):
-
-        non_dc_to_dc(soil)
-        non_dc_non_tc_to_dc_tc(soil)
-        non_tc_to_tc(soil)
+    shift_to_bulk_ec_dc_tc(soil)
 
     # Condition for non-fitting approach
     if any(np.isnan(soil.df.water_ec[x]) and not np.isnan(soil.df.salinity[x]) for x in range(soil.n_states)) or sum(np.isnan(soil.df.water_ec[x]) and not np.isnan(soil.df.water[x]) and not np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states)) == 1:

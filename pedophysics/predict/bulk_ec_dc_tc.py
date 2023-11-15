@@ -5,6 +5,7 @@ from .frequency_ec import *
 from .particle_density import *
 from .solid_ec import *
 from .temperature import *
+from .bulk_ec_dc import non_dc_to_dc
 
 from pedophysics.pedophysical_models.bulk_ec import Fu, SheetsHendrickx, WunderlichEC
 from pedophysics.utils.stats import R2_score
@@ -47,8 +48,7 @@ def BulkECDCTC(soil):
     if (np.isnan(soil.df.bulk_ec_dc_tc)).any():  # Go over if any value is missing        
         FrequencyEC(soil)
         Temperature(soil)
-        non_dc_non_tc_to_dc_tc(soil)
-        non_tc_to_tc(soil)
+        shift_to_bulk_ec_dc_tc(soil)
 
         # Condition for fitting routine 
         if sum(not np.isnan(soil.water[x]) and not np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states))>= 3:
@@ -58,7 +58,7 @@ def BulkECDCTC(soil):
         if any(not np.isnan(soil.df.water[x]) and np.isnan(soil.df.bulk_ec_dc_tc[x])  for x in range(soil.n_states)):
             non_fitting(soil)
 
-    return soil.df.bulk_ec_tc.values
+    return soil.df.bulk_ec_dc_tc.values
 
 
 def non_dc_non_tc_to_dc_tc(soil):
@@ -86,6 +86,16 @@ def non_tc_to_tc(soil):
                         or soil.info.bulk_ec_dc_tc[x] == str(soil.info.bulk_ec_dc_tc[x]) + "--> Calculated using SheetsHendrickx function in predict.bulk_ec_dc_tc.non_tc_to_tc" else soil.info.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
     
     soil.df['bulk_ec_dc_tc'] = [SheetsHendrickx(soil.df.bulk_ec_dc[x], soil.df.temperature[x]) if np.isnan(soil.df.bulk_ec_dc_tc[x]) and soil.df.temperature[x] != 298.15 else soil.df.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
+
+
+def shift_to_bulk_ec_dc_tc(soil):
+    """
+    
+    """    
+    if any(((not np.isnan(soil.df.bulk_ec[x])) or (not np.isnan(soil.df.bulk_ec_dc[x]))) and np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states)):
+        non_dc_to_dc(soil)
+        non_dc_non_tc_to_dc_tc(soil)
+        non_tc_to_tc(soil)
 
 
 #def dc_freq(soil):

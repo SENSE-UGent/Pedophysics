@@ -9,8 +9,6 @@ from .particle_density import ParticleDensity
 from .solid_ec import SolidEC
 from .frequency_ec import FrequencyEC
 from .texture import Texture
-from .bulk_ec_dc_tc import non_tc_to_tc, non_dc_non_tc_to_dc_tc
-from .bulk_ec_dc import non_dc_to_dc
 
 
 def WaterFromEC(soil):
@@ -57,12 +55,6 @@ def WaterFromEC(soil):
     Name: water, dtype: float64
     """
     FrequencyEC(soil)
-    
-    # Check for non-DC frequency conditions
-    if any((np.isnan(soil.df.bulk_ec_dc_tc[x]) and (not np.isnan(soil.df.bulk_ec[x]) or not np.isnan(soil.df.bulk_ec_dc[x]))) for x in range(soil.n_states)):
-        non_dc_to_dc(soil)
-        non_dc_non_tc_to_dc_tc(soil)
-        non_tc_to_tc(soil)
 
     # Check for conditions to use a fitting approach
     if sum(not np.isnan(soil.water[x]) and not np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states)) >= 3:
