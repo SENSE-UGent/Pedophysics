@@ -13,6 +13,7 @@ from .texture import Texture
 from .frequency_ec import FrequencyEC
 from .water_perm import WaterPerm
 
+from .bulk_ec_dc_tc import shift_to_bulk_ec_dc_tc
 
 def WaterEC(soil):
     """
@@ -67,13 +68,14 @@ def WaterEC(soil):
 
     Temperature(soil)
     FrequencyEC(soil)
+    shift_to_bulk_ec_dc_tc(soil)
 
     # Condition for non-fitting approach
-    if any(np.isnan(soil.df.water_ec[x]) and not np.isnan(soil.df.salinity[x]) for x in range(soil.n_states)) or sum(np.isnan(soil.df.water_ec[x]) and not np.isnan(soil.df.water[x]) and not np.isnan(soil.df.bulk_ec[x]) for x in range(soil.n_states)) == 1:
+    if any(np.isnan(soil.df.water_ec[x]) and not np.isnan(soil.df.salinity[x]) for x in range(soil.n_states)) or sum(np.isnan(soil.df.water_ec[x]) and not np.isnan(soil.df.water[x]) and not np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states)) == 1:
         non_fitting(soil)
 
     # Condition for fitting approach
-    if sum(not np.isnan(soil.bulk_ec[x]) and (not np.isnan(soil.water[x]) or not np.isnan(soil.bulk_perm[x])) and np.isnan(soil.water_ec[x]) for x in range(soil.n_states)) >= 2:
+    if sum(not np.isnan(soil.bulk_ec_dc_tc[x]) and (not np.isnan(soil.water[x]) or not np.isnan(soil.bulk_perm[x])) and np.isnan(soil.water_ec[x]) for x in range(soil.n_states)) >= 2:
         fitting(soil)
 
     return soil.df.water_ec.values
@@ -108,9 +110,9 @@ def non_fitting(soil):
     if any(np.isnan(soil.df.water_ec[x]) and not np.isnan(soil.salinity[x]) for x in range(soil.n_states)):
         from_salinity(soil)
 
-    # Condition for non-fitting approach using bulk_ec
-    if any(np.isnan(soil.df.water_ec[x]) and not np.isnan(soil.df.water[x]) and not np.isnan(soil.df.bulk_ec[x]) for x in range(soil.n_states)):
-        from_bulk_ec(soil)
+    # Condition for non-fitting approach using bulk_ec_dc_tc
+    if any(np.isnan(soil.df.water_ec[x]) and not np.isnan(soil.df.water[x]) and not np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states)):
+        from_ec(soil)
 
 
 def from_salinity(soil):
@@ -151,7 +153,7 @@ def from_salinity(soil):
                                 else soil.df.water_ec[x] for x in range(soil.n_states)]
 
 
-def from_bulk_ec(soil):
+def from_ec(soil):
     """
     Calculates soil.df.water_ec based on soil.df.bulk_ec using the Fu function.
 
@@ -196,12 +198,12 @@ def from_bulk_ec(soil):
     wat_ec = []
     for i in range(soil.n_states):
         res = minimize(objective_wat_ec, 0.14, args=(soil.df.water[i], soil.df.clay[i], soil.df.bulk_density[i], soil.df.particle_density[i], soil.df.solid_ec[i], 
-                                                     soil.df.dry_ec[i], soil.df.sat_ec[i], soil.df.bulk_ec[i]), bounds=[(0, 2)] )
+                                                     soil.df.dry_ec[i], soil.df.sat_ec[i], soil.df.bulk_ec_dc_tc[i]), bounds=[(0, 2)] )
         wat_ec.append(np.nan if np.isnan(res.fun) else round(res.x[0], soil.roundn) )
 
     # Saving calculated water_ec and its info
-    soil.info['water_ec'] = [str(soil.info.water_ec[x]) + "--> Calculated using Fu function (reported R2=0.98) in predict.water_ec.from_bulk_ec" if np.isnan(soil.df.water_ec[x]) 
-                             or soil.info.water_ec[x] == str(soil.info.water_ec[x]) + "--> Calculated using Fu function (reported R2=0.98) in predict.water_ec.from_bulk_ec"
+    soil.info['water_ec'] = [str(soil.info.water_ec[x]) + "--> Calculated using Fu function (reported R2=0.98) in predict.water_ec.from_ec" if np.isnan(soil.df.water_ec[x]) 
+                             or soil.info.water_ec[x] == str(soil.info.water_ec[x]) + "--> Calculated using Fu function (reported R2=0.98) in predict.water_ec.from_ec"
                                  else soil.info.water_ec[x] for x in range(soil.n_states)]
 
     soil.df['water_ec'] = [round(wat_ec[x], soil.roundn+3) if np.isnan(soil.df.water_ec[x]) else soil.df.water[x] for x in range(soil.n_states) ]
@@ -237,11 +239,11 @@ def fitting(soil):
     """
 
     # Condition for fitting approach using Rhoades function
-    if sum(not np.isnan(soil.df.bulk_ec[x]) and not np.isnan(soil.df.water[x]) and np.isnan(soil.df.water_ec[x]) for x in range(soil.n_states)) >= 2:
+    if sum(not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.water[x]) and np.isnan(soil.df.water_ec[x]) for x in range(soil.n_states)) >= 2:
         fitting_rhoades(soil)
     
     # Condition for fitting approach using Rhoades function
-    elif sum(not np.isnan(soil.df.bulk_ec[x]) and not np.isnan(soil.df.bulk_perm[x]) and soil.df.bulk_perm[x]>=10 and np.isnan(soil.df.water_ec[x]) for x in range(soil.n_states)) >= 2:
+    elif sum(not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.bulk_perm[x]) and soil.df.bulk_perm[x]>=10 and np.isnan(soil.df.water_ec[x]) for x in range(soil.n_states)) >= 2:
         fitting_hilhorst(soil)
 
 
@@ -280,8 +282,8 @@ def fitting_rhoades(soil):
     """
 
     # Selecting calibration data
-    arg_EC_wn = np.array([soil.df.bulk_ec[x] if not np.isnan(soil.df.bulk_ec[x]) and not np.isnan(soil.df.water[x]) else np.nan for x in range(soil.n_states)])
-    arg_water_wn = np.array([soil.df.water[x] if not np.isnan(soil.df.bulk_ec[x]) and not np.isnan(soil.df.water[x]) else np.nan for x in range(soil.n_states)])
+    arg_EC_wn = np.array([soil.df.bulk_ec_dc_tc[x] if not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.water[x]) else np.nan for x in range(soil.n_states)])
+    arg_water_wn = np.array([soil.df.water[x] if not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.water[x]) else np.nan for x in range(soil.n_states)])
     
     # Removing NaNs from calibration data
     valid_indices = ~np.isnan(arg_EC_wn) & ~np.isnan(arg_water_wn)
@@ -296,9 +298,9 @@ def fitting_rhoades(soil):
     initial_guess_F = 0.38
 
     # Defining minimization function to obtain water_ec and s_ec while fixing E and F
-    def objective_water_ec(params, wat, bulk_ec, E, F):
+    def objective_water_ec(params, wat, bulk_ec_dc_tc, E, F):
         water_ec, s_ec = params
-        residuals = (Rhoades(wat, water_ec, s_ec, E, F) - bulk_ec)**2
+        residuals = (Rhoades(wat, water_ec, s_ec, E, F) - bulk_ec_dc_tc)**2
         return np.sum(residuals)
 
     # Calculating optimal water_ec and s_ec
@@ -313,9 +315,9 @@ def fitting_rhoades(soil):
     soil.df['s_ec'] = [round(best_s_ecs, soil.roundn+3) if np.isnan(soil.df.s_ec[x]) else soil.df.s_ec[x] for x in range(soil.n_states) ]
 
     # Defining minimization function to obtain E and F while fixing water_ec and s_ec
-    def objective_others(params, wat, bulk_ec, water_ec, s_ec):
+    def objective_others(params, wat, bulk_ec_dc_tc, water_ec, s_ec):
         E, F = params
-        residuals = np.sum((Rhoades(wat, water_ec, s_ec, E, F) - bulk_ec)**2)
+        residuals = np.sum((Rhoades(wat, water_ec, s_ec, E, F) - bulk_ec_dc_tc)**2)
         return residuals
 
     # Calculating optimal E and F
@@ -375,11 +377,11 @@ def fitting_hilhorst(soil):
     WaterPerm(soil)
 
     # Selecting calibration data
-    arg_EC_wn = np.array([soil.df.bulk_ec[x] if not np.isnan(soil.df.bulk_ec[x]) and not np.isnan(soil.df.bulk_perm[x]) and soil.df.bulk_perm[x]>=10 
+    arg_EC_wn = np.array([soil.df.bulk_ec_dc_tc[x] if not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.bulk_perm[x]) and soil.df.bulk_perm[x]>=10 
                             else np.nan for x in range(soil.n_states)])
-    arg_bulk_perm_wn = np.array([soil.df.bulk_perm[x] if not np.isnan(soil.df.bulk_ec[x]) and not np.isnan(soil.df.bulk_perm[x]) and soil.df.bulk_perm[x]>=10 
+    arg_bulk_perm_wn = np.array([soil.df.bulk_perm[x] if not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.bulk_perm[x]) and soil.df.bulk_perm[x]>=10 
                               else np.nan for x in range(soil.n_states)])
-    arg_water_perm_wn = np.array([soil.df.water_perm[x] if not np.isnan(soil.df.bulk_ec[x]) and not np.isnan(soil.df.bulk_perm[x]) and soil.df.bulk_perm[x]>=10 
+    arg_water_perm_wn = np.array([soil.df.water_perm[x] if not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.bulk_perm[x]) and soil.df.bulk_perm[x]>=10 
                                else np.nan for x in range(soil.n_states)])
 
     # Removing NaNs from calibration data
@@ -394,9 +396,9 @@ def fitting_hilhorst(soil):
     initial_guess_watec = 0.15
 
     # Defining minimization function
-    def objective_water_ec(param, bulk_perm, bulk_ec, water_perm):
+    def objective_water_ec(param, bulk_perm, bulk_ec_dc_tc, water_perm):
         water_ec, offset_perm = param
-        residuals = (Hilhorst(bulk_ec, water_ec, water_perm, offset_perm) - bulk_perm)**2
+        residuals = (Hilhorst(bulk_ec_dc_tc, water_ec, water_perm, offset_perm) - bulk_perm)**2
         return np.sum(residuals)
 
     # Calculating optimal water_ec and offset_perm

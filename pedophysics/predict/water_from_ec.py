@@ -9,7 +9,6 @@ from .particle_density import ParticleDensity
 from .solid_ec import SolidEC
 from .frequency_ec import FrequencyEC
 from .texture import Texture
-from .bulk_ec import non_dc_to_dc
 
 
 def WaterFromEC(soil):
@@ -55,20 +54,18 @@ def WaterFromEC(soil):
     4    0.243
     Name: water, dtype: float64
     """
-
     FrequencyEC(soil)
-    
-    # Check for non-DC frequency conditions
-    if any(np.isnan(soil.df.water[x]) and not np.isnan(soil.df.bulk_ec[x]) and soil.df.frequency_ec[x] >= 5 for x in range(soil.n_states)):
-        bulk_ec_dc = non_dc_to_dc(soil) 
-    else:
-        # If already in DC frequency
-        bulk_ec_dc = soil.df.bulk_ec
 
-    dc_freq(soil, bulk_ec_dc)
+    # Check for conditions to use a fitting approach
+    if sum(not np.isnan(soil.water[x]) and not np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states)) >= 3:
+        fitting(soil)
+
+    # Check for conditions to use a non-fitting approach
+    if any(np.isnan(soil.df.water[x]) and not np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states)):
+        non_fitting(soil)
 
 
-def dc_freq(soil, bulk_ec_dc):
+#def dc_freq(soil):
     """ 
     Decide between fitting and non-fitting approaches to calculate soil.df.water
 
@@ -103,15 +100,15 @@ def dc_freq(soil, bulk_ec_dc):
     """
 
     # Check for conditions to use a fitting approach
-    if sum(not np.isnan(soil.water[x]) and not np.isnan(bulk_ec_dc[x]) for x in range(soil.n_states)) >= 3:
-        fitting(soil, bulk_ec_dc)
+#    if sum(not np.isnan(soil.water[x]) and not np.isnan(bulk_ec_dc[x]) for x in range(soil.n_states)) >= 3:
+#        fitting(soil, bulk_ec_dc)
 
     # Check for conditions to use a non-fitting approach
-    if any(np.isnan(soil.df.water[x]) and not np.isnan(bulk_ec_dc[x]) for x in range(soil.n_states)):
-        non_fitting(soil, bulk_ec_dc)
+#    if any(np.isnan(soil.df.water[x]) and not np.isnan(bulk_ec_dc[x]) for x in range(soil.n_states)):
+#        non_fitting(soil, bulk_ec_dc)
 
 
-def non_fitting(soil, bulk_ec_dc):
+def non_fitting(soil):
     """ 
     Return and compute soil.df.water using a non-fitting approach.
 
@@ -149,9 +146,7 @@ def non_fitting(soil, bulk_ec_dc):
     ParticleDensity: Function to compute particle_density.
     WaterEC: Function to compute water_ec
     SolidEC: Function to compute solid_ec
-    """
-    print('bulk_ec_dc:', bulk_ec_dc)
-    
+    """    
     Texture(soil)
     ParticleDensity(soil)
     WaterEC(soil)
@@ -165,7 +160,7 @@ def non_fitting(soil, bulk_ec_dc):
     # Calculating water
     for i in range(soil.n_states):
         res = minimize(objective_func_wat, 0.15, args=(soil.df.clay[i], soil.df.bulk_density[i], soil.df.particle_density[i], soil.df.water_ec[i], soil.df.solid_ec[i], 
-                                                        soil.df.dry_ec[i], soil.df.sat_ec[i], bulk_ec_dc[i]), bounds=[(0, .65)] )
+                                                        soil.df.dry_ec[i], soil.df.sat_ec[i], soil.df.bulk_ec_dc_tc[i]), bounds=[(0, .65)] )
         wat.append(np.nan if np.isnan(res.fun) else round(res.x[0], soil.roundn) )
 
    # Saving calculated water and its info
@@ -175,7 +170,7 @@ def non_fitting(soil, bulk_ec_dc):
     soil.df['water'] = [round(wat[i], soil.roundn) if np.isnan(soil.df.water[i]) else soil.df.water[i] for i in range(soil.n_states) ]
 
 
-def fitting(soil, bulk_ec_dc):
+def fitting(soil):
     """ 
     Computes soil.df.water using a fitting approach.
 
@@ -221,10 +216,10 @@ def fitting(soil, bulk_ec_dc):
     WaterEC(soil) 
     
     # Defining model parameters
-    valids = ~np.isnan(soil.df.water) & ~np.isnan(bulk_ec_dc) # States where calibration data are
+    valids = ~np.isnan(soil.df.water) & ~np.isnan(soil.df.bulk_ec_dc_tc) # States where calibration data are
     water_init = np.nanmin(soil.df.water[valids])
-    bulk_ec_init = np.nanmin(bulk_ec_dc[valids])
-    bulk_ec_final = np.nanmax(bulk_ec_dc[valids])
+    bulk_ec_init = np.nanmin(soil.df.bulk_ec_dc_tc[valids])
+    bulk_ec_final = np.nanmax(soil.df.bulk_ec_dc_tc[valids])
     bulk_ec_range = [round(bulk_ec_init - (bulk_ec_final-bulk_ec_init)/soil.range_ratio, soil.roundn), 
                      round(bulk_ec_final + (bulk_ec_final-bulk_ec_init)/soil.range_ratio, soil.roundn)]
     if bulk_ec_range[0] < 0:
@@ -236,7 +231,7 @@ def fitting(soil, bulk_ec_dc):
         # Defining minimization function to obtain water
         def objective_Lw(Lw):
             wund_eval = [WunderlichEC(soil.df.water[x], bulk_ec_init, water_init, soil.df.water_ec[x], Lw)[0] if valids[x] else np.nan for x in range(soil.n_states)]    
-            Lw_RMSE = np.sqrt(np.nanmean((np.array(wund_eval) - bulk_ec_dc)**2))
+            Lw_RMSE = np.sqrt(np.nanmean((np.array(wund_eval) - soil.df.bulk_ec_dc_tc)**2))
             return Lw_RMSE
 
         # Calculating optimal Lw
@@ -251,12 +246,12 @@ def fitting(soil, bulk_ec_dc):
 
         # Defining minimization function to obtain water
         def objective_wat(wat, i):
-            Wat_RMSE = np.sqrt((WunderlichEC(wat, bulk_ec_init, water_init, soil.df.water_ec[i], soil.Lw) - bulk_ec_dc[i])**2)
+            Wat_RMSE = np.sqrt((WunderlichEC(wat, bulk_ec_init, water_init, soil.df.water_ec[i], soil.Lw) - soil.df.bulk_ec_dc_tc[i])**2)
             return Wat_RMSE
         
         # Looping over soil states to obtain water using WunderlichEC function
         for i in range(soil.n_states):
-            if (min(bulk_ec_range) <= bulk_ec_dc[i] <= max(bulk_ec_range)) & ~np.isnan(bulk_ec_dc[i]):
+            if (min(bulk_ec_range) <= soil.df.bulk_ec_dc_tc[i] <= max(bulk_ec_range)) & ~np.isnan(soil.df.bulk_ec_dc_tc[i]):
                 result = minimize(objective_wat, 0.15, args=(i), bounds=[(0, .65)], method='L-BFGS-B')
                 Wat_wund.append(np.nan if np.isnan(result.fun) else round(result.x[0], soil.roundn))
 
@@ -268,7 +263,7 @@ def fitting(soil, bulk_ec_dc):
 
         # Saving calculated bulk_perm and its info with R2 and valid bulk_ec range
         soil.info['water'] = [str(soil.info.water[x]) + "--> Calculated by fitting (R2="+str(R2)+") WunderlichEC function in predict.water_from_ec.fitting, for soil.bulk_ec values between: "+str(bulk_ec_range) 
-                              if min(bulk_ec_range) <= bulk_ec_dc[x] <= max(bulk_ec_range) and np.isnan(soil.df.water[x])
+                              if min(bulk_ec_range) <= soil.df.bulk_ec_dc_tc[x] <= max(bulk_ec_range) and np.isnan(soil.df.water[x])
                                 or soil.info.water[x] == str(soil.info.water[x]) + "--> Calculated by fitting (R2="+str(R2)+") WunderlichEC function in predict.water_from_ec.fitting, for soil.bulk_ec values between: "+str(bulk_ec_range)
                                 else soil.info.water[x] for x in range(soil.n_states)]
         

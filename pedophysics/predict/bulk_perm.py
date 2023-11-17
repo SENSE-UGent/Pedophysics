@@ -1,4 +1,5 @@
 import numpy as np
+from scipy.optimize import minimize
 
 from pedophysics.pedophysical_models.bulk_perm import WunderlichP, LongmireSmithP, LR, LR_W, LR_MV
 from pedophysics.utils.stats import R2_score
@@ -10,7 +11,7 @@ from .bulk_perm_inf import *
 from .particle_density import *
 from .air_perm import *
 from .solid_perm import *
-
+from .temperature import *
 
 def BulkPerm(soil):
     """ 
