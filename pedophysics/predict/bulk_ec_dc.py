@@ -22,16 +22,6 @@ def BulkECDC(soil):
     return soil.df.bulk_ec_dc.values
 
 
-#def conversion_to_dc(soil):
-#    """
-
-#    """    
-#    soil.info['bulk_ec_dc'] = [str(soil.info.bulk_ec_dc[x]) + "--> Equal to soil.df.bulk_ec_dc_tc in predict.bulk_ec_dc.conversion_to_dc" if np.isnan(soil.df.bulk_ec_dc[x]) and soil.df.temperature[x] == 298.15
-#                        or soil.info.bulk_ec_dc[x] == str(soil.info.bulk_ec_dc[x]) + "--> Equal to soil.df.bulk_ec_dc_tc in predict.bulk_ec_dc.conversion_to_dc" else soil.info.bulk_ec_dc[x] for x in range(soil.n_states)]
-
-#    soil.df['bulk_ec_dc'] = [soil.df.bulk_ec_dc_tc[x] if np.isnan(soil.df.bulk_ec_dc[x]) and soil.df.temperature[x] == 298.15 else soil.df.bulk_ec_dc[x] for x in range(soil.n_states)]
-
-
 def tc_to_non_tc(soil):
     """
 
