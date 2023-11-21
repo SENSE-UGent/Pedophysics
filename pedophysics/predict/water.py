@@ -3,6 +3,9 @@ import numpy as np
 from .water_from_ec import WaterFromEC
 from .water_from_perm import WaterFromPerm
 from .frequency_perm import FrequencyPerm
+from .frequency_ec import FrequencyEC
+from .temperature import Temperature
+from .bulk_ec_dc_tc import shift_to_bulk_ec_dc_tc
 
 def Water(soil):
     """
@@ -54,6 +57,7 @@ def Water(soil):
     """
 
     # Condition to obtain water from bulk_perm 
+    Temperature(soil)
     FrequencyPerm(soil)
 
     if any(np.isnan(soil.df.water[x]) and not np.isnan(soil.df.bulk_perm[x]) for x in range(soil.n_states)) and (np.isnan(soil.df.frequency_perm)).all():
@@ -63,7 +67,9 @@ def Water(soil):
         WaterFromPerm(soil) 
 
     # Condition to obtain water from bulk_ec
-    if any(np.isnan(soil.df.water[x]) and not np.isnan(soil.df.bulk_ec[x]) for x in range(soil.n_states)):
+    FrequencyEC(soil)
+    shift_to_bulk_ec_dc_tc(soil)
+    if any(np.isnan(soil.df.water[x]) and not np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states)):
         WaterFromEC(soil)        
 
     # Converting negative results due to fitting to zero
