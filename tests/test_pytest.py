@@ -26,12 +26,14 @@ def test_sample_C0():
         assert (BulkEC(sample_C0) == np.array([0.0072, 0.007,  0.0075, 0.008])).all()
 
 
-#def test_sample_C0b():
-sample_C0b = Soil(water =              0.1, 
-                bulk_ec = [ 0.0072,  0.007, 0.0075,  np.nan], 
-                sand=20.0, silt = 10, bulk_density=1.5, water_ec = 0.05, instrument = 'GPR')
-print(BulkEC(sample_C0b))
-assert (BulkEC(sample_C0b) == np.array([0.0072, 0.007, 0.0075, 0.007])).all()
+def test_sample_C0b():
+      sample_C0b = Soil(water =              0.1, 
+                  bulk_ec = [ 0.0072,  0.007, 0.0075,  np.nan], 
+                  sand=20.0, silt = 10, bulk_density=1.5, water_ec = 0.05, instrument = 'GPR')
+
+      print(BulkEC(sample_C0b))
+      print(sample_C0b.df.frequency_ec)
+      assert (BulkEC(sample_C0b) == np.array([0.0072, 0.007, 0.0075, 0.007])).all()
 
 
 #def test_sample_C0c():

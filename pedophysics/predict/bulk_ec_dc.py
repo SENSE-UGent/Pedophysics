@@ -79,7 +79,7 @@ def non_dc_to_dc(soil):
         return (LongmireSmithEC(bulk_ec_dc, frequency_ec) - bulk_ec)**2
 
     for i in range(soil.n_states):
-        if soil.df.frequency_ec[i] <= 5 and np.isnan(soil.df.bulk_ec_dc[i]):
+        if (soil.df.frequency_ec[i] <= 5) and np.isnan(soil.df.bulk_ec_dc[i]):
             soil.info.loc[i, 'bulk_ec_dc'] = str(soil.info.bulk_ec_dc[i]) + "--> Equal to soil.df.bulk_ec in predict.bulk_ec_dc.non_dc_to_dc" 
             soil.df.loc[i, 'bulk_ec_dc'] = soil.df.bulk_ec[i]
 
@@ -88,4 +88,5 @@ def non_dc_to_dc(soil):
 
             soil.info.loc[i, 'bulk_ec_dc'] = str(soil.info.bulk_ec_dc[i]) + "--> EM frequency shift from actual to zero Hz using LongmireSmithEC function in predict.bulk_ec_dc.non_dc_to_dc"
             soil.df.loc[i, 'bulk_ec_dc'] = round(res.x[0], soil.roundn+2)
+
 
