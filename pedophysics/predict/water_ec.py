@@ -71,11 +71,11 @@ def WaterEC(soil):
     shift_to_bulk_ec_dc_tc(soil)
 
     # Condition for non-fitting approach
-    if any(np.isnan(soil.df.water_ec[x]) and not np.isnan(soil.df.salinity[x]) for x in range(soil.n_states)) or sum(np.isnan(soil.df.water_ec[x]) and not np.isnan(soil.df.water[x]) and not np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states)) == 1:
+    if any(np.isnan(soil.df.water_ec[x]) and not np.isnan(soil.df.salinity[x]) for x in range(soil.n_states)) or any(np.isnan(soil.df.water_ec[x]) and not np.isnan(soil.df.water[x]) and not np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states)):
         non_fitting(soil)
 
     # Condition for fitting approach
-    if sum(not np.isnan(soil.bulk_ec_dc_tc[x]) and (not np.isnan(soil.water[x]) or not np.isnan(soil.bulk_perm[x])) and np.isnan(soil.water_ec[x]) for x in range(soil.n_states)) >= 2:
+    if sum(not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.water[x]) and np.isnan(soil.df.water_ec[x]) for x in range(soil.n_states)) >= 2 or sum(not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.bulk_perm[x]) and soil.df.bulk_perm[x]>=10 and np.isnan(soil.df.water_ec[x]) for x in range(soil.n_states)) >= 2:
         fitting(soil)
 
     return soil.df.water_ec.values
@@ -280,7 +280,6 @@ def fitting_rhoades(soil):
     ------------------
     - Rhoades : A mathematical function used to relate bulk EC with water content, water EC, and other parameters.
     """
-
     # Selecting calibration data
     arg_EC_wn = np.array([soil.df.bulk_ec_dc_tc[x] if not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.water[x]) else np.nan for x in range(soil.n_states)])
     arg_water_wn = np.array([soil.df.water[x] if not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.water[x]) else np.nan for x in range(soil.n_states)])
