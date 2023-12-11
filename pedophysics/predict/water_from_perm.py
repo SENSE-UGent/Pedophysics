@@ -59,7 +59,6 @@ def WaterFromPerm(soil):
     2    0.246
     Name: water, dtype: float64
     """
-
     # Condition for constant permittivity frequency
     if np.all(soil.df.frequency_perm == soil.df.frequency_perm[0]):
         fixed_freq(soil)
@@ -211,7 +210,7 @@ def fitting(soil):
     WunderlichP: Function that defines the relationship between water content and relative dielectric permittivity.
     WaterPerm: Function to compute soil water real relative dielectric permittivity.
     """
-
+    print('water fitting')
     WaterPerm(soil)                   
 
     # Defining model parameters
@@ -258,7 +257,7 @@ def fitting(soil):
                 Wat_wund.append(np.nan)
 
         # Calculating the R2 score of the model fitting
-        R2 = round(R2_score(soil.df.water.values, Wat_wund), soil.roundn)
+        R2 = round(R2_score(soil.df.water, np.array(Wat_wund)), soil.roundn)
 
         # Saving calculated bulk_perm and its info with R2 and valid bulk_perm range
         soil.info['water'] = [str(soil.info.water[x]) + "--> Calculated by fitting (R2="+str(R2)+") WunderlichP function in predict.water_from_perm.fitting, for soil.bulk_perm values between: "+str(bulk_perm_range) if min(bulk_perm_range) <= soil.df.bulk_perm[x] <= max(bulk_perm_range) and ~np.isnan(soil.df.bulk_perm[x]) and np.isnan(soil.df.water[x])
@@ -266,7 +265,7 @@ def fitting(soil):
                                 else soil.info.water[x] for x in range(soil.n_states)]
         
         soil.df['water'] = [Wat_wund[x] if np.isnan(soil.df.water[x]) else soil.df.water[x] for x in range(soil.n_states)]
-
+        print('fitting sol:', soil.df.water)
 
 def non_fitting(soil):
     """ 
@@ -308,7 +307,7 @@ def non_fitting(soil):
     WaterPerm(soil)              
     Texture(soil)                     
     #CEC(soil)                      
-
+    print('soil.df.frequency_perm', soil.df.frequency_perm)
     # Condition for EM frequencies between 5 and 30e6
     if ((soil.df.frequency_perm >= 5) & (soil.df.frequency_perm < 30e6)).all():
         BulkPermInf(soil)
@@ -347,7 +346,6 @@ def non_fitting(soil):
         soil.info['water'] = [str(soil.info.water[x]) + "--> Calculated using LR function (reported RMSE=0.032) in predict.water_from_perm.non_fitting" if np.isnan(soil.df.water[x]) 
                         or soil.info.water[x] ==str(soil.info.water[x]) + "--> Calculated using LR function (reported RMSE=0.032) in predict.water_from_perm.non_fitting" else soil.info.water[x] for x in range(soil.n_states)]
                 
-        print('LR', [LR(soil.df.bulk_perm[x], soil.df.bulk_density[x], soil.df.particle_density[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.alpha) for x in range(soil.n_states)])        
         soil.df['water'] = [round(LR(soil.df.bulk_perm[x], soil.df.bulk_density[x], soil.df.particle_density[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.alpha), soil.roundn) if np.isnan(soil.df.water[x]) else soil.df.water[x] for x in range(soil.n_states)]
 
     # Condition for EM frequencies between 200e6 and 30e9

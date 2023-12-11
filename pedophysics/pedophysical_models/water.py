@@ -101,7 +101,6 @@ def LR(bp, bd, pdn, ap, sp, wp, alpha):
 
     if np.isnan(alpha):
         alpha = 0.5
-    print('alpha', alpha, type(alpha))
     por = 1 - bd/pdn    
     water = (bp**alpha - (1-por)*sp**alpha - por*ap**alpha) / (wp**alpha - ap**alpha)
 

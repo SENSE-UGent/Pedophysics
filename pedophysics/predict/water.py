@@ -66,7 +66,7 @@ def Water(soil):
     elif any(np.isnan(soil.df.water[x]) and not np.isnan(soil.df.bulk_perm[x]) for x in range(soil.n_states)) and not (np.isnan(soil.df.frequency_perm).all()):
         WaterFromPerm(soil) 
 
-    # Condition to obtain water from bulk_ec
+    # Condition to obtain water from bulk_ec_dc_tc
     FrequencyEC(soil)
     shift_to_bulk_ec_dc_tc(soil)
     if any(np.isnan(soil.df.water[x]) and not np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states)):

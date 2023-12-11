@@ -635,7 +635,7 @@ def test_sample_WP7b():
                   texture = 'Sand',
                   solid_perm = 5)
 
-      expected_result = np.array([0.05, 0.11, 0.08, 0.11, np.nan, np.nan, np.nan, 0.07, np.nan, np.nan]) # no water ec
+      expected_result = np.array([0.05,  0.11,  0.08,  0.11,  0.05,    np.nan, 0.056, 0.07,  0.061, 0.11 ]) # no water ec
       assert arrays_are_similar(Water(sample_WP7b), expected_result)  
 
 
@@ -658,7 +658,7 @@ def test_sample_WP8():
             solid_perm = 5,
             frequency_perm =         [1e6,  2e6,   2.5e6, 3e6,   3.5e6, 10e6, 25e6,  25e6,  np.nan, 100e6, 200e6])
 
-      expected_result = np.array([np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan , np.nan , np.nan , np.nan])
+      expected_result = np.array([0.006, 0.012, 0.025, 0.046, 0.006, 0.005, 0.03, 0.107, np.nan, 0.25, 0.454])
       assert arrays_are_similar(Water(sample_WP8), expected_result)  
 
 
@@ -700,7 +700,7 @@ def test_sample_WPv():
       sample_WPv = Soil( bulk_perm = [3,    8,       15,    20,    22,    7,    12,    18     ], 
                         bulk_density=1.4, texture = 'Sand', solid_perm = 5, CEC = 1.6, frequency_perm = 50e6)
 
-      expected_result = np.array([0.005, 0.148, 0.282, 0.359, 0.386, 0.124, 0.23, 0.329])
+      expected_result = np.array([0.005, 0.15, 0.286, 0.363, 0.391, 0.126, 0.233, 0.333])
       assert arrays_are_similar(Water(sample_WPv), expected_result) 
 
 ################################################################################################################

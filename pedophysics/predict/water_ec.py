@@ -65,18 +65,22 @@ def WaterEC(soil):
     >>> predict.WaterEC(sample)
     array([0.289855, 0.289855, 0.289855, 0.289855, 0.289855])
     """
-
+    print('water EC')
     Temperature(soil)
     FrequencyEC(soil)
     shift_to_bulk_ec_dc_tc(soil)
 
-    # Condition for non-fitting approach
-    if any(np.isnan(soil.df.water_ec[x]) and not np.isnan(soil.df.salinity[x]) for x in range(soil.n_states)) or any(np.isnan(soil.df.water_ec[x]) and not np.isnan(soil.df.water[x]) and not np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states)):
-        non_fitting(soil)
+    # Condition for non-fitting approach using salinity
+    if any(np.isnan(soil.df.water_ec[x]) and not np.isnan(soil.salinity[x]) for x in range(soil.n_states)):
+        from_salinity(soil)
 
     # Condition for fitting approach
     if sum(not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.water[x]) and np.isnan(soil.df.water_ec[x]) for x in range(soil.n_states)) >= 2 or sum(not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.bulk_perm[x]) and soil.df.bulk_perm[x]>=10 and np.isnan(soil.df.water_ec[x]) for x in range(soil.n_states)) >= 2:
         fitting(soil)
+
+    # Condition for non-fitting approach using bulk_ec_dc_tc
+    if any(np.isnan(soil.df.water_ec[x]) and not np.isnan(soil.df.water[x]) and not np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states)):
+        from_ec(soil)
 
     return soil.df.water_ec.values
 
@@ -185,7 +189,7 @@ def from_ec(soil):
     - SolidEC : Function that provides the electrical conductivity of the solid particles.
     - Fu : Model function to estimate bulk EC from various soil properties.
     """
-
+    print('from EC')
     Texture(soil)
     ParticleDensity(soil)
     SolidEC(soil)
@@ -237,7 +241,7 @@ def fitting(soil):
     - fitting_rhoades : Function that applies the Rhoades function to estimate missing water EC values using bulk EC and water content.
     - fitting_hilhorst : Function that applies the Hilhorst function to estimate missing water EC values using bulk EC and bulk permittivity.
     """
-
+    print('fitting water EC')
     # Condition for fitting approach using Rhoades function
     if sum(not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.water[x]) and np.isnan(soil.df.water_ec[x]) for x in range(soil.n_states)) >= 2:
         fitting_rhoades(soil)
@@ -281,6 +285,8 @@ def fitting_rhoades(soil):
     - Rhoades : A mathematical function used to relate bulk EC with water content, water EC, and other parameters.
     """
     # Selecting calibration data
+    print('fitting rhoades')
+
     arg_EC_wn = np.array([soil.df.bulk_ec_dc_tc[x] if not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.water[x]) else np.nan for x in range(soil.n_states)])
     arg_water_wn = np.array([soil.df.water[x] if not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.water[x]) else np.nan for x in range(soil.n_states)])
     
@@ -372,7 +378,8 @@ def fitting_hilhorst(soil):
     Hilhorst : function
         A mathematical equation to relate bulk EC with water content, water EC, water permittivity, and other parameters.
     """
-    
+    print('fitting hilhorst')
+
     WaterPerm(soil)
 
     # Selecting calibration data

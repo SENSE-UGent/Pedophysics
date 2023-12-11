@@ -252,12 +252,10 @@ def non_fitting(soil):
         Texture(soil)                    
 
         if ((soil.df.frequency_perm >= 30e6) & (soil.df.frequency_perm < 100e6)).all():
-            print('############## LR_MV ############')
             soil.info['bulk_perm'] = [str(soil.info.bulk_perm[x]) + "--> Calculated using LR_MV (reported R2=0.93) function in predict.bulk_perm.non_fitting" if np.isnan(soil.df.bulk_perm[x])
                                     or soil.info.bulk_perm[x] == str(soil.info.bulk_perm[x]) + "--> Calculated using LR_MV (reported R2=0.93) function in predict.bulk_perm.non_fitting"
                                     else soil.info.bulk_perm[x] for x in range(soil.n_states)]
             
-            print(soil.df.bulk_perm, soil.df.water, soil.df.bulk_density, soil.df.particle_density, soil.df.air_perm, soil.df.solid_perm, soil.df.water_perm, soil.df.CEC)
             soil.df['bulk_perm'] = [np.round(LR_MV(soil.df.water[x], soil.df.bulk_density[x], soil.df.particle_density[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.df.CEC[x]), soil.roundn) 
                                     if np.isnan(soil.df.bulk_perm[x]) else soil.df.bulk_perm[x] for x in range(soil.n_states)]
 
