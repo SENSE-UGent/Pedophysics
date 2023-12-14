@@ -45,7 +45,8 @@ def BulkECDCTC(soil):
     - dc_freq : Adjusts the DC values of EC based on frequency.
     - dc_to_non_dc : Converts DC values of EC back to their non-DC counterparts.
     """
-    if (np.isnan(soil.df.bulk_ec_dc_tc)).any():  # Go over if any value is missing        
+    if (np.isnan(soil.df.bulk_ec_dc_tc)).any():  # Go over if any value is missing      
+
         FrequencyEC(soil)
         Temperature(soil)
         shift_to_bulk_ec_dc_tc(soil)
@@ -93,8 +94,8 @@ def shift_to_bulk_ec_dc_tc(soil):
     
     """    
     if any(((not np.isnan(soil.df.bulk_ec[x])) or (not np.isnan(soil.df.bulk_ec_dc[x]))) and np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states)):
-        non_dc_to_dc(soil)
-        non_dc_non_tc_to_dc_tc(soil)
+        non_dc_to_dc(soil) 
+        non_dc_non_tc_to_dc_tc(soil) 
         non_tc_to_tc(soil)
 
 
