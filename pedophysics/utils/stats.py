@@ -34,10 +34,8 @@ def R2_score(actual, predicted):
     0.9228556485355649
     """
     valids = ~np.isnan(actual) & ~np.isnan(predicted)
-
     # Calculate the total sum of squares
     ss_tot = np.sum((actual[valids] - np.mean(actual[valids])) ** 2)
-    
     # Calculate the residual sum of squares
     ss_res = np.sum((actual[valids] - predicted[valids]) ** 2)
 

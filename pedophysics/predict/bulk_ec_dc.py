@@ -10,7 +10,6 @@ def BulkECDC(soil):
     """    
     from .bulk_ec_dc_tc import BulkECDCTC # Lazy import to avoid circular dependency
     if any(np.isnan(soil.df.bulk_ec_dc)):
-        #conversion_to_dc(soil)    
         BulkECDCTC(soil)
 
         if any(np.isnan(soil.df.bulk_ec_dc[x]) and not np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states)):
@@ -88,3 +87,8 @@ def non_dc_to_dc(soil):
 
             soil.info.loc[i, 'bulk_ec_dc'] = str(soil.info.bulk_ec_dc[i]) + "--> EM frequency shift from actual to zero Hz using LongmireSmithEC function in predict.bulk_ec_dc.non_dc_to_dc"
             soil.df.loc[i, 'bulk_ec_dc'] = np.nan if np.isnan(res.fun) else round(res.x[0], soil.roundn+2)
+<<<<<<< HEAD
+
+
+=======
+>>>>>>> 6400973703a73d0db442bd1f5967af5e4367db8b

@@ -214,14 +214,14 @@ def fitting(soil):
         # Calculating the R2 score of the model fitting
         R2 = round(R2_score(soil.df.bulk_ec_dc_tc, WunderlichEC(soil.df.water, bulk_ec_dc_tc_init, water_init, soil.df.water_ec, soil.Lw)), soil.roundn)
 
-        # Saving calculated bulk_ec and its info with R2 and valid water range
+        # Saving calculated bulk_ec_dc_tc and its info with R2 and valid water range
         soil.info['bulk_ec_dc_tc'] = [str(soil.info.bulk_ec_dc_tc[x]) + "--> Calculated by fitting (R2="+str(R2)+") WunderlichEC function in predict.bulk_ec_dc_tc.fitting, for soil.water values between"+str(water_range) if np.isnan(soil.df.bulk_ec_dc_tc[x]) and (min(water_range) <= soil.water[x] <= max(water_range))
                                 or soil.info.bulk_ec_dc_tc[x] == str(soil.info.bulk_ec_dc_tc[x]) + "--> Calculated by fitting (R2="+str(R2)+") WunderlichEC function in predict.bulk_ec_dc_tc.fitting, for soil.water values between"+str(water_range)
                                 else soil.info.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
                 
         soil.df['bulk_ec_dc_tc'] = [round(WunderlichEC(soil.df.water[x], bulk_ec_dc_tc_init, water_init, soil.df.water_ec[x], soil.Lw), soil.roundn+3) if 
                       np.isnan(soil.df.bulk_ec_dc_tc[x]) and (min(water_range) <= soil.water[x] <= max(water_range)) else soil.df.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
-       
+
 
 def non_fitting(soil):
     """ 
