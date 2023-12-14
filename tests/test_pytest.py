@@ -324,10 +324,11 @@ def test_sample_P6():
 
 def test_sample_P6b():
       sample_P6b = Soil(water = np.array([0.06,   0.08,   0.095, 0.128]), 
-                  temperature=25., texture = "Clay", 
+                  temperature=25.+273.15, texture = "Clay", 
                   instrument = 'HydraProbe', CEC = 2, bulk_density = 1.3, orgm = 0.4)
       print(BulkPerm(sample_P6b))
-      expected_result = np.array([4.116, 4.818, 5.377, 6.708])
+      expected_result = np.array([4.09,  4.781, 5.331, 6.639])
+      
       assert arrays_are_similar(BulkPerm(sample_P6b), expected_result)
 
 
@@ -339,7 +340,7 @@ def test_sample_P6c():
                   CEC = 20., 
                   frequency_perm = 50e6)
       print(BulkPerm(sample_P6c))
-      expected_result = np.array([8.661, 10.462, 11.791, 14.661])
+      expected_result = np.array([ 8.531, 10.293, 11.593, 14.399])
       assert arrays_are_similar(BulkPerm(sample_P6c), expected_result)
 
 
@@ -352,7 +353,7 @@ def test_sample_Pv():
                   CEC = 1.6,
                   frequency_perm = np.array([50e6]))
       print(BulkPerm(sample_Pv))
-      expected_result = np.array([3.697, 5.315, 8.092, 10.447, 11.476, 4.967, 6.828, 9.468])
+      expected_result = np.array([ 3.687,  5.282,  8.014, 10.328, 11.339,  4.939,  6.771,  9.366])
       assert arrays_are_similar(BulkPerm(sample_Pv), expected_result)
 
 

@@ -66,7 +66,6 @@ def BulkPerm(soil):
         # Condition to ask for frequency data
         if (np.isnan(soil.df.frequency_perm)).all():
             soil.info['bulk_perm'] = [str(soil.info.bulk_perm[x]) + "--> Unmodified value. Please provide soil.frequency_perm" for x in range(soil.n_states)]
-            #soil.df['bulk_perm'] = [soil.df.bulk_perm[x] if True else soil.df.bulk_perm[x] for x in range(soil.n_states)]
 
         # Condition for fixed EM frequency
         elif np.all(soil.df.frequency_perm == soil.df.frequency_perm[0]):
@@ -232,14 +231,14 @@ def non_fitting(soil):
     if any(np.isnan(soil.df.bulk_perm[x]) and soil.df.frequency_perm[x] >= 5 and soil.df.frequency_perm[x] < 30e6 for x in range(soil.n_states)):
 
         BulkPermInf(soil)              
-        BulkEC(soil)
+        BulkECDC(soil)
 
         # Saving calculated bulk_perm and its info
         soil.info['bulk_perm'] = [str(soil.info.bulk_perm[x]) + "--> Calculated using LongmireSmithP function in predict.bulk_perm.non_fitting" if np.isnan(soil.df.bulk_perm[x])
                                 or soil.info.bulk_perm[x] == str(soil.info.bulk_perm[x]) + "--> Calculated using LongmireSmithP function in predict.bulk_perm.non_fitting"
                                 else soil.info.bulk_perm[x] for x in range(soil.n_states)]
         
-        soil.df['bulk_perm'] = [round(LongmireSmithP(soil.df.bulk_ec[x], soil.df.bulk_perm_inf[x], soil.df.frequency_perm[x]), soil.roundn) 
+        soil.df['bulk_perm'] = [round(LongmireSmithP(soil.df.bulk_ec_dc[x], soil.df.bulk_perm_inf[x], soil.df.frequency_perm[x]), soil.roundn) 
                                 if np.isnan(soil.df.bulk_perm[x]) else soil.df.bulk_perm[x] for x in range(soil.n_states)]
 
     # Condition for EM frequency of common moisture sensors and GPR
@@ -309,12 +308,12 @@ def changing_freq(soil):
     """
     
     BulkPermInf(soil)             
-    BulkEC(soil)
+    BulkECDC(soil)
 
     # Saving calculated bulk_perm and its info
     soil.info['bulk_perm'] = [str(soil.info.bulk_perm[x]) + "--> Calculated using LongmireSmithP function in predict.bulk_perm.changing_freq" if np.isnan(soil.df.bulk_perm[x])
                             or soil.info.bulk_perm[x] == str(soil.info.bulk_perm[x]) + "--> Calculated using LongmireSmithP function in predict.bulk_perm.changing_freq"
                             else soil.info.bulk_perm[x] for x in range(soil.n_states)]
     
-    soil.df['bulk_perm'] = [round(LongmireSmithP(soil.df.bulk_ec[x], soil.df.bulk_perm_inf[x], soil.df.frequency_perm[x]), soil.roundn) 
+    soil.df['bulk_perm'] = [round(LongmireSmithP(soil.df.bulk_ec_dc[x], soil.df.bulk_perm_inf[x], soil.df.frequency_perm[x]), soil.roundn) 
                             if (np.isnan(soil.df.bulk_perm[x])) else soil.df.bulk_perm[x] for x in range(soil.n_states)]

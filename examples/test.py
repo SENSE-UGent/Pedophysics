@@ -81,7 +81,6 @@ def test_sample_C1c():
       assert arrays_are_similar(bulkec_C1c, expected_result) 
 
 
-print('######### sample_C4 #########')
 def test_sample_C4():
       # In this example, the solution by fitting is possible thanks to the prediction of water_ec without additional information.
       sample_C4 = Soil(water =   [0.06,    0.08,   0.095,  0.11], 
@@ -325,9 +324,10 @@ def test_sample_P6b():
       sample_P6b = Soil(water = np.array([0.06,   0.08,   0.095, 0.128]), 
                   temperature=25+273.15, texture = "Clay", 
                   instrument = 'HydraProbe', CEC = 2, bulk_density = 1.3, orgm = 0.4)
-      print(BulkPerm(sample_P6b))
+      BulkPerm_sample_P6b = BulkPerm(sample_P6b)
       expected_result = np.array([4.09,  4.781, 5.331, 6.639])
       assert arrays_are_similar(BulkPerm(sample_P6b), expected_result)
+
 
 def test_sample_P6c():
       sample_P6c = Soil(water =  [0.06,  0.08,   0.095,  0.128], 
@@ -336,9 +336,10 @@ def test_sample_P6c():
                   silt = 60, 
                   CEC = 20., 
                   frequency_perm = 50e6)
-      print(BulkPerm(sample_P6c))
+      BulkPerm_sample_P6c = BulkPerm(sample_P6c)
+      print(BulkPerm_sample_P6c)
       expected_result = np.array([ 8.531, 10.293, 11.593, 14.399])
-      assert arrays_are_similar(BulkPerm(sample_P6c), expected_result)
+      assert arrays_are_similar(BulkPerm_sample_P6c, expected_result)
 
 
 def test_sample_Pv():
