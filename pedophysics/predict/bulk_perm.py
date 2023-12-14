@@ -65,8 +65,8 @@ def BulkPerm(soil):
 
         # Condition to ask for frequency data
         if (np.isnan(soil.df.frequency_perm)).all():
-            soil.info['bulk_perm'] = [str(soil.info.bulk_perm[x]) + "--> Unmodified value. Please provide soil.frequency_perm" if True else soil.info.bulk_perm[x] for x in range(soil.n_states)]
-            soil.df['bulk_perm'] = [soil.df.bulk_perm[x] if True else soil.df.bulk_perm[x] for x in range(soil.n_states)]
+            soil.info['bulk_perm'] = [str(soil.info.bulk_perm[x]) + "--> Unmodified value. Please provide soil.frequency_perm" for x in range(soil.n_states)]
+            #soil.df['bulk_perm'] = [soil.df.bulk_perm[x] if True else soil.df.bulk_perm[x] for x in range(soil.n_states)]
 
         # Condition for fixed EM frequency
         elif np.all(soil.df.frequency_perm == soil.df.frequency_perm[0]):
@@ -252,7 +252,6 @@ def non_fitting(soil):
         Texture(soil)                    
 
         if ((soil.df.frequency_perm >= 30e6) & (soil.df.frequency_perm < 100e6)).all():
-
             soil.info['bulk_perm'] = [str(soil.info.bulk_perm[x]) + "--> Calculated using LR_MV (reported R2=0.93) function in predict.bulk_perm.non_fitting" if np.isnan(soil.df.bulk_perm[x])
                                     or soil.info.bulk_perm[x] == str(soil.info.bulk_perm[x]) + "--> Calculated using LR_MV (reported R2=0.93) function in predict.bulk_perm.non_fitting"
                                     else soil.info.bulk_perm[x] for x in range(soil.n_states)]

@@ -147,6 +147,7 @@ def non_fitting(soil):
     WaterEC: Function to compute water_ec
     SolidEC: Function to compute solid_ec
     """    
+    print('non fitting')
     Texture(soil)
     ParticleDensity(soil)
     WaterEC(soil)
@@ -212,6 +213,7 @@ def fitting(soil):
     WunderlichEC: Function that defines the relationship between water content and electrical conductivity.
     WaterEC: Function to compute soil water real electrical conductivity.
     """
+    print('fitting')
 
     WaterEC(soil) 
     

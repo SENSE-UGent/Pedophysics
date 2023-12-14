@@ -19,6 +19,8 @@ class Soil(object):
         Soil silt content [g/g]*100
     clay : array-like
         Soil clay content [g/g]*100
+    porosity : array-like
+        Soil porosity [m**3/m**3]
     bulk_density : array-like 
         Soil bulk density [kg/m**3]
     particle_density : array-like
@@ -105,6 +107,7 @@ class Soil(object):
                 'sand': array_like_types,
                 'silt': array_like_types,
                 'clay': array_like_types,
+                'porosity': array_like_types,
                 'bulk_density': array_like_types,
                 'particle_density': array_like_types,
                 'CEC': array_like_types,
@@ -174,7 +177,7 @@ class Soil(object):
         self.range_ratio = 2 if np.isnan(self.range_ratio[0]) else self.range_ratio
         
         ### Fill the state variables with nans when are shorter than n_states
-        array_like_attributes = ['temperature', 'water', 'salinity', 'sand', 'silt', 'clay', 'bulk_density', 'particle_density', 'CEC',
+        array_like_attributes = ['temperature', 'water', 'salinity', 'sand', 'silt', 'clay', 'porosity', 'bulk_density', 'particle_density', 'CEC',
                             'orgm', 'bulk_perm', 'bulk_perm_inf', 'air_perm', 'water_perm', 'solid_perm', 'offset_perm', 'bulk_ec', 
                             'bulk_ec_dc', 'bulk_ec_dc_tc', 'water_ec', 'solid_ec', 'dry_ec', 'sat_ec', 's_ec', 'frequency_perm', 'frequency_ec']
 
