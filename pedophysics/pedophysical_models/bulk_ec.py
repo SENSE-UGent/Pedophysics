@@ -60,12 +60,12 @@ def WunderlichEC(water, ec_init, wat_init, wc, Lw):
     return bulk_ec    
 
 
-def Fu(water, clay, bd, pd, wc, solid_ec, dry_ec, sat_ec, s=1, w=2):
+def Fu(water, clay, por, wc, solid_ec, dry_ec, sat_ec, s=1, w=2):
     """
     Calculate the soil bulk real electrical conductivity using the Fu model.
 
     This is a volumetric mixing model that takes into account various soil properties 
-    such as clay content, bulk density, particle density, and water content. 
+    such as clay content, porosity, and water content. 
     It was exhaustively validated using several soil samples [1]. Reported R2 = 0.98
 
     Parameters
@@ -74,10 +74,8 @@ def Fu(water, clay, bd, pd, wc, solid_ec, dry_ec, sat_ec, s=1, w=2):
         Soil volumetric water content [m**3/m**3].
     clay : array_like
         Soil clay content [g/g]*100.
-    bd : array_like 
-        Soil bulk density (g/cm^3).
-    pd : array_like
-        Soil particle density (g/cm^3).
+    por: array_like
+        Soil porosity [m**3/m**3].
     wc : array_like
         Soil water real electrical conductivity [S/m].
     solid_ec : array_like
@@ -120,7 +118,6 @@ def Fu(water, clay, bd, pd, wc, solid_ec, dry_ec, sat_ec, s=1, w=2):
     """
     d = 0.6539
     e = 0.0183
-    por = 1 - bd/pd
     surf_ec = (d*clay/(100-clay))+e # Soil electrical conductivity of solid surfaces
 
     if np.isnan(dry_ec) & np.isnan(sat_ec):

@@ -2,10 +2,11 @@ import numpy as np
 from scipy.optimize import minimize
 
 from .frequency_ec import *
-from .particle_density import *
 from .solid_ec import *
 from .temperature import *
 from .bulk_ec_dc import non_dc_to_dc
+from .texture import Texture
+from .porosity import Porosity
 
 from pedophysics.pedophysical_models.bulk_ec import Fu, SheetsHendrickx, WunderlichEC
 from pedophysics.utils.stats import R2_score
@@ -62,6 +63,16 @@ def BulkECDCTC(soil):
     return soil.df.bulk_ec_dc_tc.values
 
 
+def shift_to_bulk_ec_dc_tc(soil):
+    """
+    
+    """    
+    if any(((not np.isnan(soil.df.bulk_ec[x])) or (not np.isnan(soil.df.bulk_ec_dc[x]))) and np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states)):
+        non_dc_to_dc(soil) 
+        non_dc_non_tc_to_dc_tc(soil) 
+        non_tc_to_tc(soil)
+
+
 def non_dc_non_tc_to_dc_tc(soil):
     """
     
@@ -87,53 +98,6 @@ def non_tc_to_tc(soil):
                         or soil.info.bulk_ec_dc_tc[x] == str(soil.info.bulk_ec_dc_tc[x]) + "--> Calculated using SheetsHendrickx function in predict.bulk_ec_dc_tc.non_tc_to_tc" else soil.info.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
     
     soil.df['bulk_ec_dc_tc'] = [SheetsHendrickx(soil.df.bulk_ec_dc[x], soil.df.temperature[x]) if np.isnan(soil.df.bulk_ec_dc_tc[x]) and soil.df.temperature[x] != 298.15 else soil.df.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
-
-
-def shift_to_bulk_ec_dc_tc(soil):
-    """
-    
-    """    
-    if any(((not np.isnan(soil.df.bulk_ec[x])) or (not np.isnan(soil.df.bulk_ec_dc[x]))) and np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states)):
-        non_dc_to_dc(soil) 
-        non_dc_non_tc_to_dc_tc(soil) 
-        non_tc_to_tc(soil)
-
-
-#def dc_freq(soil):
-    """
-    Decide between fitting and non-fitting approaches to calculate soil.df.bulk_ec.
-
-    Based on the frequency of the electrical conductivity measuments, this function determines 
-    whether to employ a fitting or non-fitting approach to estimate the soil's bulk real EC.
-
-    Parameters
-    ----------
-    soil : object
-        A custom soil object containing:
-
-        - df : DataFrame
-            Data Frame containing the quantitative information of all soil array-like attributes for each state.
-            Includes: water, frequency_ec, bulk_ec, bulk_dc_ec
-        - n_states : int
-            Number of soil states.
-
-    Notes
-    -----
-    The function decides the appropriate method (fitting or non-fitting) for adjusting the bulk EC values based on
-    the availability of the soil's water content data.
-
-    External Functions
-    ------------------
-    - fitting : Function used to adjust bulk EC values using a fitting routine.
-    - non_fitting : Function used to adjust bulk EC values using a non-fitting routine.
-    """
-    # Condition for fitting routine 
-#    if sum(not np.isnan(soil.water[x]) and not np.isnan(soil.df.bulk_ec_dc[x]) for x in range(soil.n_states))>= 3:
-#        fitting(soil)
-
-    # Condition for non-fitting routine 
-#    if any(not np.isnan(soil.df.water[x]) and np.isnan(soil.df.bulk_ec_dc[x])  for x in range(soil.n_states)):
-#        non_fitting(soil)
 
 
 def fitting(soil):
@@ -237,7 +201,7 @@ def non_fitting(soil):
 
         - df : DataFrame
             Data Frame containing all the quantitative information of soil array-like attributes for each state.
-            Includes: water, clay, bulk_density, particle_density, bulk_ec, water_ec, solid_ec, dry_ec, sat_ec, and bulk_ec_dc.
+            Includes: water, clay, porosity, bulk_ec, water_ec, solid_ec, dry_ec, sat_ec, and bulk_ec_dc.
         - info : DataFrame
             Data Frame containing descriptive information about how each array-like attribute was determined or modified.
         - roundn : int
@@ -260,14 +224,14 @@ def non_fitting(soil):
     --------
     Fu: Function that defines the relationship between water content and electrical conductivity.
     Texture: Function to derive soil texture properties.
-    ParticleDensity: Function to compute particle_density.
+    Porosity: Function to compute porosity.
     WaterEC: Function to compute water_ec
     SolidEC: Function to compute solid_ec
     """
     from .water_ec import WaterEC # Lazy import to avoid circular dependency
 
     Texture(soil)
-    ParticleDensity(soil)
+    Porosity(soil)
     WaterEC(soil)
     SolidEC(soil)
 
@@ -275,5 +239,5 @@ def non_fitting(soil):
                             or soil.info.bulk_ec_dc_tc[x] == str(soil.info.bulk_ec_dc_tc[x]) + "--> Calculated using Fu function (reported R2=0.98) in predict.bulk_ec_dc_tc.non_fitting"
                             else soil.info.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
  
-    soil.df['bulk_ec_dc_tc'] = [round(Fu(soil.df.water[x], soil.df.clay[x], soil.df.bulk_density[x], soil.df.particle_density[x], soil.df.water_ec[x], soil.df.solid_ec[x], soil.df.dry_ec[x], soil.df.sat_ec[x]), soil.roundn+3) 
+    soil.df['bulk_ec_dc_tc'] = [round(Fu(soil.df.water[x], soil.df.clay[x], soil.df.porosity[x], soil.df.water_ec[x], soil.df.solid_ec[x], soil.df.dry_ec[x], soil.df.sat_ec[x]), soil.roundn+3) 
                              if np.isnan(soil.df.bulk_ec_dc_tc[x]) else soil.df.bulk_ec_dc_tc[x] for x in range(soil.n_states)]

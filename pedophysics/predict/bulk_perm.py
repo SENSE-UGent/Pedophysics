@@ -8,10 +8,11 @@ from .water_perm import *
 from .frequency_perm import *
 from .bulk_ec import *
 from .bulk_perm_inf import *
-from .particle_density import *
+from .porosity import *
 from .air_perm import *
 from .solid_perm import *
 from .temperature import *
+from .texture import *
 
 def BulkPerm(soil):
     """ 
@@ -52,7 +53,7 @@ def BulkPerm(soil):
     Example
     -------
     >>> sample = Soil( water = [0.3, 0.1, 0.15, 0.23, 0.02],
-                bulk_density = 1.5,
+                porosity = 0.434,
                 texture = 'Silt loam',
                 instrument = 'GPR')
 
@@ -209,7 +210,7 @@ def non_fitting(soil):
 
         - df : DataFrame
             Data Frame containing the quantitative information of all soil array-like attributes for each state.
-            Includes: water, bulk_perm, frequency_perm, bulk_ec, bulk_perm_inf, bulk_density, particle_density, 
+            Includes: water, bulk_perm, frequency_perm, bulk_ec, bulk_perm_inf, porosity,
             air_perm, solid_perm, water_perm, and CEC.
         - roundn : int
             Number of decimal places to round results.
@@ -222,7 +223,7 @@ def non_fitting(soil):
     ------------------
     - BulkPermInf : Determines the bulk permittivity at infinite frequency.
     - BulkEC : Estimates the soil's bulk electrical conductivity.
-    - Temperature, ParticleDensity, AirPerm, SolidPerm, WaterPerm, Texture : Various functions to ensure the soil's attributes 
+    - Temperature, Porosity, AirPerm, SolidPerm, WaterPerm, Texture : Various functions to ensure the soil's attributes 
       are determined for the given conditions.
     - LongmireSmithP, LR_MV, LR, LR_W : Pedophysical models used for the estimation.
     """
@@ -244,7 +245,7 @@ def non_fitting(soil):
     # Condition for EM frequency of common moisture sensors and GPR
     elif (np.isnan(soil.df.bulk_perm)).any() & ((soil.df.frequency_perm >= 30e6) & (soil.df.frequency_perm <= 30e9)).all(): 
         Temperature(soil)
-        ParticleDensity(soil)                      
+        Porosity(soil)                      
         AirPerm(soil)                   
         SolidPerm(soil)                  
         WaterPerm(soil)               
@@ -255,7 +256,7 @@ def non_fitting(soil):
                                     or soil.info.bulk_perm[x] == str(soil.info.bulk_perm[x]) + "--> Calculated using LR_MV (reported R2=0.93) function in predict.bulk_perm.non_fitting"
                                     else soil.info.bulk_perm[x] for x in range(soil.n_states)]
             
-            soil.df['bulk_perm'] = [np.round(LR_MV(soil.df.water[x], soil.df.bulk_density[x], soil.df.particle_density[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.df.CEC[x]), soil.roundn) 
+            soil.df['bulk_perm'] = [np.round(LR_MV(soil.df.water[x], soil.df.porosity[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.df.CEC[x]), soil.roundn) 
                                     if np.isnan(soil.df.bulk_perm[x]) else soil.df.bulk_perm[x] for x in range(soil.n_states)]
 
         elif ((soil.df.frequency_perm >= 100e6) & (soil.df.frequency_perm < 200e6)).all():
@@ -265,7 +266,7 @@ def non_fitting(soil):
                                     or soil.info.bulk_perm[x] == str(soil.info.bulk_perm[x]) + "--> Calculated using LR function (reported RMSE=0.032) in predict.bulk_perm.non_fitting"
                                     else soil.info.bulk_perm[x] for x in range(soil.n_states)]
             
-            soil.df['bulk_perm'] = [np.round(LR(soil.df.water[x], soil.df.bulk_density[x], soil.df.particle_density[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.alpha[x]), soil.roundn) 
+            soil.df['bulk_perm'] = [np.round(LR(soil.df.water[x], soil.df.porosity[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.alpha[x]), soil.roundn) 
                                     if np.isnan(soil.df.bulk_perm[x]) else soil.df.bulk_perm[x] for x in range(soil.n_states)]
 
         elif ((soil.df.frequency_perm >= 200e6) & (soil.df.frequency_perm <= 30e9)).all(): 
@@ -274,7 +275,7 @@ def non_fitting(soil):
                                     or soil.info.bulk_perm[x] == str(soil.info.bulk_perm[x]) + "--> Calculated using LR_W function in predict.bulk_perm.non_fitting"
                                     else soil.info.bulk_perm[x] for x in range(soil.n_states)]
             
-            soil.df['bulk_perm'] = [np.round(LR_W(soil.df.water[x], soil.df.bulk_density[x], soil.df.particle_density[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.df.clay[x]), soil.roundn) 
+            soil.df['bulk_perm'] = [np.round(LR_W(soil.df.water[x], soil.df.porosity[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.df.clay[x]), soil.roundn) 
                                     if np.isnan(soil.df.bulk_perm[x]) else soil.df.bulk_perm[x] for x in range(soil.n_states)] 
 
 

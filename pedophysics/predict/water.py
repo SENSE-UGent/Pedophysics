@@ -49,7 +49,7 @@ def Water(soil):
     -------
     >>> sample = Soil( bulk_ec = [0.01, 0.02, 0.025, 0.030, 0.040],
                     clay = 10,
-                    bulk_density = 1.4,
+                    porosity = 0.47,
                     water_ec = 0.5)
 
     >>> Water(sample) 

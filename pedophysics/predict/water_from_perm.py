@@ -6,7 +6,7 @@ from pedophysics.pedophysical_models.water import LR, LR_W, LR_MV
 from pedophysics.pedophysical_models.bulk_perm import WunderlichP, LongmireSmithP
 
 from .bulk_perm_inf import BulkPermInf
-from .particle_density import ParticleDensity
+from .porosity import Porosity
 from .air_perm import AirPerm
 from .solid_perm import SolidPerm
 from .water_perm import WaterPerm
@@ -50,7 +50,7 @@ def WaterFromPerm(soil):
     -------
     >>> sample = Soil(frequency_perm = 1e9, 
                     clay = 15,             
-                    bulk_density = 1.5,
+                    porosity = 0.434,
                     bulk_perm = [8, 10, 15])
     >>> WaterFromPerm(sample) 
     >>> sample.df.water
@@ -297,11 +297,11 @@ def non_fitting(soil):
 
     External Functions
     ------------------
-    ParticleDensity, AirPerm, SolidPerm, WaterPerm, Texture, BulkPermInf : Functions used to estimate various soil attributes.
+    Porosity, AirPerm, SolidPerm, WaterPerm, Texture, BulkPermInf : Functions used to estimate various soil attributes.
     LongmireSmithP, LR_MV, LR, LR_W : Pedophysical models for predictions based on frequency ranges and other attributes.
 
     """
-    ParticleDensity(soil)                     
+    Porosity(soil)                     
     AirPerm(soil)                      
     SolidPerm(soil)                   
     WaterPerm(soil)              
@@ -336,7 +336,7 @@ def non_fitting(soil):
         soil.info['water'] = [str(soil.info.water[x]) + "--> Calculated using LR_MV function (reported R2=0.93) in predict.water_from_perm.non_fitting" if np.isnan(soil.df.water[x]) 
                               or soil.info.water[x] ==str(soil.info.water[x]) + "--> Calculated using LR_MV function (reported R2=0.93) in predict.water_from_perm.non_fitting" else soil.info.water[x] for x in range(soil.n_states)]
 
-        soil.df['water'] = [round(LR_MV(soil.df.bulk_perm[x], soil.df.bulk_density[x], soil.df.particle_density[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.df.CEC[x]), soil.roundn) 
+        soil.df['water'] = [round(LR_MV(soil.df.bulk_perm[x], soil.df.porosity[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.df.CEC[x]), soil.roundn) 
                             if np.isnan(soil.df.water[x]) else soil.df.water[x] for x in range(soil.n_states)]
 
     # Condition for EM frequencies between 100e6 and 200e6
@@ -346,7 +346,7 @@ def non_fitting(soil):
         soil.info['water'] = [str(soil.info.water[x]) + "--> Calculated using LR function (reported RMSE=0.032) in predict.water_from_perm.non_fitting" if np.isnan(soil.df.water[x]) 
                         or soil.info.water[x] ==str(soil.info.water[x]) + "--> Calculated using LR function (reported RMSE=0.032) in predict.water_from_perm.non_fitting" else soil.info.water[x] for x in range(soil.n_states)]
                 
-        soil.df['water'] = [round(LR(soil.df.bulk_perm[x], soil.df.bulk_density[x], soil.df.particle_density[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.alpha), soil.roundn) if np.isnan(soil.df.water[x]) else soil.df.water[x] for x in range(soil.n_states)]
+        soil.df['water'] = [round(LR(soil.df.bulk_perm[x], soil.df.porosity[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.alpha), soil.roundn) if np.isnan(soil.df.water[x]) else soil.df.water[x] for x in range(soil.n_states)]
 
     # Condition for EM frequencies between 200e6 and 30e9
     elif ( ((soil.df.frequency_perm >= 200e6) & (soil.df.frequency_perm <= 30e9))).all():
@@ -355,4 +355,4 @@ def non_fitting(soil):
         soil.info['water'] = [str(soil.info.water[x]) + "--> Calculated using LR_W function in predict.water_from_perm.non_fitting" if np.isnan(soil.df.water[x]) 
                         or soil.info.water[x] ==str(soil.info.water[x]) + "--> Calculated using LR_W function in predict.water_from_perm.non_fitting" else soil.info.water[x] for x in range(soil.n_states)]
         
-        soil.df['water'] = [round(LR_W(soil.df.bulk_perm[x], soil.df.bulk_density[x], soil.df.particle_density[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.df.clay[x]), soil.roundn) if np.isnan(soil.df.water[x]) else soil.df.water[x] for x in range(soil.n_states)] 
+        soil.df['water'] = [round(LR_W(soil.df.bulk_perm[x], soil.df.porosity[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.df.clay[x]), soil.roundn) if np.isnan(soil.df.water[x]) else soil.df.water[x] for x in range(soil.n_states)] 

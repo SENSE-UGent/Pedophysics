@@ -263,15 +263,17 @@ def test_sample_P0():
 
 
 def test_sample_P1():
-                                #    0     1    2     3       4       5       6       7
-        sample_P1 = Soil( water =   [0.05, 0.1, 0.08, 0.14,   0.04,   np.nan, np.nan, 0.07], 
-                        bulk_perm = [6,    11,  9,    np.nan, np.nan, np.nan, 8,      8.5 ], 
-                        bulk_density=1.7,
-                        solid_perm = 5,
-                        instrument = 'TDR')
+                              #    0     1    2     3       4       5       6       7
+      sample_P1 = Soil( water =   [0.05, 0.1, 0.08, 0.14,   0.04,   np.nan, np.nan, 0.07], 
+                  bulk_perm = [6,    11,  9,    np.nan, np.nan, np.nan, 8,      8.5 ], 
+                  bulk_density=1.7,
+                  solid_perm = 5,
+                  instrument = 'TDR')
 
-        expected_result = np.array([6., 11., 9., np.nan, 4.666, np.nan, 8., 8.5])
-        assert arrays_are_similar(BulkPerm(sample_P1), expected_result)
+      BulkPerm_sample_P1 = BulkPerm(sample_P1)
+      print(BulkPerm_sample_P1)
+      expected_result = np.array([6., 11., 9., np.nan, 4.666, np.nan, 8., 8.5])
+      assert arrays_are_similar(BulkPerm(sample_P1), expected_result)
 
 
 def test_sample_P1b():

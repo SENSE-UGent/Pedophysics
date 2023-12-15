@@ -1,6 +1,6 @@
 import numpy as np
 
-def LR_W(bp, bd, pdn, ap, sp, wp, clay): 
+def LR_W(bp, por, ap, sp, wp, clay): 
     """
     Calculate the soil volumetric water content using the Lichtenecker and Rother model.
 
@@ -13,10 +13,8 @@ def LR_W(bp, bd, pdn, ap, sp, wp, clay):
     ----------
     bp : array_like
         Soil bulk real relative dielectric permittivity [-]
-    bd : array_like 
-        Soil bulk density (g/cm^3).
-    pd : array_like
-        Soil particle density (g/cm^3).
+    por: array_like
+        Soil porosity [m**3/m**3].
     ap : array_like
         Soil air real relative dielectric permittivity phase [-].
     sp : array_like
@@ -45,15 +43,13 @@ def LR_W(bp, bd, pdn, ap, sp, wp, clay):
     >>> LR_W(10, 1.3, 2.65, 1, 4, 80, 20)
     0.177
     """
-
-    por = 1 - bd/pdn    
     alpha = -0.46*(clay/100)+0.71
     water = (bp**alpha - (1-por)*sp**alpha - por*ap**alpha) / (wp**alpha - ap**alpha)
 
     return water
 
 
-def LR(bp, bd, pdn, ap, sp, wp, alpha): 
+def LR(bp, por, ap, sp, wp, alpha): 
     """
     Calculate the soil volumetric water content using the Lichtenecker and Rother model.
 
@@ -66,10 +62,8 @@ def LR(bp, bd, pdn, ap, sp, wp, alpha):
     ----------
     bp : array_like
         Soil bulk real relative dielectric permittivity [-]
-    bd : array_like 
-        Soil bulk density (g/cm^3).
-    pdn : array_like
-        Soil particle density (g/cm^3).
+    por: array_like
+        Soil porosity [m**3/m**3].
     ap : array_like
         Soil air real relative dielectric permittivity phase [-].
     sp : array_like
@@ -101,13 +95,12 @@ def LR(bp, bd, pdn, ap, sp, wp, alpha):
 
     if np.isnan(alpha):
         alpha = 0.5
-    por = 1 - bd/pdn    
     water = (bp**alpha - (1-por)*sp**alpha - por*ap**alpha) / (wp**alpha - ap**alpha)
 
     return water
 
 
-def LR_MV(bp, bd, pdn, ap, sp, wp, CEC): 
+def LR_MV(bp, por, ap, sp, wp, CEC): 
     """
     Calculate the soil volumetric water content using the Lichtenecker and Rother model.
 
@@ -120,10 +113,8 @@ def LR_MV(bp, bd, pdn, ap, sp, wp, CEC):
     ----------
     bp : array_like
         Soil bulk real relative dielectric permittivity [-]
-    bd : array_like 
-        Soil bulk density (g/cm^3).
-    pdn : array_like
-        Soil particle density (g/cm^3).
+    por: array_like
+        Soil porosity [m**3/m**3].
     ap : array_like
         Soil air real relative dielectric permittivity phase [-].
     sp : array_like
@@ -154,7 +145,6 @@ def LR_MV(bp, bd, pdn, ap, sp, wp, CEC):
     0.078
 
     """
-    por = 1 - bd/pdn  
     alpha = 0.248*np.log(CEC) + 0.366  
     water = (bp**alpha - (1-por)*sp**alpha - por*ap**alpha) / (wp**alpha - ap**alpha)
 
