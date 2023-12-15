@@ -147,7 +147,6 @@ def non_fitting(soil):
     WaterEC: Function to compute water_ec
     SolidEC: Function to compute solid_ec
     """    
-    print('non fitting')
     Texture(soil)
     Porosity(soil)
     WaterEC(soil)
@@ -160,6 +159,7 @@ def non_fitting(soil):
 
     # Calculating water
     for i in range(soil.n_states):
+        
         res = minimize(objective_func_wat, 0.15, args=(soil.df.clay[i], soil.df.porosity[i], soil.df.water_ec[i], soil.df.solid_ec[i], 
                                                         soil.df.dry_ec[i], soil.df.sat_ec[i], soil.df.bulk_ec_dc_tc[i]), bounds=[(0, .65)] )
         wat.append(np.nan if np.isnan(res.fun) else round(res.x[0], soil.roundn) )
@@ -213,7 +213,6 @@ def fitting(soil):
     WunderlichEC: Function that defines the relationship between water content and electrical conductivity.
     WaterEC: Function to compute soil water real electrical conductivity.
     """
-    print('fitting')
 
     WaterEC(soil) 
     
