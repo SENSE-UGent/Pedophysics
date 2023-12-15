@@ -7,7 +7,7 @@ from pedophysics.pedophysical_models.bulk_perm import Hilhorst
 from pedophysics.utils.stats import R2_score
 
 from .temperature import Temperature
-from .particle_density import ParticleDensity
+from .porosity import Porosity
 from .solid_ec import SolidEC
 from .texture import Texture
 from .frequency_ec import FrequencyEC
@@ -59,13 +59,12 @@ def WaterEC(soil):
     >>> sample = Soil( bulk_ec=[0.02, 0.03, 0.04, 0.05, 0.06], 
                 bulk_perm=[11.5, 14.8, 17, 20, 22.7],
                 clay=5,
-                bulk_density=1.48,
+                porosity=0.44,
                 instrument='TDR')
 
     >>> predict.WaterEC(sample)
     array([0.289855, 0.289855, 0.289855, 0.289855, 0.289855])
     """
-    print('water EC')
     Temperature(soil)
     FrequencyEC(soil)
     shift_to_bulk_ec_dc_tc(soil)
@@ -176,7 +175,7 @@ def from_ec(soil):
 
         - df : DataFrame
             Data Frame containing the quantitative information of all soil array-like attributes for each state.
-            Includes: water_ec, clay, bulk_density, particle_density, solid_ec, dry_ec, sat_ec, and bulk_ec.
+            Includes: water_ec, clay, porosity, solid_ec, dry_ec, sat_ec, and bulk_ec.
         - n_states : int
             Number of soil states.
         - info : dict
@@ -185,23 +184,22 @@ def from_ec(soil):
     External Functions
     ------------------
     - Texture : Function that provides the texture attributes of the soil.
-    - ParticleDensity : Function that provides the particle density of the soil.
+    - Porosity : Function that provides the soil porosity
     - SolidEC : Function that provides the electrical conductivity of the solid particles.
     - Fu : Model function to estimate bulk EC from various soil properties.
     """
-    print('from EC')
     Texture(soil)
-    ParticleDensity(soil)
+    Porosity(soil)
     SolidEC(soil)
 
     # Defining minimization function to obtain water_ec
-    def objective_wat_ec(water_ec, wat, clay, bulk_density, particle_density, solid_ec, dry_ec, sat_ec, EC):
-        return abs(Fu(wat, clay, bulk_density, particle_density, water_ec, solid_ec, dry_ec, sat_ec) - EC)
+    def objective_wat_ec(water_ec, wat, clay, porosity, solid_ec, dry_ec, sat_ec, EC):
+        return abs(Fu(wat, clay, porosity, water_ec, solid_ec, dry_ec, sat_ec) - EC)
     
     # Calculating optimal water_ec
     wat_ec = []
     for i in range(soil.n_states):
-        res = minimize(objective_wat_ec, 0.14, args=(soil.df.water[i], soil.df.clay[i], soil.df.bulk_density[i], soil.df.particle_density[i], soil.df.solid_ec[i], 
+        res = minimize(objective_wat_ec, 0.14, args=(soil.df.water[i], soil.df.clay[i], soil.df.porosity[i], soil.df.solid_ec[i], 
                                                      soil.df.dry_ec[i], soil.df.sat_ec[i], soil.df.bulk_ec_dc_tc[i]), bounds=[(0, 2)] )
         wat_ec.append(np.nan if np.isnan(res.fun) else round(res.x[0], soil.roundn) )
 
@@ -241,7 +239,6 @@ def fitting(soil):
     - fitting_rhoades : Function that applies the Rhoades function to estimate missing water EC values using bulk EC and water content.
     - fitting_hilhorst : Function that applies the Hilhorst function to estimate missing water EC values using bulk EC and bulk permittivity.
     """
-    print('fitting water EC')
     # Condition for fitting approach using Rhoades function
     if sum(not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.water[x]) and np.isnan(soil.df.water_ec[x]) for x in range(soil.n_states)) >= 2:
         fitting_rhoades(soil)
@@ -285,7 +282,6 @@ def fitting_rhoades(soil):
     - Rhoades : A mathematical function used to relate bulk EC with water content, water EC, and other parameters.
     """
     # Selecting calibration data
-    print('fitting rhoades')
 
     arg_EC_wn = np.array([soil.df.bulk_ec_dc_tc[x] if not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.water[x]) else np.nan for x in range(soil.n_states)])
     arg_water_wn = np.array([soil.df.water[x] if not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.water[x]) else np.nan for x in range(soil.n_states)])
@@ -378,8 +374,6 @@ def fitting_hilhorst(soil):
     Hilhorst : function
         A mathematical equation to relate bulk EC with water content, water EC, water permittivity, and other parameters.
     """
-    print('fitting hilhorst')
-
     WaterPerm(soil)
 
     # Selecting calibration data

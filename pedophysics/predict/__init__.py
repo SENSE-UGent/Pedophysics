@@ -7,6 +7,7 @@ from .bulk_perm import *
 from .frequency_ec import *
 from .frequency_perm import *
 from .particle_density import *
+from .porosity import *
 from .solid_ec import *
 from .solid_perm import *
 from .temperature import *

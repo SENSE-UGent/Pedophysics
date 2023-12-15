@@ -59,7 +59,7 @@ def WunderlichP(water, perm_init, wat_init, wp, Lw):
     return bulk_perm
 
 
-def LR_MV(water, bd, pdn, ap, sp, wp, CEC): 
+def LR_MV(water, por, ap, sp, wp, CEC): 
     """
     Calculate the soil bulk real relative dielectric permittivity using the Lichtenecker and Rother model.
 
@@ -72,10 +72,8 @@ def LR_MV(water, bd, pdn, ap, sp, wp, CEC):
     ----------
     water : array_like
         Soil volumetric water content [m**3/m**3].
-    bd : array_like 
-        Soil bulk density (g/cm^3).
-    pd : array_like
-        Soil particle density (g/cm^3).
+    por: array_like
+        Soil porosity [m**3/m**3].
     ap : array_like
         Soil air real relative dielectric permittivity phase [-].
     sp : array_like
@@ -106,14 +104,13 @@ def LR_MV(water, bd, pdn, ap, sp, wp, CEC):
     28.577  
 
     """
-    por = 1 - bd/pdn    
     alpha = 0.248*np.log(CEC) + 0.366
     bulk_perm = ( water*wp**alpha + (1-por)*sp**alpha + (por-water)*ap**(alpha))**(1/alpha)
 
     return bulk_perm
 
 
-def LR(water, bd, pdn, ap, sp, wp, alpha): 
+def LR(water, por, ap, sp, wp, alpha): 
     """
     Calculate the soil bulk real relative dielectric permittivity using the Lichtenecker and Rother model.
 
@@ -126,10 +123,8 @@ def LR(water, bd, pdn, ap, sp, wp, alpha):
     ----------
     water : array_like
         Soil volumetric water content [m**3/m**3].
-    bd : array_like 
-        Soil bulk density (g/cm^3).
-    pd : array_like
-        Soil particle density (g/cm^3).
+    por: array_like
+        Soil porosity [m**3/m**3].
     ap : array_like
         Soil air real relative dielectric permittivity phase [-].
     sp : array_like
@@ -158,14 +153,12 @@ def LR(water, bd, pdn, ap, sp, wp, alpha):
     """
     if not isinstance(alpha, np.floating):
         alpha = alpha[0]
-    
-    por = 1 - bd/pdn    
     bulk_perm = ( water*wp**alpha + (1-por)*sp**alpha + (por-water)*ap**(alpha))**(1/alpha)
 
     return bulk_perm
 
 
-def LR_W(water, bd, pdn, ap, sp, wp, clay): 
+def LR_W(water, por, ap, sp, wp, clay): 
     """
     Calculate the soil bulk real relative dielectric permittivity using the Lichtenecker and Rother model.
 
@@ -178,10 +171,8 @@ def LR_W(water, bd, pdn, ap, sp, wp, clay):
     ----------
     water : array_like
         Soil volumetric water content [m**3/m**3].
-    bd : array_like 
-        Soil bulk density (g/cm^3).
-    pd : array_like
-        Soil particle density (g/cm^3).
+    por: array_like
+        Soil porosity [m**3/m**3].
     ap : array_like
         Soil air real relative dielectric permittivity phase [-].
     sp : array_like
@@ -211,7 +202,6 @@ def LR_W(water, bd, pdn, ap, sp, wp, clay):
     17.505 
 
     """
-    por = 1 - bd/pdn    
     alpha = -0.46*(clay/100)+0.71
     bulk_perm = ( water*wp**alpha + (1-por)*sp**alpha + (por-water)*ap**(alpha))**(1/alpha)
 
@@ -314,7 +304,6 @@ def Hilhorst(bulk_ec, water_ec, water_perm, offset_perm):
     12.0
 
     """
-
     bulk_perm = bulk_ec*water_perm/water_ec + offset_perm
 
     return bulk_perm

@@ -5,7 +5,7 @@ from pedophysics.utils.stats import R2_score
 from pedophysics.pedophysical_models.bulk_ec import Fu, WunderlichEC
 
 from .water_ec import WaterEC
-from .particle_density import ParticleDensity
+from .porosity import Porosity
 from .solid_ec import SolidEC
 from .frequency_ec import FrequencyEC
 from .texture import Texture
@@ -42,7 +42,7 @@ def WaterFromEC(soil):
     -------
     >>> sample = Soil( bulk_ec = [0.01, np.nan, 0.025, 0.030, 0.040],
                 clay = 10,
-                bulk_density = 1.4,
+                porosity = 0.47,
                 water_ec = 0.5)
 
     >>> WaterFromEC(sample) 
@@ -122,7 +122,7 @@ def non_fitting(soil):
 
         - df : DataFrame
             Data Frame containing all the quantitative information of soil array-like attributes for each state.
-            Includes: water, clay, bulk_density, particle_density, bulk_ec, water_ec, solid_ec, dry_ec, and sat_ec.
+            Includes: water, clay, porosity, bulk_ec, water_ec, solid_ec, dry_ec, and sat_ec.
         - info : DataFrame
             Data Frame containing descriptive information about how each array-like attribute was determined or modified.
         - roundn : int
@@ -143,24 +143,24 @@ def non_fitting(soil):
     --------
     Fu: Function that defines the relationship between water content and electrical conductivity.
     Texture: Function to derive soil texture properties.
-    ParticleDensity: Function to compute particle_density.
+    Porosity: Function to compute porosity.
     WaterEC: Function to compute water_ec
     SolidEC: Function to compute solid_ec
     """    
     print('non fitting')
     Texture(soil)
-    ParticleDensity(soil)
+    Porosity(soil)
     WaterEC(soil)
     SolidEC(soil)
 
     # Defining minimization function to obtain water using Fu
-    def objective_func_wat(x, clay, bulk_density, particle_density, water_ec, solid_ec, dry_ec, sat_ec, EC):
-        return (Fu(x, clay, bulk_density, particle_density, water_ec, solid_ec, dry_ec, sat_ec) - EC)**2
+    def objective_func_wat(x, clay, porosity, water_ec, solid_ec, dry_ec, sat_ec, EC):
+        return (Fu(x, clay, porosity, water_ec, solid_ec, dry_ec, sat_ec) - EC)**2
     wat = []
 
     # Calculating water
     for i in range(soil.n_states):
-        res = minimize(objective_func_wat, 0.15, args=(soil.df.clay[i], soil.df.bulk_density[i], soil.df.particle_density[i], soil.df.water_ec[i], soil.df.solid_ec[i], 
+        res = minimize(objective_func_wat, 0.15, args=(soil.df.clay[i], soil.df.porosity[i], soil.df.water_ec[i], soil.df.solid_ec[i], 
                                                         soil.df.dry_ec[i], soil.df.sat_ec[i], soil.df.bulk_ec_dc_tc[i]), bounds=[(0, .65)] )
         wat.append(np.nan if np.isnan(res.fun) else round(res.x[0], soil.roundn) )
 
