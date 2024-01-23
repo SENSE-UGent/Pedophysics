@@ -54,6 +54,7 @@ def WaterFromEC(soil):
     4    0.243
     Name: water, dtype: float64
     """
+    print('WaterFromEC', WaterFromEC)
     FrequencyEC(soil)
 
     # Check for conditions to use a fitting approach
@@ -129,6 +130,7 @@ def non_fitting(soil):
 
 
 def fitting(soil):
+    print('fitting', fitting)
     """ 
     Computes soil.df.water using a fitting approach.
 
@@ -175,6 +177,7 @@ def fitting(soil):
     
     # Defining model parameters
     valids = ~np.isnan(soil.df.water) & ~np.isnan(soil.df.bulk_ec_dc_tc) # States where calibration data are
+    print('valids', valids)
     water_init = np.nanmin(soil.df.water[valids])
     bulk_ec_init = np.nanmin(soil.df.bulk_ec_dc_tc[valids])
     bulk_ec_final = np.nanmax(soil.df.bulk_ec_dc_tc[valids])
@@ -226,9 +229,3 @@ def fitting(soil):
                                 else soil.info.water[x] for x in range(soil.n_states)]
         
         soil.df['water'] = [Wat_wund[x] if np.isnan(soil.df.water[x]) else soil.df.water[x] for x in range(soil.n_states)]
-
-    # Converting negative results due to fitting to zero
-    soil.info['water'] = [str(soil.info.water[x]) + "--> Set to 0 because of < 0 results" if soil.df.water[x]<0 or soil.info.water[x] == str(soil.info.water[x]) + "--> Set to 0 because of < 0 results"
-                            else soil.info.water[x] for x in range(soil.n_states)]
-    
-    soil.df['water'] = [ 0 if soil.df.water[x]<0 else soil.df.water[x] for x in range(soil.n_states)] 
