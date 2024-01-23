@@ -98,7 +98,6 @@ def changing_freq(soil):
     --------
     LongmireSmithP: Function used to predict soil bulk real relative dielectric permittivity given bulk_ec_dc, perm_inf, and frequency.
     """
-    print('changing_freq', changing_freq)
     BulkPermInf(soil)    
     bulk_ec_dc = []
 
@@ -121,14 +120,6 @@ def changing_freq(soil):
                             else soil.info.bulk_ec_dc[x] for x in range(soil.n_states)]
         
     soil.df['bulk_ec_dc'] = [bulk_ec_dc[x] if np.isnan(soil.df.bulk_ec_dc[x]) else soil.df.bulk_ec_dc[x] for x in range(soil.n_states)]
-    print('soil.df.bulk_ec_dc', soil.df.bulk_ec_dc)
-
-    # Saving calculated frequency_ec and its info
-    #soil.info['frequency_ec'] = [str(soil.info.frequency_ec[x]) + "--> Calculated using LongmireSmithP function in predict.water_from_perm.changing_freq" if not np.isnan(bulk_ec[x])
-    #                        or soil.info.frequency_ec[x] == str(soil.info.frequency_ec[x]) + "--> Calculated using LongmireSmithP function in predict.water_from_perm.changing_freq"
-    #                        else soil.info.frequency_ec[x] for x in range(soil.n_states)]
-        
-    #soil.df['frequency_ec'] = [0 if not np.isnan(bulk_ec[x]) else soil.df.frequency_ec[x] for x in range(soil.n_states)]
 
 
 def fixed_freq(soil):
@@ -211,7 +202,6 @@ def fitting(soil):
     WunderlichP: Function that defines the relationship between water content and relative dielectric permittivity.
     WaterPerm: Function to compute soil water real relative dielectric permittivity.
     """
-    print('water fitting')
     WaterPerm(soil)                   
 
     # Defining model parameters
