@@ -87,3 +87,4 @@ def non_dc_to_dc(soil):
 
             soil.info.loc[i, 'bulk_ec_dc'] = str(soil.info.bulk_ec_dc[i]) + "--> EM frequency shift from actual to zero Hz using LongmireSmithEC function in predict.bulk_ec_dc.non_dc_to_dc"
             soil.df.loc[i, 'bulk_ec_dc'] = np.nan if np.isnan(res.fun) else round(res.x[0], soil.roundn+2)
+

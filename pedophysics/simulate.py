@@ -119,6 +119,7 @@ class Soil(object):
                 'solid_perm': array_like_types,
                 'offset_perm': array_like_types,
                 'bulk_ec': array_like_types,
+                'bulk_ec_tc': array_like_types,
                 'bulk_ec_dc': array_like_types,
                 'bulk_ec_dc_tc': array_like_types,
                 'water_ec': array_like_types,
@@ -178,8 +179,8 @@ class Soil(object):
         
         ### Fill the state variables with nans when are shorter than n_states
         array_like_attributes = ['temperature', 'water', 'salinity', 'sand', 'silt', 'clay', 'porosity', 'bulk_density', 'particle_density', 'CEC',
-                            'orgm', 'bulk_perm', 'bulk_perm_inf', 'air_perm', 'water_perm', 'solid_perm', 'offset_perm', 'bulk_ec', 
-                            'bulk_ec_dc', 'bulk_ec_dc_tc', 'water_ec', 'solid_ec', 'dry_ec', 'sat_ec', 's_ec', 'frequency_perm', 'frequency_ec']
+                            'orgm', 'bulk_perm', 'bulk_perm_inf', 'air_perm', 'water_perm', 'solid_perm', 'offset_perm', 
+                            'bulk_ec', 'bulk_ec_tc', 'bulk_ec_dc', 'bulk_ec_dc_tc', 'water_ec', 'solid_ec', 'dry_ec', 'sat_ec', 's_ec', 'frequency_perm', 'frequency_ec']
 
         # calculate the max length of the input arrays
         n_states = max([len(getattr(self, attr)) for attr in array_like_attributes])

@@ -65,49 +65,6 @@ def WaterFromEC(soil):
         non_fitting(soil)
 
 
-#def dc_freq(soil):
-    """ 
-    Decide between fitting and non-fitting approaches to calculate soil.df.water
-
-    Based on the frequency of the electrical conductivity measuments, this function determines 
-    whether to employ a fitting or non-fitting approach to estimate the soil's 
-    volumetric water content.
-
-    Parameters
-    ----------
-    soil : object
-        A custom soil object that contains:
-
-        - df : DataFrame
-            Data Frame containing all the quantitative information of soil array-like attributes for each state.
-            Includes: water
-        - n_states : int
-            Number of states or records in the dataframe.
-
-    bulk_ec_dc : array-like
-        Array containing soil bulk real electrical conductivity at DC frequency [S/m] for each soil state.
-
-    Notes
-    -----
-    This function modifies the soil object in-place by updating the `df` and `info` dataframes.
-    The function checks the number of non-missing records for water and bulk_ec_dc. If there are at least three,
-    the fitting approach is taken, otherwise the non-fitting approach is considered.
-
-    External functions
-    --------
-    fitting: Function that employs a fitting approach for prediction.
-    non_fitting: Function that employs a non-fitting approach for prediction.
-    """
-
-    # Check for conditions to use a fitting approach
-#    if sum(not np.isnan(soil.water[x]) and not np.isnan(bulk_ec_dc[x]) for x in range(soil.n_states)) >= 3:
-#        fitting(soil, bulk_ec_dc)
-
-    # Check for conditions to use a non-fitting approach
-#    if any(np.isnan(soil.df.water[x]) and not np.isnan(bulk_ec_dc[x]) for x in range(soil.n_states)):
-#        non_fitting(soil, bulk_ec_dc)
-
-
 def non_fitting(soil):
     """ 
     Return and compute soil.df.water using a non-fitting approach.
