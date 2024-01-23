@@ -72,7 +72,7 @@ def changing_freq(soil):
     """ 
     Predict soil attributes when permittivity frequency is changing.
 
-    Determines bulk electrical conductivity (bulk_ec) using the LongmireSmithP function, given the changing 
+    Determines bulk electrical conductivity (bulk_ec_dc) using the LongmireSmithP function, given the changing 
     nature of permittivity frequency in the provided soil data.
 
     Parameters
@@ -82,7 +82,7 @@ def changing_freq(soil):
 
         - df : DataFrame
             Data Frame containing the quantitative information of all soil array-like attributes for each state.
-            Includes: frequency_perm, frequency_ec, bulk_ec, and bulk_perm.
+            Includes: frequency_perm, frequency_ec, bulk_ec_dc, and bulk_perm.
         - info : DataFrame
             Data Frame containing descriptive information about how each array-like attribute was determined or modified.
         - n_states : int
@@ -92,42 +92,34 @@ def changing_freq(soil):
     -----
     This function modifies the soil object in-place by updating the `df` and `info` dataframes.
     The minimization function `objective` computes the difference between the LongmireSmithP predicted 
-    permittivity and actual permittivity to obtain the best bulk_ec for each soil state.
+    permittivity and actual permittivity to obtain the best bulk_ec_dc for each soil state.
 
     External functions
     --------
-    LongmireSmithP: Function used to predict soil bulk real relative dielectric permittivity given bulk_ec, perm_inf, and frequency.
+    LongmireSmithP: Function used to predict soil bulk real relative dielectric permittivity given bulk_ec_dc, perm_inf, and frequency.
     """
-
     BulkPermInf(soil)    
-    bulk_ec = []
+    bulk_ec_dc = []
 
     # Defining minimization function to obtain EC
-    def objective(bulk_ec, perm_inf, freq, bulk_perm):
-        LS_perm = LongmireSmithP(bulk_ec, perm_inf, freq)
+    def objective(bulk_ec_dc, perm_inf, freq, bulk_perm):
+        LS_perm = LongmireSmithP(bulk_ec_dc, perm_inf, freq)
         return (LS_perm - bulk_perm)**2
 
     # Calculating bulk EC from bulk perm when unknown
     for x in range(soil.n_states):
-        if np.isnan(soil.df.bulk_ec[x]):
+        if np.isnan(soil.df.bulk_ec_dc[x]):
             result = minimize(objective, 0.05, args=(soil.df.bulk_perm_inf[x], soil.df.frequency_perm[x], soil.bulk_perm[x]), bounds=[(1e-6, 1)])
-            bulk_ec.append(np.nan if np.isnan(result.fun) else round(result.x[0], soil.roundn+2))
+            bulk_ec_dc.append(np.nan if np.isnan(result.fun) else round(result.x[0], soil.roundn+2))
         else:
-            bulk_ec.append(np.nan)
+            bulk_ec_dc.append(np.nan)
 
     # Saving calculated bulk_ec and its info
-    soil.info['bulk_ec'] = [str(soil.info.bulk_ec[x]) + "--> Calculated using LongmireSmithP function in predict.water_from_perm.changing_freq" if np.isnan(soil.df.bulk_ec[x])
-                            or soil.info.bulk_ec[x] == str(soil.info.bulk_ec[x]) + "--> Calculated using LongmireSmithP function in predict.water_from_perm.changing_freq"
-                            else soil.info.bulk_ec[x] for x in range(soil.n_states)]
+    soil.info['bulk_ec_dc'] = [str(soil.info.bulk_ec_dc[x]) + "--> Calculated using LongmireSmithP function in predict.water_from_perm.changing_freq" if np.isnan(soil.df.bulk_ec_dc[x])
+                            or soil.info.bulk_ec_dc[x] == str(soil.info.bulk_ec_dc[x]) + "--> Calculated using LongmireSmithP function in predict.water_from_perm.changing_freq"
+                            else soil.info.bulk_ec_dc[x] for x in range(soil.n_states)]
         
-    soil.df['bulk_ec'] = [bulk_ec[x] if np.isnan(soil.df.bulk_ec[x]) else soil.df.bulk_ec[x] for x in range(soil.n_states)]
-
-    # Saving calculated frequency_ec and its info
-    soil.info['frequency_ec'] = [str(soil.info.frequency_ec[x]) + "--> Calculated using LongmireSmithP function in predict.water_from_perm.changing_freq" if not np.isnan(bulk_ec[x])
-                            or soil.info.frequency_ec[x] == str(soil.info.frequency_ec[x]) + "--> Calculated using LongmireSmithP function in predict.water_from_perm.changing_freq"
-                            else soil.info.frequency_ec[x] for x in range(soil.n_states)]
-        
-    soil.df['frequency_ec'] = [0 if not np.isnan(bulk_ec[x]) else soil.df.frequency_ec[x] for x in range(soil.n_states)]
+    soil.df['bulk_ec_dc'] = [bulk_ec_dc[x] if np.isnan(soil.df.bulk_ec_dc[x]) else soil.df.bulk_ec_dc[x] for x in range(soil.n_states)]
 
 
 def fixed_freq(soil):
@@ -210,7 +202,6 @@ def fitting(soil):
     WunderlichP: Function that defines the relationship between water content and relative dielectric permittivity.
     WaterPerm: Function to compute soil water real relative dielectric permittivity.
     """
-    print('water fitting')
     WaterPerm(soil)                   
 
     # Defining model parameters
@@ -265,13 +256,13 @@ def fitting(soil):
                                 else soil.info.water[x] for x in range(soil.n_states)]
         
         soil.df['water'] = [Wat_wund[x] if np.isnan(soil.df.water[x]) else soil.df.water[x] for x in range(soil.n_states)]
-        print('fitting sol:', soil.df.water)
+
 
 def non_fitting(soil):
     """ 
     Return and compute soil.df.water using a non-fitting approach.
 
-    Uses various methods to calculate water content and bulk electrical conductivity (bulk_ec) based on 
+    Uses various methods to calculate water content and bulk electrical conductivity (bulk_ec_dc) based on 
     different electromagnetic (EM) frequency ranges and other given soil attributes.
 
     Parameters
@@ -281,7 +272,7 @@ def non_fitting(soil):
 
         - df : DataFrame
             Data Frame containing the quantitative information of all soil array-like attributes for each state. 
-            Includes: water, bulk_perm, frequency_perm, and bulk_ec for each soil state.
+            Includes: water, bulk_perm, frequency_perm, and bulk_ec_dc for each soil state.
         - n_states : int
             Number of soil states.
         - info : DataFrame
@@ -306,28 +297,27 @@ def non_fitting(soil):
     SolidPerm(soil)                   
     WaterPerm(soil)              
     Texture(soil)                     
-    #CEC(soil)                      
-    print('soil.df.frequency_perm', soil.df.frequency_perm)
+
     # Condition for EM frequencies between 5 and 30e6
     if ((soil.df.frequency_perm >= 5) & (soil.df.frequency_perm < 30e6)).all():
         BulkPermInf(soil)
 
-        bulk_ec = []
-        # Defining minimization function to obtain bulk_ec using LongmireSmithP
-        def objective(bulk_ec, perm_inf, freq_perm, bulk_perm):
-            LS_perm = LongmireSmithP(bulk_ec, perm_inf, freq_perm)
+        bulk_ec_dc = []
+        # Defining minimization function to obtain bulk_ec_dc using LongmireSmithP
+        def objective(bulk_ec_dc, perm_inf, freq_perm, bulk_perm):
+            LS_perm = LongmireSmithP(bulk_ec_dc, perm_inf, freq_perm)
             return (LS_perm - bulk_perm)**2
         
-        # Calculating bulk_ec
+        # Calculating bulk_ec_ec
         for i in range(soil.n_states):
             result = minimize(objective, 0.05, args=(soil.df.bulk_perm_inf[i], soil.df.frequency_perm[i], soil.df.bulk_perm[i]), bounds=[(1e-6, 1)], method='L-BFGS-B')
-            bulk_ec.append(np.nan if np.isnan(result.fun) else round(result.x[0], soil.roundn+2))
+            bulk_ec_dc.append(np.nan if np.isnan(result.fun) else round(result.x[0], soil.roundn+2))
 
-        # Saving calculated bulk_ec and its info
-        soil.info['bulk_ec'] = [str(soil.info.bulk_ec[x]) + "--> Calculated using LongmireSmithP function in predict.water_from_perm.non_fitting" if np.isnan(soil.df.bulk_ec[x]) 
-                                or soil.info.bulk_ec[x] ==str(soil.info.bulk_ec[x]) + "--> Calculated using LongmireSmithP function in predict.water_from_perm.non_fitting" else soil.info.bulk_ec[x] for x in range(soil.n_states)]
+        # Saving calculated bulk_ec_dc and its info
+        soil.info['bulk_ec_dc'] = [str(soil.info.bulk_ec_dc[x]) + "--> Calculated using LongmireSmithP function in predict.water_from_perm.non_fitting" if np.isnan(soil.df.bulk_ec_dc[x]) 
+                                or soil.info.bulk_ec_dc[x] ==str(soil.info.bulk_ec_dc[x]) + "--> Calculated using LongmireSmithP function in predict.water_from_perm.non_fitting" else soil.info.bulk_ec_dc[x] for x in range(soil.n_states)]
         
-        soil.df['bulk_ec'] = [bulk_ec[x] if np.isnan(soil.df.bulk_ec[x]) else soil.df.bulk_ec[x] for x in range(soil.n_states)]
+        soil.df['bulk_ec_dc'] = [bulk_ec_dc[x] if np.isnan(soil.df.bulk_ec_dc[x]) else soil.df.bulk_ec_dc[x] for x in range(soil.n_states)]
 
     # Condition for EM frequencies between 30e6 and 100e6
     elif ((soil.df.frequency_perm >= 30e6) & (soil.df.frequency_perm < 100e6)).all():

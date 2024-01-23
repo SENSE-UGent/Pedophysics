@@ -643,7 +643,7 @@ def test_sample_WP7c():
                   frequency_ec =     [50e2,   50e2,   50e2,   200e1,  200e3,  200e4,  50e3,   50e3,   50e3,   20    ],
                   bulk_density=1.7, texture = 'Sand', solid_perm = 5, water_ec = 0.05)
       
-      expected_result = np.array([0.05, 0.11, 0.08, 0.11, 0., np.nan, 0.111, 0.07, 0., 0.117])
+      expected_result = np.array([0.05, 0.11, 0.08, 0.11, 0., np.nan, 0., 0.07, 0., 0.117])
       assert arrays_are_similar(Water(sample_WP7c), expected_result)  
 
 

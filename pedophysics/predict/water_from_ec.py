@@ -226,9 +226,3 @@ def fitting(soil):
                                 else soil.info.water[x] for x in range(soil.n_states)]
         
         soil.df['water'] = [Wat_wund[x] if np.isnan(soil.df.water[x]) else soil.df.water[x] for x in range(soil.n_states)]
-
-    # Converting negative results due to fitting to zero
-    soil.info['water'] = [str(soil.info.water[x]) + "--> Set to 0 because of < 0 results" if soil.df.water[x]<0 or soil.info.water[x] == str(soil.info.water[x]) + "--> Set to 0 because of < 0 results"
-                            else soil.info.water[x] for x in range(soil.n_states)]
-    
-    soil.df['water'] = [ 0 if soil.df.water[x]<0 else soil.df.water[x] for x in range(soil.n_states)] 
