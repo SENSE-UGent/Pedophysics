@@ -73,49 +73,22 @@ def WaterEC(soil):
     if any(np.isnan(soil.df.water_ec[x]) and not np.isnan(soil.salinity[x]) for x in range(soil.n_states)):
         from_salinity(soil)
 
-    # Condition for fitting approach
+    # Conditions for fitting approaches
     if sum(not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.water[x]) and np.isnan(soil.df.water_ec[x]) for x in range(soil.n_states)) >= 2 or sum(not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.bulk_perm[x]) and soil.df.bulk_perm[x]>=10 and np.isnan(soil.df.water_ec[x]) for x in range(soil.n_states)) >= 2:
-        fitting(soil)
+
+        # Condition for fitting approach using Rhoades function
+        if sum(not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.water[x]) and np.isnan(soil.df.water_ec[x]) for x in range(soil.n_states)) >= 2:
+            fitting_rhoades(soil)
+        
+        # Condition for fitting approach using Rhoades function
+        elif sum(not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.bulk_perm[x]) and soil.df.bulk_perm[x]>=10 and np.isnan(soil.df.water_ec[x]) for x in range(soil.n_states)) >= 2:
+            fitting_hilhorst(soil)
 
     # Condition for non-fitting approach using bulk_ec_dc_tc
     if any(np.isnan(soil.df.water_ec[x]) and not np.isnan(soil.df.water[x]) and not np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states)):
         from_ec(soil)
 
     return soil.df.water_ec.values
-
-
-def non_fitting(soil):
-    """
-    Decides between two different non-fitting approaches to obtain soil.df.water_ec. 
-
-    This function employs two non-fitting strategies based on the available data in the soil object:
-    1. Estimates the water EC using the salinity attribute if water EC values are missing but salinity values are available.
-    2. Estimates the water EC from the bulk EC attribute if water EC values are missing but values for water and bulk EC are available.
-
-    Parameters
-    ----------
-    soil : object
-        A custom soil object containing:
-
-        - df : DataFrame
-            Data Frame containing the quantitative information of all soil array-like attributes for each state.
-            Includes: water_ec, salinity, water, bulk_ec, frequency_ec, and bulk_perm.
-        - n_states : int
-            Number of soil states.
-
-    External Functions
-    ------------------
-    - from_salinity : Function that estimates water EC from the salinity attribute.
-    - from_bulk_ec  : Function that estimates water EC from the bulk EC attribute.
-    """
-
-    # Condition for non-fitting approach using salinity
-    if any(np.isnan(soil.df.water_ec[x]) and not np.isnan(soil.salinity[x]) for x in range(soil.n_states)):
-        from_salinity(soil)
-
-    # Condition for non-fitting approach using bulk_ec_dc_tc
-    if any(np.isnan(soil.df.water_ec[x]) and not np.isnan(soil.df.water[x]) and not np.isnan(soil.df.bulk_ec_dc_tc[x]) for x in range(soil.n_states)):
-        from_ec(soil)
 
 
 def from_salinity(soil):
@@ -209,43 +182,6 @@ def from_ec(soil):
                                  else soil.info.water_ec[x] for x in range(soil.n_states)]
 
     soil.df['water_ec'] = [round(wat_ec[x], soil.roundn+3) if np.isnan(soil.df.water_ec[x]) else soil.df.water[x] for x in range(soil.n_states) ]
-
-
-def fitting(soil):
-    """
-    Decides between two different fitting approaches to obtain soil.df.water_ec. 
-
-    Depending on the available data within the soil object, this function selects one of two fitting 
-    functions: Rhoades function or Hilhorst function. The selection criterion is based on the number of 
-    missing water EC values and the availability of certain soil properties (e.g., water content and bulk permittivity).
-    If enough data points are available and the conditions are met, the fitting function is applied to estimate the 
-    missing water EC values.
-
-    Parameters
-    ----------
-    soil : object
-        A custom soil object containing:
-
-        - df : DataFrame
-            Data Frame containing the quantitative information of all soil array-like attributes for each state.
-            Includes: bulk_ec, water, bulk_perm, and water_ec.
-        - n_states : int
-            Number of soil states.
-        - info : dict
-            Data Frame containing descriptive information about how each array-like attribute was determined or modified.
-
-    External Functions
-    ------------------
-    - fitting_rhoades : Function that applies the Rhoades function to estimate missing water EC values using bulk EC and water content.
-    - fitting_hilhorst : Function that applies the Hilhorst function to estimate missing water EC values using bulk EC and bulk permittivity.
-    """
-    # Condition for fitting approach using Rhoades function
-    if sum(not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.water[x]) and np.isnan(soil.df.water_ec[x]) for x in range(soil.n_states)) >= 2:
-        fitting_rhoades(soil)
-    
-    # Condition for fitting approach using Rhoades function
-    elif sum(not np.isnan(soil.df.bulk_ec_dc_tc[x]) and not np.isnan(soil.df.bulk_perm[x]) and soil.df.bulk_perm[x]>=10 and np.isnan(soil.df.water_ec[x]) for x in range(soil.n_states)) >= 2:
-        fitting_hilhorst(soil)
 
 
 def fitting_rhoades(soil):
