@@ -12,6 +12,6 @@ def Porosity(soil):
         soil.info['porosity'] = ["Calculated based on bulk density" if np.isnan(soil.df.porosity[x]) or soil.info.porosity[x] == "Calculated based on bulk density"
                                      else soil.info.porosity[x] for x in range(soil.n_states)]
         
-        soil.df['porosity'] = [1 - soil.df.bulk_density[x]/soil.df.particle_density[x] if np.isnan(soil.df.porosity[x]) else soil.df.porosity[x] for x in range(soil.n_states)]
+        soil.df['porosity'] = [round(1 - soil.df.bulk_density[x]/soil.df.particle_density[x], soil.roundn) if np.isnan(soil.df.porosity[x]) else soil.df.porosity[x] for x in range(soil.n_states)]
 
     return soil.df.porosity.values
