@@ -3,7 +3,7 @@ import pandas as pd
 
 class Soil(object):
     """
-    A class to represent soil characteristics.
+    A class to represent a soil sample with its characteristics.
 
     Attributes
     ----------
