@@ -55,16 +55,17 @@ def Texture(soil):
     if (np.isnan(soil.df.sand)).any() or (np.isnan(soil.df.silt)).any() or (np.isnan(soil.df.clay)).any() : 
 
         # Warn texture fractions that does not sum 100
-        states_warns = []
-        total_percents = []
-        for x in range(soil.n_states):
-            if ~np.isnan(soil.df.sand[x]) & ~np.isnan(soil.df.silt[x]) & ~np.isnan(soil.df.clay[x]):
-                total_percent = soil.df.sand[x] + soil.df.silt[x] + soil.df.clay[x]
-                if total_percent != 100:
-                    total_percents.append(total_percent)
-                    states_warns.append(x)
+        if any(not np.isnan(soil.df.sand[x]) and not np.isnan(soil.df.silt[x]) and not np.isnan(soil.df.clay[x]) and soil.df.sand[x] + soil.df.silt[x] + soil.df.clay[x] != 100 for x in range(soil.n_states)):
+            states_warns = []
+            total_percents = []
+            for x in range(soil.n_states):
+                if ~np.isnan(soil.df.sand[x]) & ~np.isnan(soil.df.silt[x]) & ~np.isnan(soil.df.clay[x]):
+                    total_percent = soil.df.sand[x] + soil.df.silt[x] + soil.df.clay[x]
+                    if total_percent != 100:
+                        total_percents.append(total_percent)
+                        states_warns.append(x)
 
-        warnings.warn(f"Total percentage of texture fractions in states: {states_warns} are equal to {total_percents}")
+            warnings.warn(f"Total percentage of texture fractions in states: {states_warns} are equal to {total_percents}")
 
         # Complete a third fraction if just two are given
         soil.info['sand'] = ["Fraction calculated using: 100 - clay - silt" if (np.isnan(soil.df.sand[x]) & ~np.isnan(soil.df.silt[x]) & ~np.isnan(soil.df.clay[x])) 
