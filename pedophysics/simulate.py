@@ -46,7 +46,7 @@ class Soil(object):
     bulk_ec_dc : array-like
         Soil bulk real electrical conductivity direct current [S/m]
     bulk_ec_dc_tc : array-like
-        Soil bulk real electrical conductivity direct current temperature corrected [S/m]
+        Soil bulk real electrical conductivity direct current (0 Hz) temperature corrected (298.15 K) [S/m]
     water_ec : array-like
         Soil water real electrical conductivity [S/m]
     s_ec : array-like

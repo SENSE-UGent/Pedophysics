@@ -307,9 +307,18 @@ def changing_freq(soil):
     - BulkEC : Estimates the soil's bulk electrical conductivity.
     - LongmireSmithP : Pedophysical model used for the estimation.
     """
-    
+    Texture(soil)
     BulkPermInf(soil)             
     BulkECDC(soil)
+
+    # Warn about applying LongmireSmithP function to non-validated soil conditions
+    if any( soil.df.frequency_perm[x] > 200e6 and (soil.df.clay[x] > 10 or soil.df.sand[x] < 90) and np.isnan(soil.df.bulk_perm[x]) for x in range(soil.n_states) ):
+        states_warns = []
+        for x in range(soil.n_states):
+            if (soil.df.frequency_perm[x] > 200e6 and (soil.df.clay[x] > 10 or soil.df.sand[x] < 90) and np.isnan(soil.df.bulk_perm[x])):
+                states_warns.append(x) 
+
+        warnings.warn(f"LongmireSmithP function is applied to soil states {states_warns} with conditions soil.df.frequency_perm > 200e6 and soil.df.clay > 10 or (soil.df.sand < 90), for which the validation of such model is uncertain. ")
 
     # Saving calculated bulk_perm and its info
     soil.info['bulk_perm'] = [str(soil.info.bulk_perm[x]) + "--> Calculated using LongmireSmithP function in predict.bulk_perm.changing_freq" if np.isnan(soil.df.bulk_perm[x])

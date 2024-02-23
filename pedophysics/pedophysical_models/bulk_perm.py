@@ -252,6 +252,7 @@ def LongmireSmithP(bulk_ec_dc, bulk_perm_inf, frequency_perm):
     23.328
 
     """
+    
     if (bulk_ec_dc == 0).all():
         return bulk_perm_inf
     

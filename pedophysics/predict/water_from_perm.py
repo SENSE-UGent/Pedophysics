@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.optimize import minimize
+import warnings
 
 from pedophysics.utils.stats import R2_score
 from pedophysics.pedophysical_models.water import LR, LR_W, LR_MV
@@ -98,6 +99,7 @@ def changing_freq(soil):
     --------
     LongmireSmithP: Function used to predict soil bulk real relative dielectric permittivity given bulk_ec_dc, perm_inf, and frequency.
     """
+    Texture(soil)
     BulkPermInf(soil)    
     bulk_ec_dc = []
 
@@ -113,6 +115,15 @@ def changing_freq(soil):
             bulk_ec_dc.append(np.nan if np.isnan(result.fun) else round(result.x[0], soil.roundn+2))
         else:
             bulk_ec_dc.append(np.nan)
+
+    # Warn about applying LongmireSmithP function to non-validated soil conditions    
+    if any( soil.df.frequency_perm[x] > 200e6 and (soil.df.clay[x] > 10 or soil.df.sand[x] < 90) and np.isnan(soil.df.bulk_ec_dc[x]) for x in range(soil.n_states) ):
+        states_warns = []
+        for x in range(soil.n_states):
+            if (soil.df.frequency_perm[x] > 200e6 and (soil.df.clay[x] > 10 or soil.df.sand[x] < 90) and np.isnan(soil.df.bulk_ec_dc[x]) ):
+                states_warns.append(x) 
+
+        warnings.warn(f"LongmireSmithP function is applied to soil states {states_warns} with conditions soil.df.frequency_perm > 200e6 and soil.df.clay > 10 or (soil.df.sand < 90), for which the validation of such model is uncertain. ")
 
     # Saving calculated bulk_ec and its info
     soil.info['bulk_ec_dc'] = [str(soil.info.bulk_ec_dc[x]) + "--> Calculated using LongmireSmithP function in predict.water_from_perm.changing_freq" if np.isnan(soil.df.bulk_ec_dc[x])
