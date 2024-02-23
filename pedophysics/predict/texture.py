@@ -62,7 +62,8 @@ def Texture(soil):
                 total_percent = soil.df.sand[x] + soil.df.silt[x] + soil.df.clay[x]
                 if total_percent != 100:
                     total_percents.append(total_percent)
-                    states_warns.append[x]
+                    states_warns.append(x)
+
         warnings.warn(f"Total percentage of texture fractions in states: {states_warns} are equal to {total_percents}")
 
         # Complete a third fraction if just two are given
