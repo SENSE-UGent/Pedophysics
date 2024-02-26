@@ -11,26 +11,16 @@ def Water(soil):
     """
     Return and compute missing values of the soil.df.water attribute using soil.df.bulk_perm or soil.df.bulk_ec.
 
-    The function first checks the availability of soil.df.frequency_perm, if it's missing
-    it prompts the user to provide the values. 
-    Next, the function attempts to calculate missing water content values from the provided soil.df.bulk_perm values, 
-    and then from the provided soil.df.bulk_ec values, if necessary.
+    This function performs calculations to fill in missing water content values in the soil DataFrame based on bulk permeability (bulk_perm) and electrical conductivity (bulk_ec_dc_tc). 
+    It employs different strategies based on available data and sets conditions for water content calculation.
 
     Parameters
     ----------
     soil : object
         A custom soil object that contains:
 
-        - water : array-like
-            Soil volumetric water content [m**3/m**3]
-        - bulk_perm : array-like
-            Soil bulk real relative dielectric permittivity [-]
-        - bulk_ec : array-like
-            Soil bulk real electrical conductivity [S/m]
-        - frequency_perm : array-like
-            Frequency of dielectric permittivity measurement [Hz]
         - df : DataFrame
-            Data Frame containing all the quantitative information of soil array-like attributes for each state
+            Data Frame containing all the quantitative information of soil array-like attributes for each state. Includes columns: water, bulk_perm, frequency_perm, and bulk_ec_dc_tc
         - info : DataFrame
             Data Frame containing descriptive information about how each array-like attribute was determined or modified.
         - n_states : int
@@ -39,11 +29,16 @@ def Water(soil):
     Returns
     -------
     np.ndarray
-        An array of updated or original soil volumetric water content values
+        soil.df.water.values: an array of updated or original soil volumetric water content values
 
-    Notes
-    -----
-    This function modifies the soil object in-place by updating the `df` and `info` dataframes.
+    External functions
+    --------
+    Temperature : Set missing values of soil.df.temperature and return 
+    FrequencyPerm : Set missing values of soil.df.frequency_perm and return 
+    WaterFromPerm : Calculate missing values of soil.df.water based on soil.df.bulk_perm
+    WaterFromEC : Calculate missing values of soil.df.water based on soil.df.bulk_ec_dc_tc  
+    FrequencyEC : Set missing values of soil.df.frequency_ec and return 
+    shift_to_bulk_ec_dc_tc : Compute missing values of soil.df.bulk_ec_dc_tc based on soil.df.bulk_ec or soil.df.bulk_ec_dc
 
     Example
     -------

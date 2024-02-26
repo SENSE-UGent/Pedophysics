@@ -2,7 +2,7 @@ import numpy as np
 
 def SolidPerm(soil):
     """
-    Return and set missing values of the soil.df.solid_perm attribute.
+    Set missing values of soil.df.solid_perm and return
 
     If any value of the solid_perm attribute is missing (NaN), 
     it will be set to a default value of 4. Corresponding information 
@@ -25,7 +25,7 @@ def SolidPerm(soil):
     Returns
     -------
     np.ndarray
-        An array of updated soil solid real relative dielectric permittivity phase values
+        soil.df.solid_perm.values: an array of updated soil solid real relative dielectric permittivity phase values
 
     Example
     -------

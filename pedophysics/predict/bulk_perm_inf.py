@@ -2,7 +2,7 @@ import numpy as np
 
 def BulkPermInf(soil):
     """
-    Return and set missing values of the soil.df.bulk_perm_inf attribute.
+    Set missing values of soil.df.bulk_perm_inf and return.
 
     If any value of the bulk_perm_inf attribute is missing (NaN), 
     it will be set to a default value of 5. Corresponding information 
@@ -25,7 +25,7 @@ def BulkPermInf(soil):
     Returns
     -------
     np.ndarray
-        An array of updated soil bulk real relative permittivity at infinite frequency values
+        soil.df.bulk_perm_inf.values: an array of updated soil bulk real relative permittivity at infinite frequency values
 
     Example
     -------

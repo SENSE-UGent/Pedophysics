@@ -16,10 +16,11 @@ from .texture import Texture
 
 def WaterFromPerm(soil):
     """ 
-    Compute missing values of soil.df.water based on soil.df.bulk_perm
+    Calculate missing values of soil.df.water based on soil.df.bulk_perm
 
-    Depending on the consistency of the permittivity frequency provided, this function decides 
-    whether to apply a fixed frequency or changing frequency method to predict soil volumetric water content.
+    This function checks if the permittivity frequency (`frequency_perm`) across all soil states is constant. 
+    If it is, a specific adjustment is made using the `fixed_freq` function. 
+    If the frequencies vary across soil states, a different adjustment is applied using the `changing_freq` function.
 
     Parameters
     ----------
@@ -34,18 +35,14 @@ def WaterFromPerm(soil):
         - n_states : int
             Number of states or records in the dataframe.
 
-    Notes
-    -----
-    This function modifies the soil object in-place by updating the `df` and `info` dataframes.
-
-    Two main methods are applied based on the nature of the permittivity frequency:
-    - `fixed_freq`: applied when the permittivity frequency is constant across the soil states.
-    - `changing_freq`: applied when the permittivity frequency varies across the soil states.
+    Returns
+    -------
+    None
 
     External functions
     --------
-    fixed_freq: Function to predict water content based on a constant permittivity frequency.
-    changing_freq: Function to predict water content based on varying permittivity frequencies.
+    fixed_freq: Decide between fitting and non-fitting approaches to calculate soil.df.water
+    changing_freq: Calculate missing values of soil.df.bulk_dc_ec when soil.df.frequency_perm is not constant
 
     Example
     -------
@@ -71,10 +68,11 @@ def WaterFromPerm(soil):
 
 def changing_freq(soil):    
     """ 
-    Predict soil attributes when permittivity frequency is changing.
+    Calculate missing values of soil.df.bulk_dc_ec when soil.df.frequency_perm is not constant.
 
-    Determines bulk electrical conductivity (bulk_ec_dc) using the LongmireSmithP function, given the changing 
-    nature of permittivity frequency in the provided soil data.
+    This function iterates through soil states to calculate the bulk EC for states where it is undefined. 
+    The calculation is performed by minimizing the difference between the calculated permeability using the Longmire-Smith P function and the known bulk permeability. 
+    Warnings are issued for soil states where the Longmire-Smith P function's applicability is uncertain due to soil conditions.
 
     Parameters
     ----------
@@ -89,15 +87,23 @@ def changing_freq(soil):
         - n_states : int
             Number of soil states.
 
+    Returns
+    -------
+    None
+        The function directly modifies the `soil` object's `df` and `info` attributes and does not return any value.
+
+    External Functions
+    ------------------
+    Texture : Calculate missing values of soil.df.sand, soil.df.silt, and soil.df.clay and return
+    BulkPermInf : Set missing values of soil.df.bulk_perm_inf and return
+    LongmireSmithP : Calculate the soil bulk real relative dielectric permittivity using the Wunderlich model and return
+
     Notes
     -----
-    This function modifies the soil object in-place by updating the `df` and `info` dataframes.
-    The minimization function `objective` computes the difference between the LongmireSmithP predicted 
-    permittivity and actual permittivity to obtain the best bulk_ec_dc for each soil state.
+    - The function uses the `scipy.optimize.minimize` method for the minimization process.
+    - Warnings are issued for soil states where the frequency of permittivity exceeds 200 MHz and either clay content is above 10% or sand content is below 90%, as the validity of the Longmire-Smith P model is uncertain in these conditions.
 
-    External functions
-    --------
-    LongmireSmithP: Function used to predict soil bulk real relative dielectric permittivity given bulk_ec_dc, perm_inf, and frequency.
+
     """
     Texture(soil)
     BulkPermInf(soil)    
@@ -137,22 +143,24 @@ def fixed_freq(soil):
     """ 
     Decide between fitting and non-fitting approaches to calculate soil.df.water
 
-    Determines the soil's water content based on the bulk permittivity and the permittivity frequency.
-    The approach to estimate water content depends on the available data: 
-    1) Fitting approach: Used if there are at least 3 non-NaN values of water and bulk permittivity (calibration data).
-    2) Non-fitting approach: Used if there's any soil state with NaN water, non-NaN bulk permittivity, 
-       and a frequency_perm value between 5 and 30e9.
+    This function determines the calculation approach for soil water content based on the availability of data for water content and bulk permeability, 
+    as well as the range of frequency of permittivity. It applies a fitting approach if there are at least three soil states with known water content and bulk permeability. 
+    Otherwise, it considers a non-fitting approach when water content is unknown, bulk permeability is known, and the frequency of permittivity falls within a specified range.
 
     Parameters
     ----------
     soil : object
-        A custom soil object that contains:
-
+    A custom soil object that contains:
         - df : DataFrame
             Data Frame containing the quantitative information of all soil array-like attributes for each state.
-            Includes: water, bulk_perm, and frequency_perm.
+            Includes: frequency_perm, water, and bulk_perm.
         - n_states : int
-            Number of soil states
+            Number of soil states.
+
+    Returns
+    -------
+    None
+        The function directly modifies the `soil` object based on the selected approach and does not return any value.
 
     Notes
     -----
@@ -161,8 +169,8 @@ def fixed_freq(soil):
 
     External functions
     --------
-    fitting: Function used to fit soil data and predict missing water content values.
-    non_fitting: Function used to predict water content without a fitting approach.
+    fitting: Calculate missing values of soil.df.water using a fitting approach.
+    non_fitting: Calculate missing values of soil.df.water using a non-fitting approach.
     """
 
     # Condition for fitting approach
@@ -176,7 +184,7 @@ def fixed_freq(soil):
 
 def fitting(soil):
     """ 
-    Computes soil.df.water using a fitting approach.
+    Calculate missing values of soil.df.water using a fitting approach.
 
     This function utilizes the WunderlichP model to estimate the soil's volumetric water 
     content based on its bulk real relative dielectric permittivity at constant frequency. 
@@ -202,6 +210,11 @@ def fitting(soil):
         - n_states : int
             Number of soil states
 
+    Returns
+    -------
+    None
+        The function directly modifies the `soil` object based on the selected approach and does not return any value.
+
     Notes
     -----
     This function modifies the soil object in-place by updating the `df` and `info` dataframes.
@@ -210,8 +223,9 @@ def fitting(soil):
 
     External functions
     --------
-    WunderlichP: Function that defines the relationship between water content and relative dielectric permittivity.
-    WaterPerm: Function to compute soil water real relative dielectric permittivity.
+    WunderlichP : Calculate the soil bulk real relative dielectric permittivity using the Wunderlich model and return
+    WaterPerm : Calculate or set missing values of soil.df.water_perm and return
+    R2_score : Calculate the coefficient of determination (R^2) of a prediction and return.
     """
     WaterPerm(soil)                   
 
@@ -273,8 +287,10 @@ def non_fitting(soil):
     """ 
     Return and compute soil.df.water using a non-fitting approach.
 
-    Uses various methods to calculate water content and bulk electrical conductivity (bulk_ec_dc) based on 
-    different electromagnetic (EM) frequency ranges and other given soil attributes.
+    This function estimates soil bulk electrical conductivity (EC) and water content by applying different models based on the EM frequency range. 
+    For frequencies between 5 Hz and 30 MHz, the Longmire-Smith P function is used to calculate bulk EC. 
+    For frequencies between 30 MHz and 100 MHz, 100 MHz and 200 MHz, and 200 MHz and 30 GHz, different linear regression models (LR_MV, LR, LR_W) are applied to estimate water content.
+
 
     Parameters
     ----------
@@ -291,17 +307,30 @@ def non_fitting(soil):
         - roundn : int
             Number of decimal places to round results.
 
+    Returns
+    -------
+    None
+        The function directly modifies the `soil` object based on the selected approach and does not return any value.
+
     Notes
     -----
-    The function works based on electromagnetic (EM) frequency conditions and modifies the soil 
-    object in-place by updating the `df` and `info` attributes. Various prediction methods like LongmireSmithP,
-    LR_MV, LR, and LR_W are utilized based on the frequency ranges.
+    - The function chooses the estimation model based on the EM frequency range of the soil states.
+    - For frequencies between 5 Hz and 30 MHz, bulk EC is estimated. 
+    For higher frequencies, water content is estimated using different linear regression models tailored to specific frequency ranges.
+
 
     External Functions
     ------------------
-    Porosity, AirPerm, SolidPerm, WaterPerm, Texture, BulkPermInf : Functions used to estimate various soil attributes.
-    LongmireSmithP, LR_MV, LR, LR_W : Pedophysical models for predictions based on frequency ranges and other attributes.
-
+    Porosity : Calculate missing values of soil.df.porosity and return
+    AirPerm : Set missing values of soil.df.air_perm and return
+    SolidPerm : Set missing values of soil.df.solid_perm and return
+    WaterPerm : Calculate or set missing values of soil.df.water_perm and return
+    Texture : Calculate missing values of soil.df.sand, soil.df.silt, and soil.df.clay and return
+    BulkPermInf : Set missing values of soil.df.bulk_perm_inf and return
+    LongmireSmithP : Calculate the soil bulk real relative dielectric permittivity using the Longmire-Smith model and return
+    LR_W : Calculate the soil volumetric water content using the Lichtenecker and Rother model modified by Wunderlich and return
+    LR : Calculate the soil volumetric water content using the Lichtenecker and Rother model.
+    LR_MV : Calculate the soil volumetric water content using the Lichtenecker and Rother model modified by Mendoza-Veirana and return
     """
     Porosity(soil)                     
     AirPerm(soil)                      

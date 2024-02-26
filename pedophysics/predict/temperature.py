@@ -2,7 +2,7 @@ import numpy as np
 
 def Temperature(soil):
     """
-    Return and set missing values of the soil.df.temperature attribute.
+    Set missing values of soil.df.temperature and return 
 
     If any value of the temperature attribute is missing (NaN), 
     it will be set to a default value of 298.15. Corresponding information 
@@ -25,7 +25,7 @@ def Temperature(soil):
     Returns
     -------
     np.ndarray
-        An array of updated soil bulk temperature values
+        soil.df.temperature.values: an array of updated soil bulk temperature values
 
     Example
     -------

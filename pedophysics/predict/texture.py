@@ -3,7 +3,7 @@ import numpy as np
 
 def Texture(soil):
     """
-    Determine the texture fractions (soil.df.sand, soil.df.silt, soil.df.clay attributes).
+    Calculate missing values of soil.df.sand, soil.df.silt, and soil.df.clay and return
 
     If any value of the sand, silt, or clay attribute is missing, this function will:
     1. Warn if the sum of texture fractions does not equate to 100%.

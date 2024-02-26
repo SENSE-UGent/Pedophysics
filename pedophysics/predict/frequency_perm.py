@@ -3,7 +3,7 @@ from pedophysics import instruments
 
 def FrequencyPerm(soil): 
     """
-    Return or compute missing values of the soil.df.frequency_perm attribute.
+    Set missing values of soil.df.frequency_perm and return 
 
     If any value of the frequency_perm attribute is missing (NaN), 
     it will be computed using the `Inst2FreqP` function from the `instruments` module. 
@@ -16,12 +16,12 @@ def FrequencyPerm(soil):
         - frequency_perm : array-like
             Frequency of dielectric permittivity measurement [Hz]
         - df : DataFrame
-            Data Frame containing all the quantitative information of soil array-like attributes for each state
+            Data Frame containing all the quantitative information of soil array-like attributes for each state. Includes: frequency_perm
 
     Returns
     -------
     np.ndarray
-        An array of updated frequency of dielectric permittivity measurement values
+        soil.df.frequency_perm.values: an array of updated frequency of dielectric permittivity measurement values
 
     Notes
     -----
@@ -30,7 +30,7 @@ def FrequencyPerm(soil):
 
     External functions
     --------
-    Inst2FreqP : Function to calculate missing frequency_perm attribute based on soil.instrument
+    Inst2FreqP : Set missing values of soil.df.frequency_perm and return
 
     Example
     -------

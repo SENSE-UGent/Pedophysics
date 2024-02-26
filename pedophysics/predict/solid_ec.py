@@ -2,7 +2,7 @@ import numpy as np
 
 def SolidEC(soil):
     """
-    Return and set missing values of the soil.df.solid_ec attribute.
+    Set missing values of soil.df.solid_ec and return
 
     If any value of the solid_ec attribute is missing (NaN), 
     it will be set to a default value of 0. Corresponding information 
@@ -25,7 +25,7 @@ def SolidEC(soil):
     Returns
     -------
     np.ndarray
-        An array of updated soil solid real electrical conductivity values
+        soil.df.solid_ec.values: an array of updated soil solid real electrical conductivity values
 
     Example
     -------

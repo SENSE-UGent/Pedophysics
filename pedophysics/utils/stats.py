@@ -2,7 +2,7 @@ import numpy as np
 
 def R2_score(actual, predicted):
     """
-    Calculate the coefficient of determination (R^2) of the prediction.
+    Calculate the coefficient of determination (R^2) of a prediction.
 
     The R^2 score function computes the coefficient of determination, often used 
     to evaluate the performance of a regression model. The best possible score is 1.0.

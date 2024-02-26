@@ -4,7 +4,7 @@ from .texture import Texture
 
 def ParticleDensity(soil):
     """
-    Return or compute missing values of the soil.df.particle_density attribute.
+    Calculate or set missing values of soil.df.particle_density and return
 
     If any value of the particle_density attribute is missing (NaN), it will first
     be computed using the Schjonnen function based on the clay and organic matter values.
@@ -31,7 +31,7 @@ def ParticleDensity(soil):
     Returns
     -------
     np.ndarray
-        An array of updated soil particle density values
+        soil.df.particle_density.values: an array of updated soil particle density values
 
     Notes
     -----
@@ -40,8 +40,8 @@ def ParticleDensity(soil):
 
     External functions
     --------
-    Texture : Function to calculate missing clay, silt or sand attributes based on soil.texture
-    Schjonnen : Function to calculate particle_density based on soil.df.clay and soil.df.orgm
+    Texture : Calculate missing values of soil.df.sand, soil.df.silt, and soil.df.clay and return
+    Schjonnen : Calculate the soil particle density using the Schjonnen model and return
 
     Example
     -------
@@ -63,7 +63,7 @@ def ParticleDensity(soil):
                                          or soil.info.particle_density[x] == "Calculated using Schjonnen function (RMSE = 0.011 g/cm3)"
                                          else soil.info.particle_density[x] for x in range(soil.n_states)]
         
-        soil.df['particle_density'] = [Schjonnen(soil.df.clay.values[x], soil.df.orgm.values[x]) if np.isnan(soil.df.particle_density[x])  
+        soil.df['particle_density'] = [Schjonnen(soil.df.clay[x], soil.df.orgm[x]) if np.isnan(soil.df.particle_density[x])  
                                        else soil.df.particle_density[x] for x in range(soil.n_states)]
         
         soil.info['particle_density'] = ["Set as 2.65 by default" if np.isnan(soil.df.particle_density[x]) or soil.info.particle_density[x] == "Set as 2.65 by default"

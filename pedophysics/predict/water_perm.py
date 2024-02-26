@@ -3,7 +3,7 @@ from pedophysics.pedophysical_models.water_perm import *
 
 def WaterPerm(soil):
     """
-    Return or compute missing values of the soil.df.water_perm attribute.
+    Calculate or set missing values of soil.df.water_perm and return
 
     Determines the soil water phase real dielectric permittivity using either the MalmbergMaryott 
     function or the Olhoeft function based on the soil's salinity and
@@ -34,7 +34,7 @@ def WaterPerm(soil):
     Returns
     -------
     np.ndarray
-        Array containing the updated soil water phase real dielectric permittivity values.
+        soil.df.water_perm.values: array containing the updated soil water phase real dielectric permittivity values.
 
     Notes
     -----
@@ -42,8 +42,8 @@ def WaterPerm(soil):
 
     External functions
     --------
-    MalmbergMaryott : Function that computes water permittivity based on temperature.
-    Olhoeft : Function that computes water permittivity based on temperature and salinity.
+    MalmbergMaryott : Calculate soil water phase real dielectric permittivity using the Malmberg & Maryott model and return
+    Olhoeft : Calculate soil water phase real dielectric permittivity using the Olhoeft (1986) model and return
 
     Example
     -------

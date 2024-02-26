@@ -271,7 +271,7 @@ def LongmireSmithP(bulk_ec_dc, bulk_perm_inf, frequency_perm):
 
 def Hilhorst(bulk_ec, water_ec, water_perm, offset_perm):
     """
-    Calculate the soil bulk real relative dielectric permittivity using Hilhorst's model.
+    Calculate the soil bulk real relative dielectric permittivity using the Hilhorst model and return
 
     This function calculates the soil bulk real relative dielectric permittivity of a 
     soil-water mixture based on Hilhorst's model. The relation 

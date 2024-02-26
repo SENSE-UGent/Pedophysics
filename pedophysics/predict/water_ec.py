@@ -17,42 +17,40 @@ from .bulk_ec_dc_tc import shift_to_bulk_ec_dc_tc
 
 def WaterEC(soil):
     """
-    Return and computes soil.df.water_ec based on soil.df.water, soil.df.bulk_ec and soil.df.bulk_perm. 
+    Compute missing values of soil.df.water_ec and return  
 
-    This function uses either a non-fitting or a fitting approach based on the available soil 
-    attributes and conditions to estimate the water EC. The non-fitting approach is employed 
-    when either the water EC values are missing and soil salinity values are available, or only 
-    one state has non-missing values for water and bulk EC. Otherwise, if there are at least two 
-    states with non-missing values for bulk EC and either water or bulk permittivity, the fitting 
-    approach is used.
+    This function evaluates soil states to determine the appropriate approach for estimating water EC. 
+    It considers non-fitting approaches based on salinity and bulk electrical conductivity, 
+    as well as fitting approaches using the Rhoades or Hilhorst functions depending on the availability of water content, bulk electrical conductivity, and bulk permeability data.
 
     Parameters
     ----------
-    soil : object
-        A custom soil object containing:
-
-        - df : DataFrame
-            Data Frame containing the quantitative information of all soil array-like attributes for each state.
-            Includes: water_ec, salinity, water, bulk_ec, frequency_ec, and bulk_perm. 
-        - n_states : int
-            Number of soil states.
+    soil : Soil Object
+        An object representing the soil, which must have the following attributes:
+        - df: DataFrame
+            A pandas DataFrame containing the soil states with columns for `water`, `bulk_ec_dc_tc`, `water_ec`, `salinity`, and potentially `bulk_perm`.
+        - n_states: int
+            The number of soil states represented in the `df`.
 
     Returns
     -------
     numpy.ndarray
-        Array containing the updated soil water pore real electrical conductivity values. 
+        soil.df.water_ec.values: array containing the updated soil water pore real electrical conductivity values. 
 
     Notes
     -----
-    The function first ensures that the temperature and frequency EC attributes are available.
-    Then, based on the conditions specified, it employs the suitable approach to estimate the water EC.
+    - Non-fitting approaches are applied when specific data are available, such as salinity or bulk electrical conductivity, without the need for additional parameters.
+    - Fitting approaches, such as those using the Rhoades or Hilhorst functions, are applied when there are sufficient data points with known water content or bulk permeability.
 
     External Functions
     ------------------
-    - Temperature : Function to ensure the temperature values are available for the soil.
-    - FrequencyEC : Function to ensure the frequency EC values are available for the soil.
-    - non_fitting : Non-fitting approach function for estimating water EC.
-    - fitting     : Fitting approach function for estimating water EC.
+    - Temperature : Set missing values of soil.df.temperature and return 
+    - FrequencyEC : Set missing values of soil.df.frequency_ec and return 
+    - shift_to_bulk_ec_dc_tc : Compute missing values of soil.df.bulk_ec_dc_tc based on soil.df.bulk_ec or soil.df.bulk_ec_dc
+    - from_salinity	: Calculate missing values of soil.df.water_ec based on soil.df.salinity 
+    - from_ec : Calculate missing values of soil.df.water_ec based on soil.df.bulk_ec_dc_tc
+    - fitting_rhoades : Calculate missing values of soil.df.water_ec using the Rhoades function in a fitting approach
+    - fitting_hiolhorst : Calculate missing values of soil.df.water_ec using the Hilhorst function in a fitting approach
 
     Example
     -------
@@ -93,31 +91,31 @@ def WaterEC(soil):
 
 def from_salinity(soil):
     """
-    Calculates soil.df.water_ec based on soil.df.salinity using the SenGoode function.
+    Calculate missing values of soil.df.water_ec based on soil.df.salinity 
 
-    This function uses the salinity attribute in the soil object to estimate missing water EC values. The 
-    SenGoode function is used to perform this conversion. For each state in the soil object, if the water EC 
-    value is missing but the salinity value is available, the water EC is calculated using the SenGoode function.
-    
-    Additionally, an information note is added to the `info` attribute of the soil object indicating the method 
-    of calculation for the water EC.
+    This function estimates water EC for each soil state based on temperature and salinity data using the SenGood function. 
+    Estimated water EC values are saved in the soil DataFrame, and an information string indicating the use of the SenGood function 
+    for calculation is appended to each relevant entry in the soil information dictionary.
 
     Parameters
     ----------
-    soil : object
-        A custom soil object containing:
+    soil : Soil Object
+        An object representing the soil, which must have the following attributes:
+        - df: DataFrame
+            A pandas DataFrame containing the soil states with columns for `temperature`, `salinity`, and potentially `water_ec`.
+        - n_states: int
+            The number of soil states represented in the `df`.
+        - info: dict
+            A dictionary containing information about the soil properties.
 
-        - df : DataFrame
-            Data Frame containing the quantitative information of all soil array-like attributes for each state.
-            Includes: water_ec, salinity, and temperature.
-        - n_states : int
-            Number of soil states.
-        - info : dict
-            Data Frame containing descriptive information about how each array-like attribute was determined or modified.
+    Returns
+    -------
+    None
+        The function directly modifies the `soil` object's `df` and `info` attributes with the estimated water EC values and does not return any value.
 
     External Functions
     ------------------
-    - SenGoode : Function that estimates water EC from the temperature and salinity attributes.
+    - SenGoode : Calculate soil water real electrical conductivity using the Sen and Goode model and return
     """
 
     # Calculating and saving water_ec and its info
@@ -131,35 +129,34 @@ def from_salinity(soil):
 
 def from_ec(soil):
     """
-    Calculates soil.df.water_ec based on soil.df.bulk_ec using the Fu function.
+    Calculate missing values of soil.df.water_ec based on soil.df.bulk_ec_dc_tc
 
-    This function uses the bulk EC and other soil properties to estimate missing water EC values. The 
-    Fu function, which is a pedophysical model for bulk electrical conductivity, is used to perform the estimation.
-    For each state in the soil object, if the water EC value is missing, a minimization routine is applied 
-    to determine the optimal water EC that best fits the observed bulk EC.
-
-    Additionally, an information note is added to the `info` attribute of the soil object indicating the method 
-    of calculation for the water EC using the Fu function.
+    This function applies the Fu function within a minimization process to estimate soil water EC based on soil properties such as 
+    water content, clay content, porosity, solid EC, dry EC, and saturated EC. The estimation is performed for each soil state where water EC is unknown.
 
     Parameters
     ----------
-    soil : object
-        A custom soil object containing:
+    soil : Soil Object
+        An object representing the soil, which must have the following attributes:
+        - df: DataFrame
+            A pandas DataFrame containing the soil states with columns for `water`, `clay`, `porosity`, `solid_ec`, `dry_ec`, `sat_ec`, `bulk_ec_dc_tc`, and potentially `water_ec`.
+        - n_states: int
+            The number of soil states represented in the `df`.
+        - roundn: int
+            The number of decimal places for rounding estimated water EC values.
 
-        - df : DataFrame
-            Data Frame containing the quantitative information of all soil array-like attributes for each state.
-            Includes: water_ec, clay, porosity, solid_ec, dry_ec, sat_ec, and bulk_ec.
-        - n_states : int
-            Number of soil states.
-        - info : dict
-            Data Frame containing descriptive information about how each array-like attribute was determined or modified.
+    Returns
+    -------
+    None
+        The function directly modifies the `soil` object's `df` and `info` attributes with the estimated water EC values and does not return any value.
 
     External Functions
     ------------------
-    - Texture : Function that provides the texture attributes of the soil.
-    - Porosity : Function that provides the soil porosity
-    - SolidEC : Function that provides the electrical conductivity of the solid particles.
-    - Fu : Model function to estimate bulk EC from various soil properties.
+    - Texture : Calculate missing values of soil.df.sand, soil.df.silt, and soil.df.clay and return
+    - Porosity : Calculate missing values of soil.df.porosity and return
+    - SolidEC : Set missing values of soil.df.solid_ec and return
+    - Fu : Calculate the soil bulk real electrical conductivity using the Fu model and return
+
     """
     Texture(soil)
     Porosity(soil)
@@ -186,36 +183,37 @@ def from_ec(soil):
 
 def fitting_rhoades(soil):
     """
-    Calculates soil.df.water_ec using the Rhoades function based on soil properties.
+    Calculate missing values of soil.df.water_ec using the Rhoades function in a fitting approach
 
-    The function estimates water's EC by fitting the Rhoades function to the available bulk EC and water content data.
-    In addition to estimating the missing water EC values, this function calculates other parameters such as s_ec, E, 
-    and F that are essential for the Rhoades function.
-    The function initially selects calibration data by identifying valid data points from the soil.df attributes. 
-    Then, it utilizes the `minimize` method to fit the Rhoades function, allowing for the estimation of the required 
-    parameters. Finally, the calculated parameters are stored in the soil object, and the fitting's R2 score is recorded 
-    in the info attribute of the soil object.
+    This function selects calibration data based on available water content and bulk electrical conductivity data, removes NaNs, 
+    and uses the Rhoades function within a minimization process to estimate `water_ec` and `s_ec` parameters. 
+    It then fixes these parameters to estimate the remaining parameters of the Rhoades function, `E` and `F`. The quality of the fit is evaluated using the R2 score.
 
     Parameters
     ----------
-    soil : object
-        A custom soil object containing:
+    soil : Soil Object
+        An object representing the soil, which must have the following attributes:
+        - df: DataFrame
+            A pandas DataFrame containing the soil states with columns for `water`, `bulk_ec_dc_tc`, `water_ec`, `s_ec`, and potentially other related parameters.
+        - n_states: int
+            The number of soil states represented in the `df`.
+        - roundn: int
+            The number of decimal places for rounding estimated parameter values.
 
-        - df : DataFrame
-            Data Frame containing the quantitative information of all soil array-like attributes for each state.
-            Includes: bulk_ec, water, s_ec, and water_ec.
-        - n_states : int
-            Number of soil states.
-        - info : dict
-            Data Frame containing descriptive information about how each array-like attribute was determined or modified.
-        - E : float
-            An attribute in the soil object where the calculated E value is stored.
-        - F : float
-            An attribute in the soil object where the calculated F value is stored.
+    Returns
+    -------
+    None
+        The function directly modifies the `soil` object's `df` and `info` attributes with the estimated parameters and does not return any value.
+
+    Notes
+    -----
+    - The fitting process involves two steps: first, estimating `water_ec` and `s_ec` with fixed `E` and `F`, and second, estimating `E` and `F` with fixed `water_ec` and `s_ec`.
+    - The process uses calibration data where both water content and bulk electrical conductivity are known.
 
     External Functions
     ------------------
-    - Rhoades : A mathematical function used to relate bulk EC with water content, water EC, and other parameters.
+    - Rhoades : Calculate the soil bulk real electrical conductivity using the Rhoades model and return
+    - R2_score : Calculate the coefficient of determination (R^2) of a prediction and return.
     """
     # Selecting calibration data
 
@@ -276,18 +274,12 @@ def fitting_rhoades(soil):
 
 def fitting_hilhorst(soil):
     """
-    Calculates soil.df.water_ec using the Hilhorst function based on soil properties.
+    Calculate missing values of soil.df.water_ec using the Hilhorst function in a fitting approach
     
-    This function estimates water's EC by fitting the Hilhorst function to the available bulk EC, 
-    bulk permittivity and water permittivity data. Additionally, the function calculates the 
-    `offset_perm` parameter essential for the Hilhorst function.
-    
-    The function begins by selecting calibration data by identifying valid data points from the soil.df 
-    attributes, and subsequently applies a filtering mechanism to eliminate NaN values. The `minimize` 
-    method is then used to fit the Hilhorst function, enabling the estimation of the desired parameters. 
-    Finally, the derived parameters are stored within the soil object, and the fitting's R2 score is 
-    added to the info attribute of the soil object.
-    
+    This function selects calibration data based on available bulk electrical conductivity, bulk permeability, and water permeability, and applies the Hilhorst function
+      to estimate soil water electrical conductivity and an offset parameter for permeability. 
+      It then performs a fitting process to optimize parameters using the objective function that minimizes the residuals between the calculated and observed bulk permeability.
+
     Parameters
     ----------
     soil : object
@@ -303,12 +295,21 @@ def fitting_hilhorst(soil):
         roundn : int
             Number of decimal places to round results.
 
+    Returns
+    -------
+    None
+        The function updates the `soil` object's `df` and `info` attributes with estimated values and additional information regarding the calculation.
+
     External Functions
     ------------------
-    WaterPerm : function
-        Used for deriving the water permittivity for each soil state.
-    Hilhorst : function
-        A mathematical equation to relate bulk EC with water content, water EC, water permittivity, and other parameters.
+    WaterPerm : Calculate or set missing values of soil.df.water_perm and return
+    Hilhorst : Calculate the soil bulk real relative dielectric permittivity using the Hilhorst model and return
+    R2_score : Calculate the coefficient of determination (R^2) of a prediction and return.
+
+    Notes
+    -----
+    - The function targets soil states with known bulk electrical conductivity and bulk permeability greater than or equal to 10.
+    - A least squares optimization is used to find the best parameters that fit the Hilhorst function to the calibration data.
     """
     WaterPerm(soil)
 
