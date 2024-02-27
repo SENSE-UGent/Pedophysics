@@ -12,8 +12,8 @@
 #
 # import os
 #import sys
-#sys.path.insert(0, 'C:\\\\Users\\\\mendo\\\\OneDrive - UGent\\\\Documentos\\\\PhD\\\\Pedophysics_code')
-#sys.path.insert(0, 'C:\\\\Users\\\\gmendoza\\\\OneDrive - UGent\\\\Documentos\\\\PhD\\\\Pedophysics_code')
+#sys.path.insert(0, 'C:\\\\Users\\\\mendo\\\\OneDrive - UGent\\\\Documentos\\\\PhD\\\\Pedophysics')
+#sys.path.insert(0, 'C:\\\\Users\\\\gmendoza\\\\OneDrive - UGent\\\\Documentos\\\\PhD\\\\Pedophysics')
 
 # -- Project information -----------------------------------------------------
 

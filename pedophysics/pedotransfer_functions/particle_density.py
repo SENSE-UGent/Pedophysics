@@ -1,6 +1,6 @@
 def Schjonnen(clay, org, densorg = 1.4, denspart = 2.65, densclay = 2.86):
     """
-    Calculate the soil particle density using the Schjonnen model.
+    Calculate the soil particle density using the Schjonnen model and return
     
     This function determines the particle density of soil based on the content of clay, organic matter, 
     and specific densities of organic matter, soil particles, and clay. It implements the Schjonnen model 
