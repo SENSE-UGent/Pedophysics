@@ -3,7 +3,7 @@ from scipy.constants import pi, epsilon_0
 
 def WunderlichEC(water, ec_init, wat_init, wc, Lw):  
     """
-    Calculate the soil bulk real electrical conductivity using the Wunderlich model.
+    Calculate the soil bulk real electrical conductivity using the Wunderlich model and return
 
     This is a effective medium model that uses a differential 
     approach to compute the electrical conductivity based on the initial 
@@ -62,7 +62,7 @@ def WunderlichEC(water, ec_init, wat_init, wc, Lw):
 
 def Fu(water, clay, por, wc, solid_ec, dry_ec, sat_ec, s=1, w=2):
     """
-    Calculate the soil bulk real electrical conductivity using the Fu model.
+    Calculate the soil bulk real electrical conductivity using the Fu model and return
 
     This is a volumetric mixing model that takes into account various soil properties 
     such as clay content, porosity, and water content. 
@@ -135,7 +135,7 @@ def Fu(water, clay, por, wc, solid_ec, dry_ec, sat_ec, s=1, w=2):
 
 def LongmireSmithEC(bulk_ec_dc, frequency_ec):
     """
-    Calculate the soil bulk real electrical conductivity using the Longmire-Smith model.
+    Calculate the soil bulk real electrical conductivity using the Longmire-Smith model and return
 
     This is a semiempirical model that calculates the soil bulk real electrical conductivity at different
     electromagnetic frequencies [1].
@@ -194,7 +194,7 @@ def LongmireSmithEC(bulk_ec_dc, frequency_ec):
     
 def Rhoades(water, wc, s_ec, E, F):
     """
-    Calculate the bulk electrical conductivity using the Rhoades model.
+    Calculate the soil bulk real electrical conductivity using the Rhoades model and return
 
     This function estimates the bulk electrical conductivity of a soil-water mixture 
     using the Rhoades equation [1]. The model combines the contributions of the water's 
@@ -239,9 +239,9 @@ def Rhoades(water, wc, s_ec, E, F):
 
 def SheetsHendrickx(bulk_ec, temperature):
     """
-    Calculate the temperature-corrected soil bulk real electrical conductivity using the Sheets-Hendricks model.
+    Calculate the soil bulk real electrical conductivity using the Sheets-Hendricks model and return
 
-    This function adjusts the apparent electrical conductivity (ECa) of soil to a standard temperature of 25°C. The adjustment is based on the Sheets-Hendricks model.
+    This function adjusts the apparent electrical conductivity (ECa) of soil to a standard temperature of 298.15 K (25°C). The adjustment is based on the Sheets-Hendricks model.
 
     Parameters
     ----------

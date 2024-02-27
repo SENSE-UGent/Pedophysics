@@ -2,7 +2,7 @@ import numpy as np
 
 def LR_W(bp, por, ap, sp, wp, clay): 
     """
-    Calculate the soil volumetric water content using the Lichtenecker and Rother model.
+    Calculate the soil bulk real relative dielectric permittivity using the Lichtenecker and Rother model modified by Wunderlich and return
 
     This function computes the volumetric water content of a soil 
     mixture using the volumetric mixing model of Lichtenecker and Rother [1], and Wunderlich [2] alpha correction model (LR_W). 
@@ -102,7 +102,7 @@ def LR(bp, por, ap, sp, wp, alpha):
 
 def LR_MV(bp, por, ap, sp, wp, CEC): 
     """
-    Calculate the soil volumetric water content using the Lichtenecker and Rother model.
+    Calculate the soil volumetric water content using the Lichtenecker and Rother model modified by Mendoza-Veirana and return
 
     This function computes the volumetric water content of a soil 
     mixture using the volumetric mixing model of Lichtenecker and Rother [1], and Mendoza Veirana [2] alpha correction model (LR_MV). 

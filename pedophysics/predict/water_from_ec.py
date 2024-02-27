@@ -24,7 +24,10 @@ def WaterFromEC(soil):
     soil : Soil Object
         An object representing the soil, which must have the following attributes:
         - df: DataFrame
-            A pandas DataFrame containing the soil states with columns for `water` and `bulk_ec_dc_tc`.
+            Data Frame containing the quantitative information of all soil array-like attributes for each state. 
+            Includes: `water` and `bulk_ec_dc_tc`.
+        - info: DataFrame
+            Data Frame containing descriptive information about how each array-like attribute was calculated.
         - n_states: int
             The number of soil states represented in the `df`.
 
@@ -84,7 +87,10 @@ def non_fitting(soil):
     soil : Soil Object
         An object representing the soil, which must have the following attributes:
         - df: DataFrame
-            A pandas DataFrame containing the soil states with columns for `clay`, `porosity`, `water_ec`, `solid_ec`, `dry_ec`, `sat_ec`, `bulk_ec_dc_tc`, and potentially `water`.
+            Data Frame containing the quantitative information of all soil array-like attributes for each state. 
+            Includes: `clay`, `porosity`, `water_ec`, `solid_ec`, `dry_ec`, `sat_ec`, `bulk_ec_dc_tc`, and potentially `water`.
+        - info: DataFrame
+            Data Frame containing descriptive information about how each array-like attribute was calculated.
         - n_states: int
             The number of soil states represented in the `df`.
         - roundn: int
@@ -144,7 +150,10 @@ def fitting(soil):
     soil : Soil Object
         An object representing the soil, which must have the following attributes:
         - df: DataFrame
-            A pandas DataFrame containing the soil states with columns for `water`, `bulk_ec_dc_tc`, `water_ec`, and potentially `Lw`.
+            Data Frame containing the quantitative information of all soil array-like attributes for each state. 
+            Includes: `water`, `bulk_ec_dc_tc`, `water_ec`, and potentially `Lw`.
+        - info: DataFrame
+            Data Frame containing descriptive information about how each array-like attribute was calculated.
         - n_states: int
             The number of soil states represented in the `df`.
         - range_ratio: float

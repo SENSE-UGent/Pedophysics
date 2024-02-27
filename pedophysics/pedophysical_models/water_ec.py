@@ -1,6 +1,6 @@
 def SenGoode(T, C_f):
     """
-    Calculate soil water real electrical conductivity using the Sen and Goode model.
+    Calculate soil water real electrical conductivity using the Sen and Goode model and return
 
     Based on the model proposed by Sen and Goode (1992 a, b) [1][2], this function estimates 
     the oil water real electrical conductivity given the soil temperature and 

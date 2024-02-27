@@ -6,7 +6,42 @@ from pedophysics.pedophysical_models.bulk_ec import LongmireSmithEC, SheetsHendr
 
 def BulkECDC(soil):
     """
-    
+    Compute missing values of soil.df.bulk_ec_dc and return
+
+    This function checks for NaN values in `soil.df.bulk_ec_dc`. If NaN values are found, it attempts to estimate
+    these missing values using a series of steps. First, it calls the `BulkECDCTC` function to potentially fill in
+    missing `bulk_ec_dc` values. If after this step there are still NaN values in `bulk_ec_dc` but corresponding
+    `bulk_ec_dc_tc` values are available, it calls `tc_to_non_tc` to convert temperature-corrected values to their
+    non-temperature-corrected counterparts. Similarly, if there are NaN values in `bulk_ec_dc` but non-direct current
+    (non-dc) `bulk_ec` values are available, it calls `non_dc_to_dc` to convert these to direct current values.
+
+    Parameters
+    ----------
+    soil : Soil Object
+        An object representing the soil, which must have the following attributes:
+        - df: DataFrame
+            Data Frame containing quantitative information of soil attributes for each state, including 
+            `bulk_ec_dc`, `bulk_ec_dc_tc`, and `bulk_ec`.
+        - n_states: int
+            Number of soil states.
+
+    Returns
+    -------
+    np.ndarray
+        soil.df.bulk_ec_dc.values: soil bulk real electrical conductivity direct current values.
+
+    External functions
+    --------
+    BulkECDCTC : Compute missing values of soil.df.bulk_ec_dc_tc and return
+    tc_to_non_tc : Calculate missing values of soil.df.bulk_ec_dc based on soil.df.bulk_ec_dc_tc
+    non_dc_to_dc : Calculate missing values of soil.df.bulk_ec_dc based on soil.df.bulk_ec
+
+    Notes
+    -----
+    - The function operates in-place, modifying the soil object's DataFrame directly.
+    - It relies on the availability of either `bulk_ec_dc_tc` or `bulk_ec` values to estimate missing `bulk_ec_dc` values.
+    - The process involves a sequence of conversions and estimations, which may depend on external functions not
+      detailed here (`BulkECDCTC`, `tc_to_non_tc`, and `non_dc_to_dc`).
     """    
     from .bulk_ec_dc_tc import BulkECDCTC # Lazy import to avoid circular dependency
     if any(np.isnan(soil.df.bulk_ec_dc)):
@@ -23,8 +58,45 @@ def BulkECDC(soil):
 
 def tc_to_non_tc(soil):
     """
+    Calculate missing values of soil.df.bulk_ec_dc based on soil.df.bulk_ec_dc_tc
 
+    This function iterates through soil states to update `bulk_ec_dc` in `soil.df` where it is NaN. For soil states
+    at standard temperature (298.15K), `bulk_ec_dc` is set directly equal to `bulk_ec_dc_tc`. For other temperatures,
+    it uses the `SheetsHendrickx` function within a minimization process to estimate `bulk_ec_dc` from `bulk_ec_dc_tc`.
+
+    Parameters
+    ----------
+    soil : Soil Object
+        An object representing the soil, which must have the following attributes:
+        - df: DataFrame
+            A DataFrame containing quantitative information of soil attributes for each state, including `bulk_ec_dc`,
+            `bulk_ec_dc_tc`, and `temperature`.
+        - info: DataFrame
+            A DataFrame containing descriptive information for each soil state, including `bulk_ec_dc`.
+        - n_states: int
+            The number of soil states.
+        - roundn: int
+            Number of decimal places to round results.
+
+    Returns
+    -------
+    None
+        This function updates the soil object in-place and does not return any value.
+
+    External functions
+    --------
+    SheetsHendrickx : Calculate the soil bulk real electrical conductivity using the Sheets-Hendricks model and return
+
+    Notes
+    -----
+    - The function uses a minimization process to estimate `bulk_ec_dc` from `bulk_ec_dc_tc` for soil states
+      not at standard temperature. The objective function aims to minimize the difference between the
+      temperature-corrected value obtained using `SheetsHendrickx` and the given `bulk_ec_dc_tc`.
+    - It directly sets `bulk_ec_dc` equal to `bulk_ec_dc_tc` for soil states at standard temperature (298.15K)
+      without any correction.
+    - Updates and calculations are logged in `soil.info` for traceability.
     """    
+
     # Defining minimization function to obtain DC bulk EC 
     def objective_tc_to_non_tc(bulk_ec_dc, bulk_ec_dc_tc, temperature):
         return (SheetsHendrickx(bulk_ec_dc, temperature) - bulk_ec_dc_tc)**2
@@ -43,7 +115,7 @@ def tc_to_non_tc(soil):
 
 def non_dc_to_dc(soil):
     """
-    Convert non-direct current (non-DC) values of soil.df.bulk_ec to direct current (DC) values.
+    Calculate missing values of soil.df.bulk_ec_dc based on soil.df.bulk_ec
 
     Given the bulk EC values at various electromagnetic frequencies, this function uses the pedophysical model
     LongmireSmithEC to estimate the bulk EC of the soil at zero Hertz (direct current).
@@ -60,7 +132,7 @@ def non_dc_to_dc(soil):
             Number of soil states.
         - roundn : int
             Number of decimal places to round results.
-        - info : dict
+        - info : DataFrame
             Data Frame containing descriptive information about how each array-like attribute was determined or modified.
 
     Notes
@@ -70,7 +142,7 @@ def non_dc_to_dc(soil):
 
     External Functions
     ------------------
-    - LongmireSmithEC : Model used to relate non-DC values to DC values.
+    - LongmireSmithEC : Calculate the soil bulk real electrical conductivity using the Longmire-Smith model and return
     """
 
     # Defining minimization function to obtain DC bulk EC 

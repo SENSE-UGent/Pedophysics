@@ -28,7 +28,10 @@ def WaterEC(soil):
     soil : Soil Object
         An object representing the soil, which must have the following attributes:
         - df: DataFrame
-            A pandas DataFrame containing the soil states with columns for `water`, `bulk_ec_dc_tc`, `water_ec`, `salinity`, and potentially `bulk_perm`.
+            Data Frame containing the quantitative information of all soil array-like attributes for each state. 
+            Includes: `water`, `bulk_ec_dc_tc`, `water_ec`, `salinity`, and potentially `bulk_perm`.
+        - info: DataFrame
+            Data Frame containing descriptive information about how each array-like attribute was calculated.
         - n_states: int
             The number of soil states represented in the `df`.
 
@@ -102,11 +105,12 @@ def from_salinity(soil):
     soil : Soil Object
         An object representing the soil, which must have the following attributes:
         - df: DataFrame
-            A pandas DataFrame containing the soil states with columns for `temperature`, `salinity`, and potentially `water_ec`.
+            Data Frame containing the quantitative information of all soil array-like attributes for each state. 
+            Includes: `temperature`, `salinity`, and potentially `water_ec`.
         - n_states: int
             The number of soil states represented in the `df`.
-        - info: dict
-            A dictionary containing information about the soil properties.
+        - info: DataFrame
+            Data Frame containing descriptive information about how each array-like attribute was calculated.
 
     Returns
     -------
@@ -139,7 +143,10 @@ def from_ec(soil):
     soil : Soil Object
         An object representing the soil, which must have the following attributes:
         - df: DataFrame
-            A pandas DataFrame containing the soil states with columns for `water`, `clay`, `porosity`, `solid_ec`, `dry_ec`, `sat_ec`, `bulk_ec_dc_tc`, and potentially `water_ec`.
+            Data Frame containing the quantitative information of all soil array-like attributes for each state. 
+            Includes: `water`, `clay`, `porosity`, `solid_ec`, `dry_ec`, `sat_ec`, `bulk_ec_dc_tc`, and potentially `water_ec`.
+        - info: DataFrame
+            Data Frame containing descriptive information about how each array-like attribute was calculated.
         - n_states: int
             The number of soil states represented in the `df`.
         - roundn: int
@@ -194,9 +201,12 @@ def fitting_rhoades(soil):
     soil : Soil Object
         An object representing the soil, which must have the following attributes:
         - df: DataFrame
-            A pandas DataFrame containing the soil states with columns for `water`, `bulk_ec_dc_tc`, `water_ec`, `s_ec`, and potentially other related parameters.
+            Data Frame containing the quantitative information of all soil array-like attributes for each state. 
+            includes: `water`, `bulk_ec_dc_tc`, `water_ec`, `s_ec`, and potentially other related parameters.
         - n_states: int
             The number of soil states represented in the `df`.
+        - info: DataFrame
+            Data Frame containing descriptive information about how each array-like attribute was calculated.
         - roundn: int
             The number of decimal places for rounding estimated parameter values.
 
@@ -286,12 +296,12 @@ def fitting_hilhorst(soil):
         A custom soil object containing:
         
         df : DataFrame
-            Data Frame containing the quantitative information of all soil array-like attributes for each state.
-            This includes attributes such as bulk_ec, bulk_perm, water_perm, offset_perm, and water_ec.
+            Data Frame containing the quantitative information of all soil array-like attributes for each state. 
+            Includes: bulk_ec, bulk_perm, water_perm, offset_perm, and water_ec.
         n_states : int
             The count of soil states.
-        info : dict
-            A dictionary which conveys descriptive data on how each array-like attribute was either determined or modified.
+        - info: DataFrame
+            Data Frame containing descriptive information about how each array-like attribute was calculated.
         roundn : int
             Number of decimal places to round results.
 

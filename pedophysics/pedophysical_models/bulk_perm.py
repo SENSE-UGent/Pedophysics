@@ -2,7 +2,7 @@ import numpy as np
 
 def WunderlichP(water, perm_init, wat_init, wp, Lw): 
     """
-    Calculate the soil bulk real relative dielectric permittivity using the Wunderlich model.
+    Calculate the soil bulk real relative dielectric permittivity using the Wunderlich model and return
 
     This is a effective medium model that uses a differential 
     approach to compute the dielectric permittivity based on the initial 
@@ -61,7 +61,7 @@ def WunderlichP(water, perm_init, wat_init, wp, Lw):
 
 def LR_MV(water, por, ap, sp, wp, CEC): 
     """
-    Calculate the soil bulk real relative dielectric permittivity using the Lichtenecker and Rother model.
+    Calculate the soil bulk real relative dielectric permittivity using the Lichtenecker-Rother model modified by Mendoza-Veirana and return
 
     This function computes the bulk real relative dielectric permittivity of a soil 
     mixture using the volumetric mixing model of Lichtenecker and Rother [1], and Mendoza Veirana [2] alpha correction model (LR_MV). 
@@ -112,7 +112,7 @@ def LR_MV(water, por, ap, sp, wp, CEC):
 
 def LR(water, por, ap, sp, wp, alpha): 
     """
-    Calculate the soil bulk real relative dielectric permittivity using the Lichtenecker and Rother model.
+    Calculate the soil bulk real relative dielectric permittivity using the Lichtenecker and Rother model and return
 
     This function computes the bulk real relative dielectric permittivity of a soil 
     mixture using the volumetric mixing model of Lichtenecker and Rother [1] (LR). 
@@ -160,7 +160,7 @@ def LR(water, por, ap, sp, wp, alpha):
 
 def LR_W(water, por, ap, sp, wp, clay): 
     """
-    Calculate the soil bulk real relative dielectric permittivity using the Lichtenecker and Rother model.
+    Calculate the soil bulk real relative dielectric permittivity using the Lichtenecker and Rother model modified by Wunderlich and return
 
     This function computes the bulk real relative dielectric permittivity of a soil 
     mixture using the volumetric mixing model of Lichtenecker and Rother [1], and Wunderlich [2] alpha correction model (LR_W). 
@@ -210,7 +210,7 @@ def LR_W(water, por, ap, sp, wp, clay):
 
 def LongmireSmithP(bulk_ec_dc, bulk_perm_inf, frequency_perm):
     """
-    Calculate the soil bulk real relative dielectric permittivity using the Longmire-Smith model.
+    Calculate the soil bulk real relative dielectric permittivity using the Longmire-Smith model and return
 
     This is a semiempirical model that calculates the soil bulk real relative dielectric permittivity at different
     electromagnetic frequencies [1].

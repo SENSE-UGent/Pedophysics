@@ -1,6 +1,6 @@
 def MalmbergMaryott(T):
     """
-    Calculate soil water phase real dielectric permittivity using the Malmberg & Maryott model.
+    Calculate soil water phase real dielectric permittivity using the Malmberg & Maryott model and return
 
     This function utilizes the model proposed by Malmberg and Maryott (1956) [1] to estimate 
     the soil water phase real dielectric permittivity based on a given soil temperature. Reported RMSE = 0.0046
@@ -34,7 +34,7 @@ def MalmbergMaryott(T):
 
 def Olhoeft(T, C_f):
     """
-    Calculate soil water phase real dielectric permittivity using the Olhoeft (1986) [1] model.
+    Calculate soil water phase real dielectric permittivity using the Olhoeft (1986) model and return
 
     Parameters
     ----------
