@@ -1,8 +1,14 @@
-import numpy as np
 import sys
-sys.path.insert(0, 'C:\\Users\\gmendoza\\OneDrive - UGent\\Documentos\\PhD\\Pedophysics_code')
-sys.path.insert(0, 'C:\\Users\\mendo\\OneDrive - UGent\\Documentos\\PhD\\Pedophysics_code')
+import os
 
+current_dir = os.path.dirname(os.path.abspath('__file__'))
+parent_dir = os.path.dirname(current_dir)
+
+# Set path to pedophysics module 
+pedophysics_code_path = os.path.join(parent_dir)
+sys.path.insert(0, pedophysics_code_path)
+
+import numpy as np
 
 from pedophysics.predict import BulkEC, BulkPerm, ParticleDensity, Salinity, WaterEC, Water
 from pedophysics.simulate import Soil
