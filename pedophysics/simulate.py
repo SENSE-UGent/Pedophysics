@@ -43,6 +43,8 @@ class Soil(object):
         Soil bulk real relative dielectric permittivity when soil bulk real electrical conductivity is zero [-]
     bulk_ec : array-like
         Soil bulk real electrical conductivity [S/m]
+    bulk_ec_tc : array-like
+        Soil bulk real electrical conductivity temperature corrected (298.15 K) [S/m]
     bulk_ec_dc : array-like
         Soil bulk real electrical conductivity direct current [S/m]
     bulk_ec_dc_tc : array-like
