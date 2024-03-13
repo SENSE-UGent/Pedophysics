@@ -28,7 +28,7 @@ def FrequencyEC(soil):
 
     External functions
     ------------------
-    Inst2FreqC : Function to calculate missing frequency_ec attribute based on soil.instrument.
+    Inst2FreqEC : Function to calculate missing frequency_ec attribute based on soil.instrument.
 
     Example
     -------
@@ -44,7 +44,7 @@ def FrequencyEC(soil):
 
     # Check if any value of frequency_ec is missing
     if (np.isnan(soil.df.frequency_ec)).any():
-        instruments.Inst2FreqC(soil)
+        instruments.Inst2FreqEC(soil)
 
         soil.info['frequency_ec'] = ["Set as 0 Hz (direct current) by default" if np.isnan(soil.df.frequency_ec[x]) or soil.info.frequency_ec[x] == "Set as 0 Hz (direct current) by default"
                                      else soil.info.frequency_ec[x] for x in range(soil.n_states)]
