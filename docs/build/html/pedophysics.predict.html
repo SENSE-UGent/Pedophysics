@@ -1,0 +1,2176 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pedophysics.predict package &mdash; pedophysics v0.1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=fa47ad08"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pedophysics.utils package" href="pedophysics.utils.html" />
+    <link rel="prev" title="pedophysics.pedotransfer_functions package" href="pedophysics.pedotransfer_functions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pedophysics
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pedophysics</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pedophysics.html">pedophysics package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pedophysics.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pedophysics.pedophysical_models.html">pedophysics.pedophysical_models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedophysics.pedotransfer_functions.html">pedophysics.pedotransfer_functions package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pedophysics.predict package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pedophysics.utils.html">pedophysics.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pedophysics.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedophysics.html#module-pedophysics.instruments">pedophysics.instruments module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedophysics.html#module-pedophysics.main">pedophysics.main module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedophysics.html#module-pedophysics.simulate">pedophysics.simulate module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="pedophysics.html#module-pedophysics">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pedophysics</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pedophysics</a></li>
+          <li class="breadcrumb-item"><a href="pedophysics.html">pedophysics package</a></li>
+      <li class="breadcrumb-item active">pedophysics.predict package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pedophysics.predict.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pedophysics-predict-package">
+<h1>pedophysics.predict package<a class="headerlink" href="#pedophysics-predict-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-pedophysics.predict.air_perm">
+<span id="pedophysics-predict-air-perm-module"></span><h2>pedophysics.predict.air_perm module<a class="headerlink" href="#module-pedophysics.predict.air_perm" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.air_perm.AirPerm">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.air_perm.</span></span><span class="sig-name descname"><span class="pre">AirPerm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.air_perm.AirPerm" title="Link to this definition"></a></dt>
+<dd><p>Set missing values of soil.df.air_perm and return.</p>
+<p>If any value of the air_perm attribute is missing (NaN), 
+it will be set to a default value of 1.2. Corresponding information 
+in the soil’s info dataframe will be updated accordingly.</p>
+<section id="parameters">
+<h3>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object that contains:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>air_perm<span class="classifier">array-like</span></dt><dd><p>Soil air real relative dielectric permittivity phase [-]</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing all the quantitative information of soil array-like attributes for each state</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was determined or modified.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of states or records in the dataframe.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>numpy.ndarray</dt><dd><p>soil.df.air_perm.values: an array of updated soil air real relative dielectric permittivity phase values.</p>
+</dd>
+</dl>
+</section>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">Soil</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">air_perm</span>
+<span class="go">0   NaN</span>
+<span class="go">Name: air_perm, dtype: float64</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">AirPerm</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">air_perm</span>
+<span class="go">0    1.2</span>
+<span class="go">Name: air_perm, dtype: float64</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-pedophysics.predict.bulk_ec">
+<span id="pedophysics-predict-bulk-ec-module"></span><h2>pedophysics.predict.bulk_ec module<a class="headerlink" href="#module-pedophysics.predict.bulk_ec" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.bulk_ec.BulkEC">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.bulk_ec.</span></span><span class="sig-name descname"><span class="pre">BulkEC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.bulk_ec.BulkEC" title="Link to this definition"></a></dt>
+<dd><p>Calculate missing values of soil.df.bulk_ec and return</p>
+<p>This function checks for NaN values in the soil’s bulk EC data. If any are found,
+it performs a series of operations to estimate the bulk EC, including direct current (DC)
+conversion and adjustment for non-DC components. The operations involve calling the BulkECDC function
+for DC conversion, followed by additional conversion functions to account for non-DC factors.</p>
+<section id="id1">
+<h3>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<dl>
+<dt>soil<span class="classifier">Soil Object</span></dt><dd><p>An object representing the soil, which must have the following attributes:
+- df: DataFrame</p>
+<blockquote>
+<div><p>A pandas DataFrame containing the soil states with columns for <cite>bulk_ec</cite>.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>info: DataFrame</dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was calculated.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h3>Returns<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>soil.df.bulk_ec.values: an array of updated or original soil bulk real electrical conductivity values</p>
+</dd>
+</dl>
+</section>
+<section id="external-functions">
+<h3>External Functions<a class="headerlink" href="#external-functions" title="Link to this heading"></a></h3>
+<p>BulkECDC : Compute missing values of soil.df.bulk_ec_dc and return
+conversion : Set missing values of soil.df.bulk_ec equal to soil.df.bulk_ec_dc_tc or soil.df.bulk_ec_dc if similar 
+dc_to_non_dc : Calculate missing values of soil.df.bulk_ec based on soil.df.bulk_ec_dc</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.bulk_ec.conversion">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.bulk_ec.</span></span><span class="sig-name descname"><span class="pre">conversion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.bulk_ec.conversion" title="Link to this definition"></a></dt>
+<dd><p>Set missing values of soil.df.bulk_ec equal to soil.df.bulk_ec_dc_tc or soil.df.bulk_ec_dc if similar</p>
+<p>This function iterates over the soil states to update the ‘bulk_ec’ values in <cite>soil.df</cite> and
+to annotate corresponding entries in <cite>soil.info[‘bulk_ec’]</cite>. The updates are based on the presence
+of NaN values in the original ‘bulk_ec’ data and specific conditions related to soil temperature
+and frequency of EC measurements. Annotations indicate the basis for the updated values, referencing
+either <cite>soil.df.bulk_ec_dc_tc</cite> or <cite>soil.df.bulk_ec_dc</cite>, as determined by the conditions met during the
+update process.</p>
+<section id="id3">
+<h3>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<dl>
+<dt>soil<span class="classifier">Soil Object</span></dt><dd><p>An object representing the soil, which must have the following attributes:
+- df: DataFrame</p>
+<blockquote>
+<div><p>Data Frame containing the quantitative information of all soil array-like attributes for each state. 
+Includes: <cite>bulk_ec</cite>, <cite>temperature</cite>, and <cite>frequency_ec</cite>.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>info: DataFrame</dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was calculated.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states: int</dt><dd><p>Number of soil states</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h3>Returns<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>This function updates the soil object in-place and does not return any value.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h3>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>The function checks for NaN values in ‘bulk_ec’ and updates them based on the soil temperature being
+exactly 298.15K and the frequency of EC measurements being 5Hz or less.</p></li>
+<li><p>Annotations in <cite>soil.info[‘bulk_ec’]</cite> provide insight into the source of the updated values, whether
+they are derived from ‘bulk_ec_dc_tc’ or ‘bulk_ec_dc’, aiding in the traceability of the data.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.bulk_ec.dc_to_non_dc">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.bulk_ec.</span></span><span class="sig-name descname"><span class="pre">dc_to_non_dc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.bulk_ec.dc_to_non_dc" title="Link to this definition"></a></dt>
+<dd><p>Calculate missing values of soil.df.bulk_ec based on soil.df.bulk_ec_dc</p>
+<p>This function iterates over the soil states to update the ‘bulk_ec’ values in <cite>soil.df</cite> for cases where 
+the electromagnetic frequency is 5Hz or higher. It applies the LongmireSmithEC function to account for 
+the frequency shift from zero Hz to the actual frequency. The updated ‘bulk_ec’ values are then rounded 
+off to a precision defined by <cite>soil.roundn+3</cite>. Corresponding entries in <cite>soil.info[‘bulk_ec’]</cite> are annotated 
+to indicate that the adjustment was made using the LongmireSmithEC function from the <cite>predict.bulk_ec.dc_to_non_dc</cite> 
+module.</p>
+<section id="id5">
+<h3>Parameters<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object containing:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing the quantitative information of all soil array-like attributes for each state. 
+Includes: frequency_ec, bulk_ec, bulk_ec_dc and other relevant attributes.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info: DataFrame</dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was calculated.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>roundn<span class="classifier">int</span></dt><dd><p>Number of decimal places to round results.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of soil states.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id6">
+<h3>Returns<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>This function updates the soil object in-place and does not return any value.</p>
+</dd>
+</dl>
+</section>
+<section id="id7">
+<h3>Notes<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>The function specifically targets soil states with a frequency of EC measurements of 5Hz or higher.</p></li>
+<li><p>Annotations in <cite>soil.info[‘bulk_ec’]</cite> detail the use of the LongmireSmithEC function for EM frequency 
+adjustments, enhancing the traceability of the data adjustments.</p></li>
+</ul>
+</section>
+<section id="id8">
+<h3>External Functions<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>LongmireSmithEC : Calculate the soil bulk real electrical conductivity using the Longmire-Smith model and return</p></li>
+</ul>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-pedophysics.predict.bulk_perm">
+<span id="pedophysics-predict-bulk-perm-module"></span><h2>pedophysics.predict.bulk_perm module<a class="headerlink" href="#module-pedophysics.predict.bulk_perm" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.bulk_perm.BulkPerm">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.bulk_perm.</span></span><span class="sig-name descname"><span class="pre">BulkPerm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.bulk_perm.BulkPerm" title="Link to this definition"></a></dt>
+<dd><p>Computes missing values of soil.df.bulk_perm and return.</p>
+<p>Uses the given electromagnetic frequency to determine the method to estimate bulk permittivity. 
+If no frequency is provided or all frequencies are the same, different methods or conditions 
+are invoked.</p>
+<section id="id9">
+<h3>Parameters<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object containing:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing the quantitative information of all soil array-like attributes for each state.
+Includes: bulk_perm and frequency_perm.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of soil states</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was determined or modified.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id10">
+<h3>Returns<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>numpy.ndarray</dt><dd><p>soil.df.bulk_perm.values: Array containing updated soil bulk real relative dielectric permittivity values</p>
+</dd>
+</dl>
+</section>
+<section id="id11">
+<h3>Notes<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<p>The function modifies the soil object in-place by updating the <cite>df</cite> and <cite>info</cite> attributes based 
+on the given conditions and returns the updated values of bulk permittivity.</p>
+</section>
+<section id="id12">
+<h3>External Functions<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>FrequencyPerm : Set missing values of soil.df.frequency_perm and return</p></li>
+<li><p>fixed_freq, changing_freq : Functions invoked based on the condition of the EM frequency provided.</p></li>
+</ul>
+</section>
+<section id="id13">
+<h3>Example<a class="headerlink" href="#id13" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">Soil</span><span class="p">(</span> <span class="n">water</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.15</span><span class="p">,</span> <span class="mf">0.23</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">],</span>
+<span class="go">            porosity = 0.434,</span>
+<span class="go">            texture = &#39;Silt loam&#39;,</span>
+<span class="go">            instrument = &#39;GPR&#39;)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predict</span><span class="o">.</span><span class="n">BulkPerm</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span> 
+<span class="go">array([18.563,  6.781,  9.328, 13.973,  3.357])</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.bulk_perm.changing_freq">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.bulk_perm.</span></span><span class="sig-name descname"><span class="pre">changing_freq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.bulk_perm.changing_freq" title="Link to this definition"></a></dt>
+<dd><p>calculate missing values of soil.df.bulk_perm based on soil.df.bulk_ec_dc</p>
+<p>This function determines the bulk permittivity of soil based on given conditions and the LongmireSmithP pedophysical model. 
+It specifically addresses cases where the electromagnetic (EM) frequency is not constant.</p>
+<section id="id14">
+<h3>Parameters<a class="headerlink" href="#id14" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object containing:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing the quantitative information of all soil array-like attributes for each state.
+Includes: bulk_perm, frequency_perm, bulk_ec_dc, clay, sand, and bulk_perm_inf.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>roundn<span class="classifier">int</span></dt><dd><p>Number of decimal places to round results.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id15">
+<h3>Returns<a class="headerlink" href="#id15" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>The function directly modifies the <cite>soil</cite> object’s <cite>df</cite> and <cite>info</cite> attributes and does not return any value.</p>
+</dd>
+</dl>
+</section>
+<section id="id16">
+<h3>Notes<a class="headerlink" href="#id16" title="Link to this heading"></a></h3>
+<p>The function modifies the soil object in-place by updating the <cite>df</cite> and <cite>info</cite> attributes.</p>
+</section>
+<section id="id17">
+<h3>External Functions<a class="headerlink" href="#id17" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>BulkPermInf : Set missing values of soil.df.bulk_perm_inf and return</p></li>
+<li><p>BulkECDC : Compute missing values of soil.df.bulk_ec_dc and return</p></li>
+<li><p>LongmireSmithP : Calculate the soil bulk real relative dielectric permittivity using the Wunderlich model and return</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.bulk_perm.fitting">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.bulk_perm.</span></span><span class="sig-name descname"><span class="pre">fitting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.bulk_perm.fitting" title="Link to this definition"></a></dt>
+<dd><p>Calculate missing values of soil.df.bulk_perm using a fitting approach</p>
+<p>This function fits the WunderlichP function to the soil data to determine the bulk permittivity values.
+It can either calculate the Lw parameter or use a provided value. The accuracy of the fitting is 
+determined by the R2 score.</p>
+<section id="id18">
+<h3>Parameters<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object containing:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing all the quantitative information of soil array-like attributes for each state.
+Includes: water, water_perm, and bulk_perm</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was determined or modified.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Lw<span class="classifier">float</span></dt><dd><p>Soil scalar depolarization factor of water aggregates (effective medium theory)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>roundn<span class="classifier">int</span></dt><dd><p>Number of decimal places to round results.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>range_ratio<span class="classifier">float</span></dt><dd><p>Ratio to extend the domain of the regression by fitting approach.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of soil states</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id19">
+<h3>Returns<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>The function directly modifies the <cite>soil</cite> object’s <cite>df</cite> and <cite>info</cite> attributes and does not return any value.</p>
+</dd>
+</dl>
+</section>
+<section id="id20">
+<h3>Notes<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
+<p>The function modifies the soil object in-place by updating the <cite>df</cite> and <cite>info</cite> attributes based on the fitting results.</p>
+</section>
+<section id="id21">
+<h3>External Functions<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Temperature : Set missing values of soil.df.temperature and return</p></li>
+<li><p>WaterPerm : Calculate or set missing values of soil.df.water_perm and return</p></li>
+<li><p>WunderlichP : Calculate the soil bulk real relative dielectric permittivity using the Wunderlich model and return</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.bulk_perm.fixed_freq">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.bulk_perm.</span></span><span class="sig-name descname"><span class="pre">fixed_freq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.bulk_perm.fixed_freq" title="Link to this definition"></a></dt>
+<dd><p>Decide between fitting and non-fitting approaches.</p>
+<p>Based on the given soil state data, chooses between two methodologies - fitting or non-fitting 
+to determine the bulk permittivity values for a fixed frequency.</p>
+<section id="id22">
+<h3>Parameters<a class="headerlink" href="#id22" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object containing:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing the quantitative information of all soil array-like attributes for each state.
+Includes: bulk_perm, water, and frequency_perm.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of soil states</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id23">
+<h3>Returns<a class="headerlink" href="#id23" title="Link to this heading"></a></h3>
+<p>None</p>
+</section>
+<section id="id24">
+<h3>Notes<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
+<p>The function modifies the soil object in-place based on the given conditions.</p>
+</section>
+<section id="id25">
+<h3>External Functions<a class="headerlink" href="#id25" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>fitting : Calculate missing values of soil.df.bulk_perm using a fitting approach</p></li>
+<li><p>non_fitting : Calculate missing values of soil.df.bulk_perm using a non fitting approach.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.bulk_perm.non_fitting">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.bulk_perm.</span></span><span class="sig-name descname"><span class="pre">non_fitting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.bulk_perm.non_fitting" title="Link to this definition"></a></dt>
+<dd><p>Calculate missing values of soil.df.bulk_perm using a non fitting approach</p>
+<p>This function determines the bulk permittivity of soil based on given conditions and known empirical relationships. 
+Depending on the electromagnetic (EM) frequency range provided, various functions are used.</p>
+<section id="id26">
+<h3>Parameters<a class="headerlink" href="#id26" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object containing:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing the quantitative information of all soil array-like attributes for each state.
+Includes: water, bulk_perm, frequency_perm, bulk_ec, bulk_perm_inf, porosity, clay, air_perm, solid_perm, water_perm, and CEC.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>roundn<span class="classifier">int</span></dt><dd><p>Number of decimal places to round results.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id27">
+<h3>Returns<a class="headerlink" href="#id27" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>The function directly modifies the <cite>soil</cite> object’s <cite>df</cite> and <cite>info</cite> attributes and does not return any value.</p>
+</dd>
+</dl>
+</section>
+<section id="id28">
+<h3>Notes<a class="headerlink" href="#id28" title="Link to this heading"></a></h3>
+<p>The function modifies the soil object in-place by updating the <cite>df</cite> and <cite>info</cite> attributes based on the chosen approach.</p>
+</section>
+<section id="id29">
+<h3>External Functions<a class="headerlink" href="#id29" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>BulkPermInf : Determines the bulk permittivity at infinite frequency.</p></li>
+<li><p>BulkEC : Estimates the soil’s bulk electrical conductivity.</p></li>
+<li><p>Temperature : Set missing values of soil.df.temperature and return</p></li>
+<li><p>Porosity : Calculate missing values of soil.df.porosity and return</p></li>
+<li><p>AirPerm : Set missing values of soil.df.air_perm and return</p></li>
+<li><p>SolidPerm : Set missing values of soil.df.solid_perm and return</p></li>
+<li><p>WaterPerm : Calculate or set missing values of soil.df.water_perm and return</p></li>
+<li><p>Texture : Calculate missing values of soil.df.sand, soil.df.silt, and soil.df.clay and return</p></li>
+<li><p>LongmireSmithP : Calculate the soil bulk real relative dielectric permittivity using the Longmire-Smith model and return</p></li>
+<li><p>LR_MV : Calculate the soil volumetric water content using the Lichtenecker and Rother model modified by Mendoza-Veirana and return</p></li>
+<li><p>LR : Calculate the soil volumetric water content using the Lichtenecker and Rother model.</p></li>
+<li><p>LR_W : Calculate the soil volumetric water content using the Lichtenecker and Rother model modified by Wunderlich and return</p></li>
+</ul>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-pedophysics.predict.bulk_perm_inf">
+<span id="pedophysics-predict-bulk-perm-inf-module"></span><h2>pedophysics.predict.bulk_perm_inf module<a class="headerlink" href="#module-pedophysics.predict.bulk_perm_inf" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.bulk_perm_inf.BulkPermInf">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.bulk_perm_inf.</span></span><span class="sig-name descname"><span class="pre">BulkPermInf</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.bulk_perm_inf.BulkPermInf" title="Link to this definition"></a></dt>
+<dd><p>Set missing values of soil.df.bulk_perm_inf and return.</p>
+<p>If any value of the bulk_perm_inf attribute is missing (NaN), 
+it will be set to a default value of 5. Corresponding information 
+in the soil’s info dataframe will be updated accordingly.</p>
+<section id="id30">
+<h3>Parameters<a class="headerlink" href="#id30" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object that contains:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>bulk_perm_inf<span class="classifier">array-like</span></dt><dd><p>Soil bulk real relative permittivity at infinite frequency [-]</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing all the quantitative information of soil array-like attributes for each state</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was determined or modified.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of states or records in the dataframe.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id31">
+<h3>Returns<a class="headerlink" href="#id31" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>soil.df.bulk_perm_inf.values: an array of updated soil bulk real relative permittivity at infinite frequency values</p>
+</dd>
+</dl>
+</section>
+<section id="id32">
+<h3>Example<a class="headerlink" href="#id32" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">Soil</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">bulk_perm_inf</span>
+<span class="go">0   NaN</span>
+<span class="go">Name: bulk_perm_inf, dtype: float64</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">BulkPermInf</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">bulk_perm_inf</span>
+<span class="go">0    5</span>
+<span class="go">Name: bulk_perm_inf, dtype: float64</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-pedophysics.predict.frequency_ec">
+<span id="pedophysics-predict-frequency-ec-module"></span><h2>pedophysics.predict.frequency_ec module<a class="headerlink" href="#module-pedophysics.predict.frequency_ec" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.frequency_ec.FrequencyEC">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.frequency_ec.</span></span><span class="sig-name descname"><span class="pre">FrequencyEC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.frequency_ec.FrequencyEC" title="Link to this definition"></a></dt>
+<dd><p>Return and set missing values of the soil.df.frequency_ec attribute.</p>
+<p>If any value of the frequency_ec attribute is missing (NaN), it will be set to a default value of 0 Hz (direct current). 
+Corresponding information in the soil’s info dataframe will be updated accordingly.</p>
+<section id="id33">
+<h3>Parameters<a class="headerlink" href="#id33" title="Link to this heading"></a></h3>
+<dl>
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object that contains:
+- frequency_ec : array-like</p>
+<blockquote>
+<div><p>Frequency of electric conductivity measurement [Hz]</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing all the quantitative information of soil array-like attributes for each state.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was calculated. includes: frequency_ec</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of states or records in the dataframe.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id34">
+<h3>Returns<a class="headerlink" href="#id34" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>soil.df.frequency_ec.values: an array of updated frequency of electric conductivity measurement values.</p>
+</dd>
+</dl>
+</section>
+<section id="id35">
+<h3>External functions<a class="headerlink" href="#id35" title="Link to this heading"></a></h3>
+<p>Inst2FreqEC : Function to calculate missing frequency_ec attribute based on soil.instrument.</p>
+</section>
+<section id="id36">
+<h3>Example<a class="headerlink" href="#id36" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">Soil</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">frequency_ec</span>
+<span class="go">0   NaN</span>
+<span class="go">Name: frequency_ec, dtype: float64</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">FrequencyEC</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">frequency_ec</span>
+<span class="go">0    0</span>
+<span class="go">Name: frequency_ec, dtype: float64</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-pedophysics.predict.frequency_perm">
+<span id="pedophysics-predict-frequency-perm-module"></span><h2>pedophysics.predict.frequency_perm module<a class="headerlink" href="#module-pedophysics.predict.frequency_perm" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.frequency_perm.FrequencyPerm">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.frequency_perm.</span></span><span class="sig-name descname"><span class="pre">FrequencyPerm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.frequency_perm.FrequencyPerm" title="Link to this definition"></a></dt>
+<dd><p>Set missing values of soil.df.frequency_perm and return</p>
+<p>If any value of the frequency_perm attribute is missing (NaN), 
+it will be computed using the <cite>Inst2FreqP</cite> function from the <cite>instruments</cite> module.</p>
+<section id="id37">
+<h3>Parameters<a class="headerlink" href="#id37" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object that contains:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>frequency_perm<span class="classifier">array-like</span></dt><dd><p>Frequency of dielectric permittivity measurement [Hz]</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing all the quantitative information of soil array-like attributes for each state. Includes: frequency_perm</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id38">
+<h3>Returns<a class="headerlink" href="#id38" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>soil.df.frequency_perm.values: an array of updated frequency of dielectric permittivity measurement values</p>
+</dd>
+</dl>
+</section>
+<section id="id39">
+<h3>Notes<a class="headerlink" href="#id39" title="Link to this heading"></a></h3>
+<p>This function modifies the soil object in-place, updating the <cite>df</cite> dataframe 
+if necessary.</p>
+</section>
+<section id="id40">
+<h3>External functions<a class="headerlink" href="#id40" title="Link to this heading"></a></h3>
+<p>Inst2FreqP : Set missing values of soil.df.frequency_perm and return</p>
+</section>
+<section id="id41">
+<h3>Example<a class="headerlink" href="#id41" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">Soil</span><span class="p">(</span><span class="n">instrument</span> <span class="o">=</span> <span class="s1">&#39;GPR&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">frequency_perm</span>
+<span class="go">0   NaN</span>
+<span class="go">Name: frequency_perm, dtype: float64</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">FrequencyPerm</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">frequency_perm</span>
+<span class="go">0    1e9</span>
+<span class="go">Name: frequency_perm, dtype: float64</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-pedophysics.predict.particle_density">
+<span id="pedophysics-predict-particle-density-module"></span><h2>pedophysics.predict.particle_density module<a class="headerlink" href="#module-pedophysics.predict.particle_density" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.particle_density.ParticleDensity">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.particle_density.</span></span><span class="sig-name descname"><span class="pre">ParticleDensity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.particle_density.ParticleDensity" title="Link to this definition"></a></dt>
+<dd><p>Calculate or set missing values of soil.df.particle_density and return</p>
+<p>If any value of the particle_density attribute is missing (NaN), it will first
+be computed using the Schjonnen function based on the clay and organic matter values.
+If it remains missing, it’s set to a default value of 2.65.</p>
+<section id="id42">
+<h3>Parameters<a class="headerlink" href="#id42" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object that contains:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>particle_density<span class="classifier">array-like</span></dt><dd><p>Soil particle density [kg/m**3]</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>clay<span class="classifier">array-like</span></dt><dd><p>Soil clay content [g/g]*100</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>orgm<span class="classifier">array-like</span></dt><dd><p>Soil organic matter [g/g]*100</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing all the quantitative information of soil array-like attributes for each state</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was determined or modified.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of states or records in the dataframe.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id43">
+<h3>Returns<a class="headerlink" href="#id43" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>soil.df.particle_density.values: an array of updated soil particle density values</p>
+</dd>
+</dl>
+</section>
+<section id="id44">
+<h3>Notes<a class="headerlink" href="#id44" title="Link to this heading"></a></h3>
+<p>This function modifies the soil object in-place, updating the <cite>df</cite> dataframe and <cite>info</cite>
+dataframe if necessary.</p>
+</section>
+<section id="id45">
+<h3>External functions<a class="headerlink" href="#id45" title="Link to this heading"></a></h3>
+<p>Texture : Calculate missing values of soil.df.sand, soil.df.silt, and soil.df.clay and return
+Schjonnen : Calculate the soil particle density using the Schjonnen model and return</p>
+</section>
+<section id="id46">
+<h3>Example<a class="headerlink" href="#id46" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">Soil</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">particle_density</span>
+<span class="go">0   NaN</span>
+<span class="go">Name: particle_density, dtype: float64</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ParticleDensity</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">particle_density</span>
+<span class="go">0    2.65</span>
+<span class="go">Name: particle_density, dtype: float64</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-pedophysics.predict.salinity">
+<span id="pedophysics-predict-salinity-module"></span><h2>pedophysics.predict.salinity module<a class="headerlink" href="#module-pedophysics.predict.salinity" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.salinity.Salinity">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.salinity.</span></span><span class="sig-name descname"><span class="pre">Salinity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.salinity.Salinity" title="Link to this definition"></a></dt>
+<dd><p>Calculate missing values of soil.df.salinity and return</p>
+<p>If any value of the salinity attribute is missing (NaN), it will first compute 
+the missing values by optimizing the SenGoode function based on the soil’s water 
+electrical conductivity and temperature.</p>
+<section id="id47">
+<h3>Parameters<a class="headerlink" href="#id47" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object that contains:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>temperature<span class="classifier">array-like</span></dt><dd><p>Soil bulk temperature [K]</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>salinity<span class="classifier">array-like</span></dt><dd><p>Soil salinity (NaCl) of the bulk pore fluid [mol/L]</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>water_ec<span class="classifier">array-like</span></dt><dd><p>Soil water real electrical conductivity [S/m]</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing all the quantitative information of soil array-like attributes for each state</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was determined or modified.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of states or records in the dataframe.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id48">
+<h3>Returns<a class="headerlink" href="#id48" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>soil.df.salinity.values: an array of soil salinity (NaCl) of the bulk pore fluid values</p>
+</dd>
+</dl>
+</section>
+<section id="id49">
+<h3>Notes<a class="headerlink" href="#id49" title="Link to this heading"></a></h3>
+<p>This function modifies the soil object in-place, updating the <cite>df</cite> dataframe and <cite>info</cite>
+dataframe if necessary.</p>
+</section>
+<section id="id50">
+<h3>External functions<a class="headerlink" href="#id50" title="Link to this heading"></a></h3>
+<p>WaterEC : Compute missing values of soil.df.water_ec and return  
+Temperature : Set missing values of soil.df.temperature and return 
+SenGoode : Calculate soil water real electrical conductivity using the Sen and Goode model and return</p>
+</section>
+<section id="id51">
+<h3>Example<a class="headerlink" href="#id51" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">Soil</span><span class="p">(</span><span class="n">water_ec</span> <span class="o">=</span> <span class="mf">0.1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">salinity</span>
+<span class="go">0   NaN</span>
+<span class="go">Name: salinity, dtype: float64</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Salinity</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">salinity</span>
+<span class="go">0    0.00846</span>
+<span class="go">Name: salinity, dtype: float64</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-pedophysics.predict.solid_ec">
+<span id="pedophysics-predict-solid-ec-module"></span><h2>pedophysics.predict.solid_ec module<a class="headerlink" href="#module-pedophysics.predict.solid_ec" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.solid_ec.SolidEC">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.solid_ec.</span></span><span class="sig-name descname"><span class="pre">SolidEC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.solid_ec.SolidEC" title="Link to this definition"></a></dt>
+<dd><p>Set missing values of soil.df.solid_ec and return</p>
+<p>If any value of the solid_ec attribute is missing (NaN), 
+it will be set to a default value of 0. Corresponding information 
+in the soil’s info dataframe will be updated accordingly.</p>
+<section id="id52">
+<h3>Parameters<a class="headerlink" href="#id52" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object that contains:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>solid_ec<span class="classifier">array-like</span></dt><dd><p>Soil solid real electrical conductivity [S/m]</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing all the quantitative information of soil array-like attributes for each state</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was determined or modified.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of states or records in the dataframe.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id53">
+<h3>Returns<a class="headerlink" href="#id53" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>soil.df.solid_ec.values: an array of updated soil solid real electrical conductivity values</p>
+</dd>
+</dl>
+</section>
+<section id="id54">
+<h3>Example<a class="headerlink" href="#id54" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">Soil</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">solid_ec</span>
+<span class="go">0   NaN</span>
+<span class="go">Name: solid_ec, dtype: float64</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">SolidEC</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">solid_ec</span>
+<span class="go">0    0</span>
+<span class="go">Name: solid_ec, dtype: float64</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-pedophysics.predict.solid_perm">
+<span id="pedophysics-predict-solid-perm-module"></span><h2>pedophysics.predict.solid_perm module<a class="headerlink" href="#module-pedophysics.predict.solid_perm" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.solid_perm.SolidPerm">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.solid_perm.</span></span><span class="sig-name descname"><span class="pre">SolidPerm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.solid_perm.SolidPerm" title="Link to this definition"></a></dt>
+<dd><p>Set missing values of soil.df.solid_perm and return</p>
+<p>If any value of the solid_perm attribute is missing (NaN), 
+it will be set to a default value of 4. Corresponding information 
+in the soil’s info dataframe will be updated accordingly.</p>
+<section id="id55">
+<h3>Parameters<a class="headerlink" href="#id55" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object that contains:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>solid_perm<span class="classifier">array-like</span></dt><dd><p>Soil solid real relative dielectric permittivity phase [-]</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing all the quantitative information of soil array-like attributes for each state</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing the qualitative information about all array-like soil attributes for each state</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of states or records in the dataframe.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id56">
+<h3>Returns<a class="headerlink" href="#id56" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>soil.df.solid_perm.values: an array of updated soil solid real relative dielectric permittivity phase values</p>
+</dd>
+</dl>
+</section>
+<section id="id57">
+<h3>Example<a class="headerlink" href="#id57" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">Soil</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">solid_perm</span>
+<span class="go">0   NaN</span>
+<span class="go">Name: solid_perm, dtype: float64</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">SolidPerm</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">solid_perm</span>
+<span class="go">0    4</span>
+<span class="go">Name: solid_perm, dtype: float64</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-pedophysics.predict.temperature">
+<span id="pedophysics-predict-temperature-module"></span><h2>pedophysics.predict.temperature module<a class="headerlink" href="#module-pedophysics.predict.temperature" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.temperature.Temperature">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.temperature.</span></span><span class="sig-name descname"><span class="pre">Temperature</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.temperature.Temperature" title="Link to this definition"></a></dt>
+<dd><p>Set missing values of soil.df.temperature and return</p>
+<p>If any value of the temperature attribute is missing (NaN), 
+it will be set to a default value of 298.15. Corresponding information 
+in the soil’s info dataframe will be updated accordingly.</p>
+<section id="id58">
+<h3>Parameters<a class="headerlink" href="#id58" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object that contains:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>temperature<span class="classifier">array-like</span></dt><dd><p>Soil bulk temperature [K]</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing all the quantitative information of soil array-like attributes for each state</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was determined or modified.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of states or records in the dataframe.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id59">
+<h3>Returns<a class="headerlink" href="#id59" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>soil.df.temperature.values: an array of updated soil bulk temperature values</p>
+</dd>
+</dl>
+</section>
+<section id="id60">
+<h3>Example<a class="headerlink" href="#id60" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">Soil</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">temperature</span>
+<span class="go">0   NaN</span>
+<span class="go">Name: temperature, dtype: float64</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Temperature</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">temperature</span>
+<span class="go">0    298.15</span>
+<span class="go">Name: temperature, dtype: float64</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-pedophysics.predict.texture">
+<span id="pedophysics-predict-texture-module"></span><h2>pedophysics.predict.texture module<a class="headerlink" href="#module-pedophysics.predict.texture" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.texture.Texture">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.texture.</span></span><span class="sig-name descname"><span class="pre">Texture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.texture.Texture" title="Link to this definition"></a></dt>
+<dd><p>Calculate missing values of soil.df.sand, soil.df.silt, and soil.df.clay and return</p>
+<p>If any value of the sand, silt, or clay attribute is missing, this function will:
+1. Warn if the sum of texture fractions does not equate to 100%.
+2. Calculate missing texture fraction if only two out of three are given.
+3. Assign default texture fractions based on the <cite>texture</cite> attribute of the soil object.</p>
+<section id="id61">
+<h3>Parameters<a class="headerlink" href="#id61" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object that contains:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>clay<span class="classifier">array-like</span></dt><dd><p>Soil clay content [g/g]*100</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>sand<span class="classifier">array-like</span></dt><dd><p>Soil sand content [g/g]*100</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>silt<span class="classifier">array-like</span></dt><dd><p>Soil silt content [g/g]*100</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>texture<span class="classifier">str</span></dt><dd><p>Soil texture according to USDA convention: “Sand”, “Loamy sand”, “Sandy loam”, “Loam”, “Silt loam”, “Silt”, “Sandy clay loam”, “Clay loam”, “Silty clay loam”, “Sandy clay”, “Clay”, “Silty clay”</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing all the quantitative information of soil array-like attributes for each state</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was determined or modified.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of states or records in the dataframe.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id62">
+<h3>Notes<a class="headerlink" href="#id62" title="Link to this heading"></a></h3>
+<p>This function modifies the soil object in-place, updating the <cite>df</cite> and <cite>info</cite> dataframes.</p>
+</section>
+<section id="id63">
+<h3>External functions<a class="headerlink" href="#id63" title="Link to this heading"></a></h3>
+<p>warnings.warn : Issue a warning, or maybe ignore it or raise an exception.</p>
+</section>
+<section id="id64">
+<h3>Example<a class="headerlink" href="#id64" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">Soil</span><span class="p">(</span><span class="n">clay</span> <span class="o">=</span> <span class="mi">20</span><span class="p">,</span>
+<span class="go">                silt = 40)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">sand</span>
+<span class="go">0   NaN</span>
+<span class="go">Name: sand, dtype: float64</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Texture</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">sand</span>
+<span class="go">0    40</span>
+<span class="go">Name: sand , dtype: float64</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-pedophysics.predict.water_ec">
+<span id="pedophysics-predict-water-ec-module"></span><h2>pedophysics.predict.water_ec module<a class="headerlink" href="#module-pedophysics.predict.water_ec" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.water_ec.WaterEC">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water_ec.</span></span><span class="sig-name descname"><span class="pre">WaterEC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water_ec.WaterEC" title="Link to this definition"></a></dt>
+<dd><p>Compute missing values of soil.df.water_ec and return</p>
+<p>This function evaluates soil states to determine the appropriate approach for estimating water EC. 
+It considers non-fitting approaches based on salinity and bulk electrical conductivity, 
+as well as fitting approaches using the Rhoades or Hilhorst functions depending on the availability of water content, bulk electrical conductivity, and bulk permeability data.</p>
+<section id="id65">
+<h3>Parameters<a class="headerlink" href="#id65" title="Link to this heading"></a></h3>
+<dl>
+<dt>soil<span class="classifier">Soil Object</span></dt><dd><p>An object representing the soil, which must have the following attributes:
+- df: DataFrame</p>
+<blockquote>
+<div><p>Data Frame containing the quantitative information of all soil array-like attributes for each state. 
+Includes: <cite>water</cite>, <cite>bulk_ec_dc_tc</cite>, <cite>water_ec</cite>, <cite>salinity</cite>, and potentially <cite>bulk_perm</cite>.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>info: DataFrame</dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was calculated.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states: int</dt><dd><p>The number of soil states represented in the <cite>df</cite>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id66">
+<h3>Returns<a class="headerlink" href="#id66" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>numpy.ndarray</dt><dd><p>soil.df.water_ec.values: array containing the updated soil water pore real electrical conductivity values.</p>
+</dd>
+</dl>
+</section>
+<section id="id67">
+<h3>Notes<a class="headerlink" href="#id67" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Non-fitting approaches are applied when specific data are available, such as salinity or bulk electrical conductivity, without the need for additional parameters.</p></li>
+<li><p>Fitting approaches, such as those using the Rhoades or Hilhorst functions, are applied when there are sufficient data points with known water content or bulk permeability.</p></li>
+</ul>
+</section>
+<section id="id68">
+<h3>External Functions<a class="headerlink" href="#id68" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Temperature : Set missing values of soil.df.temperature and return</p></li>
+<li><p>FrequencyEC : Set missing values of soil.df.frequency_ec and return</p></li>
+<li><p>shift_to_bulk_ec_dc_tc : Compute missing values of soil.df.bulk_ec_dc_tc based on soil.df.bulk_ec or soil.df.bulk_ec_dc</p></li>
+<li><p>from_salinity     : Calculate missing values of soil.df.water_ec based on soil.df.salinity</p></li>
+<li><p>from_ec : Calculate missing values of soil.df.water_ec based on soil.df.bulk_ec_dc_tc</p></li>
+<li><p>fitting_rhoades : Calculate missing values of soil.df.water_ec using the Rhoades function in a fitting approach</p></li>
+<li><p>fitting_hiolhorst : Calculate missing values of soil.df.water_ec using the Hilhorst function in a fitting approach</p></li>
+</ul>
+</section>
+<section id="id69">
+<h3>Example<a class="headerlink" href="#id69" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">Soil</span><span class="p">(</span> <span class="n">bulk_ec</span><span class="o">=</span><span class="p">[</span><span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.03</span><span class="p">,</span> <span class="mf">0.04</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.06</span><span class="p">],</span> 
+<span class="go">            bulk_perm=[11.5, 14.8, 17, 20, 22.7],</span>
+<span class="go">            clay=5,</span>
+<span class="go">            porosity=0.44,</span>
+<span class="go">            instrument=&#39;TDR&#39;)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">predict</span><span class="o">.</span><span class="n">WaterEC</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+<span class="go">array([0.289855, 0.289855, 0.289855, 0.289855, 0.289855])</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.water_ec.fitting_hilhorst">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water_ec.</span></span><span class="sig-name descname"><span class="pre">fitting_hilhorst</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water_ec.fitting_hilhorst" title="Link to this definition"></a></dt>
+<dd><p>Calculate missing values of soil.df.water_ec using the Hilhorst function in a fitting approach</p>
+<dl class="simple">
+<dt>This function selects calibration data based on available bulk electrical conductivity, bulk permeability, and water permeability, and applies the Hilhorst function</dt><dd><p>to estimate soil water electrical conductivity and an offset parameter for permeability. 
+It then performs a fitting process to optimize parameters using the objective function that minimizes the residuals between the calculated and observed bulk permeability.</p>
+</dd>
+</dl>
+<section id="id70">
+<h3>Parameters<a class="headerlink" href="#id70" title="Link to this heading"></a></h3>
+<dl>
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object containing:</p>
+<dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing the quantitative information of all soil array-like attributes for each state. 
+Includes: bulk_ec, bulk_perm, water_perm, offset_perm, and water_ec.</p>
+</dd>
+<dt>n_states<span class="classifier">int</span></dt><dd><p>The count of soil states.</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><dl class="simple">
+<dt>info: DataFrame</dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was calculated.</p>
+</dd>
+</dl>
+</li>
+</ul>
+<dl class="simple">
+<dt>roundn<span class="classifier">int</span></dt><dd><p>Number of decimal places to round results.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="id71">
+<h3>Returns<a class="headerlink" href="#id71" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>The function updates the <cite>soil</cite> object’s <cite>df</cite> and <cite>info</cite> attributes with estimated values and additional information regarding the calculation.</p>
+</dd>
+</dl>
+</section>
+<section id="id72">
+<h3>External Functions<a class="headerlink" href="#id72" title="Link to this heading"></a></h3>
+<p>WaterPerm : Calculate or set missing values of soil.df.water_perm and return
+Hilhorst : Calculate the soil bulk real relative dielectric permittivity using the Hilhorst model and return
+R2_score : Calculate the coefficient of determination (R^2) of a prediction and return.</p>
+</section>
+<section id="id73">
+<h3>Notes<a class="headerlink" href="#id73" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>The function targets soil states with known bulk electrical conductivity and bulk permeability greater than or equal to 10.</p></li>
+<li><p>A least squares optimization is used to find the best parameters that fit the Hilhorst function to the calibration data.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.water_ec.fitting_rhoades">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water_ec.</span></span><span class="sig-name descname"><span class="pre">fitting_rhoades</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water_ec.fitting_rhoades" title="Link to this definition"></a></dt>
+<dd><p>Calculate missing values of soil.df.water_ec using the Rhoades function in a fitting approach</p>
+<p>This function selects calibration data based on available water content and bulk electrical conductivity data, removes NaNs, 
+and uses the Rhoades function within a minimization process to estimate <cite>water_ec</cite> and <cite>s_ec</cite> parameters. 
+It then fixes these parameters to estimate the remaining parameters of the Rhoades function, <cite>E</cite> and <cite>F</cite>. The quality of the fit is evaluated using the R2 score.</p>
+<section id="id74">
+<h3>Parameters<a class="headerlink" href="#id74" title="Link to this heading"></a></h3>
+<dl>
+<dt>soil<span class="classifier">Soil Object</span></dt><dd><p>An object representing the soil, which must have the following attributes:
+- df: DataFrame</p>
+<blockquote>
+<div><p>Data Frame containing the quantitative information of all soil array-like attributes for each state. 
+includes: <cite>water</cite>, <cite>bulk_ec_dc_tc</cite>, <cite>water_ec</cite>, <cite>s_ec</cite>, and potentially other related parameters.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>n_states: int</dt><dd><p>The number of soil states represented in the <cite>df</cite>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info: DataFrame</dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was calculated.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>roundn: int</dt><dd><p>The number of decimal places for rounding estimated parameter values.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id75">
+<h3>Returns<a class="headerlink" href="#id75" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>The function directly modifies the <cite>soil</cite> object’s <cite>df</cite> and <cite>info</cite> attributes with the estimated parameters and does not return any value.</p>
+</dd>
+</dl>
+</section>
+<section id="id76">
+<h3>Notes<a class="headerlink" href="#id76" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>The fitting process involves two steps: first, estimating <cite>water_ec</cite> and <cite>s_ec</cite> with fixed <cite>E</cite> and <cite>F</cite>, and second, estimating <cite>E</cite> and <cite>F</cite> with fixed <cite>water_ec</cite> and <cite>s_ec</cite>.</p></li>
+<li><p>The process uses calibration data where both water content and bulk electrical conductivity are known.</p></li>
+</ul>
+</section>
+<section id="id77">
+<h3>External Functions<a class="headerlink" href="#id77" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Rhoades : Calculate the soil bulk real electrical conductivity using the Rhoades model and return</p></li>
+<li><p>R2_score : Calculate the coefficient of determination (R^2) of a prediction and return.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.water_ec.from_ec">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water_ec.</span></span><span class="sig-name descname"><span class="pre">from_ec</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water_ec.from_ec" title="Link to this definition"></a></dt>
+<dd><p>Calculate missing values of soil.df.water_ec based on soil.df.bulk_ec_dc_tc</p>
+<p>This function applies the Fu function within a minimization process to estimate soil water EC based on soil properties such as 
+water content, clay content, porosity, solid EC, dry EC, and saturated EC. The estimation is performed for each soil state where water EC is unknown.</p>
+<section id="id78">
+<h3>Parameters<a class="headerlink" href="#id78" title="Link to this heading"></a></h3>
+<dl>
+<dt>soil<span class="classifier">Soil Object</span></dt><dd><p>An object representing the soil, which must have the following attributes:
+- df: DataFrame</p>
+<blockquote>
+<div><p>Data Frame containing the quantitative information of all soil array-like attributes for each state. 
+Includes: <cite>water</cite>, <cite>clay</cite>, <cite>porosity</cite>, <cite>solid_ec</cite>, <cite>dry_ec</cite>, <cite>sat_ec</cite>, <cite>bulk_ec_dc_tc</cite>, and potentially <cite>water_ec</cite>.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>info: DataFrame</dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was calculated.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states: int</dt><dd><p>The number of soil states represented in the <cite>df</cite>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>roundn: int</dt><dd><p>The number of decimal places for rounding estimated water EC values.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id79">
+<h3>Returns<a class="headerlink" href="#id79" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>The function directly modifies the <cite>soil</cite> object’s <cite>df</cite> and <cite>info</cite> attributes with the estimated water EC values and does not return any value.</p>
+</dd>
+</dl>
+</section>
+<section id="id80">
+<h3>External Functions<a class="headerlink" href="#id80" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Texture : Calculate missing values of soil.df.sand, soil.df.silt, and soil.df.clay and return</p></li>
+<li><p>Porosity : Calculate missing values of soil.df.porosity and return</p></li>
+<li><p>SolidEC : Set missing values of soil.df.solid_ec and return</p></li>
+<li><p>Fu : Calculate the soil bulk real electrical conductivity using the Fu model and return</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.water_ec.from_salinity">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water_ec.</span></span><span class="sig-name descname"><span class="pre">from_salinity</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water_ec.from_salinity" title="Link to this definition"></a></dt>
+<dd><p>Calculate missing values of soil.df.water_ec based on soil.df.salinity</p>
+<p>This function estimates water EC for each soil state based on temperature and salinity data using the SenGood function. 
+Estimated water EC values are saved in the soil DataFrame, and an information string indicating the use of the SenGood function 
+for calculation is appended to each relevant entry in the soil information dictionary.</p>
+<section id="id81">
+<h3>Parameters<a class="headerlink" href="#id81" title="Link to this heading"></a></h3>
+<dl>
+<dt>soil<span class="classifier">Soil Object</span></dt><dd><p>An object representing the soil, which must have the following attributes:
+- df: DataFrame</p>
+<blockquote>
+<div><p>Data Frame containing the quantitative information of all soil array-like attributes for each state. 
+Includes: <cite>temperature</cite>, <cite>salinity</cite>, and potentially <cite>water_ec</cite>.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>n_states: int</dt><dd><p>The number of soil states represented in the <cite>df</cite>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info: DataFrame</dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was calculated.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id82">
+<h3>Returns<a class="headerlink" href="#id82" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>The function directly modifies the <cite>soil</cite> object’s <cite>df</cite> and <cite>info</cite> attributes with the estimated water EC values and does not return any value.</p>
+</dd>
+</dl>
+</section>
+<section id="id83">
+<h3>External Functions<a class="headerlink" href="#id83" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>SenGoode : Calculate soil water real electrical conductivity using the Sen and Goode model and return</p></li>
+</ul>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-pedophysics.predict.water_perm">
+<span id="pedophysics-predict-water-perm-module"></span><h2>pedophysics.predict.water_perm module<a class="headerlink" href="#module-pedophysics.predict.water_perm" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.water_perm.WaterPerm">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water_perm.</span></span><span class="sig-name descname"><span class="pre">WaterPerm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water_perm.WaterPerm" title="Link to this definition"></a></dt>
+<dd><p>Calculate or set missing values of soil.df.water_perm and return</p>
+<p>Determines the soil water phase real dielectric permittivity using either the MalmbergMaryott 
+function or the Olhoeft function based on the soil’s salinity and
+frequency permittivity. 
+If the permittivity cannot be determined by either method, it defaults 
+to a value of 80.</p>
+<section id="id84">
+<h3>Parameters<a class="headerlink" href="#id84" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object that contains:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>water_perm<span class="classifier">array-like</span></dt><dd><p>Soil water phase real dielectric permittivity [-]</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>temperature<span class="classifier">array-like</span></dt><dd><p>Soil bulk temperature [K]</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>salinity<span class="classifier">array-like</span></dt><dd><p>Soil salinity (NaCl) of the bulk pore fluid [mol/L]</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>frequency_perm<span class="classifier">array-like</span></dt><dd><p>Frequency of dielectric permittivity measurement [Hz]</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing all the quantitative information of soil array-like attributes for each state</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was determined or modified.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of states or records in the dataframe.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id85">
+<h3>Returns<a class="headerlink" href="#id85" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>soil.df.water_perm.values: array containing the updated soil water phase real dielectric permittivity values.</p>
+</dd>
+</dl>
+</section>
+<section id="id86">
+<h3>Notes<a class="headerlink" href="#id86" title="Link to this heading"></a></h3>
+<p>This function modifies the soil object in-place by updating the <cite>df</cite> and <cite>info</cite> dataframes.</p>
+</section>
+<section id="id87">
+<h3>External functions<a class="headerlink" href="#id87" title="Link to this heading"></a></h3>
+<p>MalmbergMaryott : Calculate soil water phase real dielectric permittivity using the Malmberg &amp; Maryott model and return
+Olhoeft : Calculate soil water phase real dielectric permittivity using the Olhoeft (1986) model and return</p>
+</section>
+<section id="id88">
+<h3>Example<a class="headerlink" href="#id88" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">Soil</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">water_perm</span>
+<span class="go">0   NaN</span>
+<span class="go">Name: water_perm, dtype: float64</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">WaterPerm</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">water_perm</span>
+<span class="go">0    80</span>
+<span class="go">Name: water_perm, dtype: float64</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-pedophysics.predict.water">
+<span id="pedophysics-predict-water-module"></span><h2>pedophysics.predict.water module<a class="headerlink" href="#module-pedophysics.predict.water" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.water.Water">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water.</span></span><span class="sig-name descname"><span class="pre">Water</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water.Water" title="Link to this definition"></a></dt>
+<dd><p>Return and compute missing values of the soil.df.water attribute using soil.df.bulk_perm or soil.df.bulk_ec.</p>
+<p>This function performs calculations to fill in missing water content values in the soil DataFrame based on bulk permeability (bulk_perm) and electrical conductivity (bulk_ec_dc_tc). 
+It employs different strategies based on available data and sets conditions for water content calculation.</p>
+<section id="id89">
+<h3>Parameters<a class="headerlink" href="#id89" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object that contains:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing all the quantitative information of soil array-like attributes for each state. Includes columns: water, bulk_perm, frequency_perm, and bulk_ec_dc_tc</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was determined or modified.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of states or records in the dataframe.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id90">
+<h3>Returns<a class="headerlink" href="#id90" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>np.ndarray</dt><dd><p>soil.df.water.values: an array of updated or original soil volumetric water content values</p>
+</dd>
+</dl>
+</section>
+<section id="id91">
+<h3>External functions<a class="headerlink" href="#id91" title="Link to this heading"></a></h3>
+<p>Temperature : Set missing values of soil.df.temperature and return 
+FrequencyPerm : Set missing values of soil.df.frequency_perm and return 
+WaterFromPerm : Calculate missing values of soil.df.water based on soil.df.bulk_perm
+WaterFromEC : Calculate missing values of soil.df.water based on soil.df.bulk_ec_dc_tc  
+FrequencyEC : Set missing values of soil.df.frequency_ec and return 
+shift_to_bulk_ec_dc_tc : Compute missing values of soil.df.bulk_ec_dc_tc based on soil.df.bulk_ec or soil.df.bulk_ec_dc</p>
+</section>
+<section id="id92">
+<h3>Example<a class="headerlink" href="#id92" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">Soil</span><span class="p">(</span> <span class="n">bulk_ec</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">0.02</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.030</span><span class="p">,</span> <span class="mf">0.040</span><span class="p">],</span>
+<span class="go">                clay = 10,</span>
+<span class="go">                porosity = 0.47,</span>
+<span class="go">                water_ec = 0.5)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Water</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span> 
+<span class="go">array([0.105, 0.162, 0.185, 0.206, 0.243])</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+<section id="pedophysics-predict-water-from-ec-module">
+<h2>pedophysics.predict.water_from_ec module<a class="headerlink" href="#pedophysics-predict-water-from-ec-module" title="Link to this heading"></a></h2>
+<dl class="py function" id="module-pedophysics.predict.water_from_ec">
+<dt class="sig sig-object py" id="pedophysics.predict.water_from_ec.WaterFromEC">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water_from_ec.</span></span><span class="sig-name descname"><span class="pre">WaterFromEC</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water_from_ec.WaterFromEC" title="Link to this definition"></a></dt>
+<dd><p>Calculate missing values of soil.df.water based on soil.df.bulk_ec_dc_tc</p>
+<p>This function evaluates the availability of water content and bulk electrical conductivity data (bulk_ec_dc_tc) across soil states. 
+A fitting approach is applied if there are at least three soil states with known water content and bulk electrical conductivity. 
+A non-fitting approach is considered when water content is unknown and bulk electrical conductivity is known for any soil state.</p>
+<section id="id93">
+<h3>Parameters<a class="headerlink" href="#id93" title="Link to this heading"></a></h3>
+<dl>
+<dt>soil<span class="classifier">Soil Object</span></dt><dd><p>An object representing the soil, which must have the following attributes:
+- df: DataFrame</p>
+<blockquote>
+<div><p>Data Frame containing the quantitative information of all soil array-like attributes for each state. 
+Includes: <cite>water</cite> and <cite>bulk_ec_dc_tc</cite>.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>info: DataFrame</dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was calculated.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states: int</dt><dd><p>The number of soil states represented in the <cite>df</cite>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id94">
+<h3>Returns<a class="headerlink" href="#id94" title="Link to this heading"></a></h3>
+<p>None</p>
+</section>
+<section id="id95">
+<h3>Notes<a class="headerlink" href="#id95" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>The fitting approach requires at least three soil states with known water content and bulk electrical conductivity for reliable estimation.</p></li>
+<li><p>The non-fitting approach is applied to individual soil states where water content is unknown but bulk electrical conductivity is available.</p></li>
+</ul>
+</section>
+<section id="id96">
+<h3>External Functions<a class="headerlink" href="#id96" title="Link to this heading"></a></h3>
+<p>FrequencyEC : Set missing values of soil.df.frequency_ec and return 
+fitting : Calculate missing values of soil.df.water using a fitting approach.
+non_fitting : Calculate missing values of soil.df.water using a non-fitting approach.</p>
+</section>
+<section id="id97">
+<h3>Example<a class="headerlink" href="#id97" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">Soil</span><span class="p">(</span> <span class="n">bulk_ec</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.030</span><span class="p">,</span> <span class="mf">0.040</span><span class="p">],</span>
+<span class="go">            clay = 10,</span>
+<span class="go">            porosity = 0.47,</span>
+<span class="go">            water_ec = 0.5)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">WaterFromEC</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">water</span>
+<span class="go">0    0.105</span>
+<span class="go">1    Nan</span>
+<span class="go">2    0.185</span>
+<span class="go">3    0.206</span>
+<span class="go">4    0.243</span>
+<span class="go">Name: water, dtype: float64</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.water_from_ec.fitting">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water_from_ec.</span></span><span class="sig-name descname"><span class="pre">fitting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water_from_ec.fitting" title="Link to this definition"></a></dt>
+<dd><p>Calculate missing values of soil.df.water using a fitting approach.</p>
+<p>This function evaluates soil states with known water content and bulk electrical conductivity to determine initial parameters for the WunderlichEC model. 
+If the Lw parameter associated with the model is unknown, it is optimized based on the root mean square error (RMSE) between estimated and actual bulk electrical conductivity. 
+Water content is then estimated for all soil states within a valid bulk electrical conductivity range using the optimized Lw parameter and the WunderlichEC model.</p>
+<section id="id98">
+<h3>Parameters<a class="headerlink" href="#id98" title="Link to this heading"></a></h3>
+<dl>
+<dt>soil<span class="classifier">Soil Object</span></dt><dd><p>An object representing the soil, which must have the following attributes:
+- df: DataFrame</p>
+<blockquote>
+<div><p>Data Frame containing the quantitative information of all soil array-like attributes for each state. 
+Includes: <cite>water</cite>, <cite>bulk_ec_dc_tc</cite>, <cite>water_ec</cite>, and potentially <cite>Lw</cite>.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>info: DataFrame</dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was calculated.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states: int</dt><dd><p>The number of soil states represented in the <cite>df</cite>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>range_ratio: float</dt><dd><p>A ratio used to determine the range of bulk electrical conductivity values considered valid for the model.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>roundn: int</dt><dd><p>The number of decimal places for rounding calculated water content values.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Lw: float or np.nan</dt><dd><p>The WunderlichEC model parameter, if known; otherwise, np.nan.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id99">
+<h3>Returns<a class="headerlink" href="#id99" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>The function directly modifies the <cite>soil</cite> object’s <cite>df</cite> and <cite>info</cite> attributes with the estimated water content and does not return any value.</p>
+</dd>
+</dl>
+</section>
+<section id="id100">
+<h3>Notes<a class="headerlink" href="#id100" title="Link to this heading"></a></h3>
+<p>This function modifies the soil object in-place by updating the <cite>df</cite> and <cite>info</cite> dataframes.
+The function either estimates or uses the known Lw parameter for the WunderlichEC model and 
+fits the model to the calibration data.</p>
+</section>
+<section id="id101">
+<h3>External Functions<a class="headerlink" href="#id101" title="Link to this heading"></a></h3>
+<p>WunderlichEC: Calculate the soil bulk real electrical conductivity using the Wunderlich model and return
+WaterEC: Compute missing values of soil.df.water_ec and return</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.water_from_ec.non_fitting">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water_from_ec.</span></span><span class="sig-name descname"><span class="pre">non_fitting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water_from_ec.non_fitting" title="Link to this definition"></a></dt>
+<dd><p>Calculate missing values of soil.df.water using a non-fitting approach.</p>
+<p>This function applies the Fu function within a minimization process to estimate soil water content based on soil properties such as 
+clay content, porosity, water electrical conductivity (EC), solid EC, dry EC, and saturated EC. 
+The estimation is performed for each soil state where water content is unknown.</p>
+<section id="id102">
+<h3>Parameters<a class="headerlink" href="#id102" title="Link to this heading"></a></h3>
+<dl>
+<dt>soil<span class="classifier">Soil Object</span></dt><dd><p>An object representing the soil, which must have the following attributes:
+- df: DataFrame</p>
+<blockquote>
+<div><p>Data Frame containing the quantitative information of all soil array-like attributes for each state. 
+Includes: <cite>clay</cite>, <cite>porosity</cite>, <cite>water_ec</cite>, <cite>solid_ec</cite>, <cite>dry_ec</cite>, <cite>sat_ec</cite>, <cite>bulk_ec_dc_tc</cite>, and potentially <cite>water</cite>.</p>
+</div></blockquote>
+<ul class="simple">
+<li><dl class="simple">
+<dt>info: DataFrame</dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was calculated.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states: int</dt><dd><p>The number of soil states represented in the <cite>df</cite>.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>roundn: int</dt><dd><p>The number of decimal places for rounding estimated water content values.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt>bulk_ec_dc<span class="classifier">array-like</span></dt><dd><p>Soil bulk real electrical conductivity at DC frequency [S/m].</p>
+</dd>
+</dl>
+</section>
+<section id="id103">
+<h3>Notes<a class="headerlink" href="#id103" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>The Fu function is utilized in a minimization process to estimate water content by minimizing the difference between the estimated and actual bulk ECDCTC.</p></li>
+<li><p>The estimation process is applied to each soil state where water content is unknown.</p></li>
+</ul>
+</section>
+<section id="id104">
+<h3>External functions<a class="headerlink" href="#id104" title="Link to this heading"></a></h3>
+<p>Fu: Calculate the soil bulk real electrical conductivity using the Fu model and return
+Texture: Calculate missing values of soil.df.sand, soil.df.silt, and soil.df.clay and return
+Porosity: Calculate missing values of soil.df.porosity and return
+WaterEC: Compute missing values of soil.df.water_ec and return  
+SolidEC: Set missing values of soil.df.solid_ec and return</p>
+</section>
+</dd></dl>
+
+</section>
+<section id="pedophysics-predict-water-from-perm-module">
+<h2>pedophysics.predict.water_from_perm module<a class="headerlink" href="#pedophysics-predict-water-from-perm-module" title="Link to this heading"></a></h2>
+<dl class="py function" id="module-pedophysics.predict.water_from_perm">
+<dt class="sig sig-object py" id="pedophysics.predict.water_from_perm.WaterFromPerm">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water_from_perm.</span></span><span class="sig-name descname"><span class="pre">WaterFromPerm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water_from_perm.WaterFromPerm" title="Link to this definition"></a></dt>
+<dd><p>Calculate missing values of soil.df.water based on soil.df.bulk_perm</p>
+<p>This function checks if the permittivity frequency (<cite>frequency_perm</cite>) across all soil states is constant. 
+If it is, a specific adjustment is made using the <cite>fixed_freq</cite> function. 
+If the frequencies vary across soil states, a different adjustment is applied using the <cite>changing_freq</cite> function.</p>
+<section id="id105">
+<h3>Parameters<a class="headerlink" href="#id105" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object that contains:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing all the quantitative information of soil array-like attributes for each state.
+Includes: water and frequency_perm.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing descriptive information about how each attribute was determined or modified.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of states or records in the dataframe.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id106">
+<h3>Returns<a class="headerlink" href="#id106" title="Link to this heading"></a></h3>
+<p>None</p>
+</section>
+<section id="id107">
+<h3>External functions<a class="headerlink" href="#id107" title="Link to this heading"></a></h3>
+<p>fixed_freq: Decide between fitting and non-fitting approaches to calculate soil.df.water
+changing_freq: Calculate missing values of soil.df.bulk_dc_ec when soil.df.frequency_perm is not constant</p>
+</section>
+<section id="id108">
+<h3>Example<a class="headerlink" href="#id108" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span> <span class="o">=</span> <span class="n">Soil</span><span class="p">(</span><span class="n">frequency_perm</span> <span class="o">=</span> <span class="mf">1e9</span><span class="p">,</span> 
+<span class="go">                clay = 15,             </span>
+<span class="go">                porosity = 0.434,</span>
+<span class="go">                bulk_perm = [8, 10, 15])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">WaterFromPerm</span><span class="p">(</span><span class="n">sample</span><span class="p">)</span> 
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sample</span><span class="o">.</span><span class="n">df</span><span class="o">.</span><span class="n">water</span>
+<span class="go">0    0.125</span>
+<span class="go">1    0.162</span>
+<span class="go">2    0.246</span>
+<span class="go">Name: water, dtype: float64</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.water_from_perm.changing_freq">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water_from_perm.</span></span><span class="sig-name descname"><span class="pre">changing_freq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water_from_perm.changing_freq" title="Link to this definition"></a></dt>
+<dd><p>Calculate missing values of soil.df.bulk_dc_ec when soil.df.frequency_perm is not constant.</p>
+<p>This function iterates through soil states to calculate the bulk EC for states where it is undefined. 
+The calculation is performed by minimizing the difference between the calculated permeability using the Longmire-Smith P function and the known bulk permeability. 
+Warnings are issued for soil states where the Longmire-Smith P function’s applicability is uncertain due to soil conditions.</p>
+<section id="id109">
+<h3>Parameters<a class="headerlink" href="#id109" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object that contains:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing the quantitative information of all soil array-like attributes for each state.
+Includes: frequency_perm, frequency_ec, bulk_ec_dc, and bulk_perm.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was determined or modified.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of soil states.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id110">
+<h3>Returns<a class="headerlink" href="#id110" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>The function directly modifies the <cite>soil</cite> object’s <cite>df</cite> and <cite>info</cite> attributes and does not return any value.</p>
+</dd>
+</dl>
+</section>
+<section id="id111">
+<h3>External Functions<a class="headerlink" href="#id111" title="Link to this heading"></a></h3>
+<p>Texture : Calculate missing values of soil.df.sand, soil.df.silt, and soil.df.clay and return
+BulkPermInf : Set missing values of soil.df.bulk_perm_inf and return
+LongmireSmithP : Calculate the soil bulk real relative dielectric permittivity using the Wunderlich model and return</p>
+</section>
+<section id="id112">
+<h3>Notes<a class="headerlink" href="#id112" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>The function uses the <cite>scipy.optimize.minimize</cite> method for the minimization process.</p></li>
+<li><p>Warnings are issued for soil states where the frequency of permittivity exceeds 200 MHz and either clay content is above 10% or sand content is below 90%, as the validity of the Longmire-Smith P model is uncertain in these conditions.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.water_from_perm.fitting">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water_from_perm.</span></span><span class="sig-name descname"><span class="pre">fitting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water_from_perm.fitting" title="Link to this definition"></a></dt>
+<dd><p>Calculate missing values of soil.df.water using a fitting approach.</p>
+<p>This function utilizes the WunderlichP model to estimate the soil’s volumetric water 
+content based on its bulk real relative dielectric permittivity at constant frequency. 
+It calculates the model’s parameters and fits them to the provided calibration data.
+The accuracy of the fitting is determined by the R2 score.</p>
+<section id="id113">
+<h3>Parameters<a class="headerlink" href="#id113" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object that contains:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing all the quantitative information of soil array-like attributes for each state.
+Includes: water, bulk_perm, and water_perm.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was determined or modified.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>Lw<span class="classifier">float</span></dt><dd><p>Soil scalar depolarization factor of water aggregates (effective medium theory)</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>roundn<span class="classifier">int</span></dt><dd><p>Number of decimal places to round results.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>range_ratio<span class="classifier">float</span></dt><dd><p>Ratio to extend the domain of the regression by fitting approach.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of soil states</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id114">
+<h3>Returns<a class="headerlink" href="#id114" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>The function directly modifies the <cite>soil</cite> object based on the selected approach and does not return any value.</p>
+</dd>
+</dl>
+</section>
+<section id="id115">
+<h3>Notes<a class="headerlink" href="#id115" title="Link to this heading"></a></h3>
+<p>This function modifies the soil object in-place by updating the <cite>df</cite> and <cite>info</cite> dataframes.
+The function either estimates or uses the known Lw parameter for the WunderlichP model and 
+fits the model to the calibration data.</p>
+</section>
+<section id="id116">
+<h3>External functions<a class="headerlink" href="#id116" title="Link to this heading"></a></h3>
+<p>WunderlichP : Calculate the soil bulk real relative dielectric permittivity using the Wunderlich model and return
+WaterPerm : Calculate or set missing values of soil.df.water_perm and return
+R2_score : Calculate the coefficient of determination (R^2) of a prediction and return.</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.water_from_perm.fixed_freq">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water_from_perm.</span></span><span class="sig-name descname"><span class="pre">fixed_freq</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water_from_perm.fixed_freq" title="Link to this definition"></a></dt>
+<dd><p>Decide between fitting and non-fitting approaches to calculate soil.df.water</p>
+<p>This function determines the calculation approach for soil water content based on the availability of data for water content and bulk permeability, 
+as well as the range of frequency of permittivity. It applies a fitting approach if there are at least three soil states with known water content and bulk permeability. 
+Otherwise, it considers a non-fitting approach when water content is unknown, bulk permeability is known, and the frequency of permittivity falls within a specified range.</p>
+<section id="id117">
+<h3>Parameters<a class="headerlink" href="#id117" title="Link to this heading"></a></h3>
+<p>soil : object
+A custom soil object that contains:</p>
+<blockquote>
+<div><ul class="simple">
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing the quantitative information of all soil array-like attributes for each state.
+Includes: frequency_perm, water, and bulk_perm.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of soil states.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</section>
+<section id="id118">
+<h3>Returns<a class="headerlink" href="#id118" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>The function directly modifies the <cite>soil</cite> object based on the selected approach and does not return any value.</p>
+</dd>
+</dl>
+</section>
+<section id="id119">
+<h3>Notes<a class="headerlink" href="#id119" title="Link to this heading"></a></h3>
+<p>This function modifies the soil object in-place, using either the <cite>fitting</cite> or the <cite>non_fitting</cite> function
+depending on the criteria described above.</p>
+</section>
+<section id="id120">
+<h3>External functions<a class="headerlink" href="#id120" title="Link to this heading"></a></h3>
+<p>fitting: Calculate missing values of soil.df.water using a fitting approach.
+non_fitting: Calculate missing values of soil.df.water using a non-fitting approach.</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pedophysics.predict.water_from_perm.non_fitting">
+<span class="sig-prename descclassname"><span class="pre">pedophysics.predict.water_from_perm.</span></span><span class="sig-name descname"><span class="pre">non_fitting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">soil</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pedophysics.predict.water_from_perm.non_fitting" title="Link to this definition"></a></dt>
+<dd><p>Return and compute soil.df.water using a non-fitting approach.</p>
+<p>This function estimates soil bulk electrical conductivity (EC) and water content by applying different models based on the EM frequency range. 
+For frequencies between 5 Hz and 30 MHz, the Longmire-Smith P function is used to calculate bulk EC. 
+For frequencies between 30 MHz and 100 MHz, 100 MHz and 200 MHz, and 200 MHz and 30 GHz, different linear regression models (LR_MV, LR, LR_W) are applied to estimate water content.</p>
+<section id="id121">
+<h3>Parameters<a class="headerlink" href="#id121" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>soil<span class="classifier">object</span></dt><dd><p>A custom soil object containing:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt>df<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing the quantitative information of all soil array-like attributes for each state. 
+Includes: water, bulk_perm, frequency_perm, and bulk_ec_dc for each soil state.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>n_states<span class="classifier">int</span></dt><dd><p>Number of soil states.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>info<span class="classifier">DataFrame</span></dt><dd><p>Data Frame containing descriptive information about how each array-like attribute was determined or modified.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>roundn<span class="classifier">int</span></dt><dd><p>Number of decimal places to round results.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+<section id="id122">
+<h3>Returns<a class="headerlink" href="#id122" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>The function directly modifies the <cite>soil</cite> object based on the selected approach and does not return any value.</p>
+</dd>
+</dl>
+</section>
+<section id="id123">
+<h3>Notes<a class="headerlink" href="#id123" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>The function chooses the estimation model based on the EM frequency range of the soil states.</p></li>
+<li><p>For frequencies between 5 Hz and 30 MHz, bulk EC is estimated.</p></li>
+</ul>
+<p>For higher frequencies, water content is estimated using different linear regression models tailored to specific frequency ranges.</p>
+</section>
+<section id="id124">
+<h3>External Functions<a class="headerlink" href="#id124" title="Link to this heading"></a></h3>
+<p>Porosity : Calculate missing values of soil.df.porosity and return
+AirPerm : Set missing values of soil.df.air_perm and return
+SolidPerm : Set missing values of soil.df.solid_perm and return
+WaterPerm : Calculate or set missing values of soil.df.water_perm and return
+Texture : Calculate missing values of soil.df.sand, soil.df.silt, and soil.df.clay and return
+BulkPermInf : Set missing values of soil.df.bulk_perm_inf and return
+LongmireSmithP : Calculate the soil bulk real relative dielectric permittivity using the Longmire-Smith model and return
+LR_W : Calculate the soil volumetric water content using the Lichtenecker and Rother model modified by Wunderlich and return
+LR : Calculate the soil volumetric water content using the Lichtenecker and Rother model.
+LR_MV : Calculate the soil volumetric water content using the Lichtenecker and Rother model modified by Mendoza-Veirana and return</p>
+</section>
+</dd></dl>
+
+</section>
+<section id="module-pedophysics.predict">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pedophysics.predict" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pedophysics.pedotransfer_functions.html" class="btn btn-neutral float-left" title="pedophysics.pedotransfer_functions package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pedophysics.utils.html" class="btn btn-neutral float-right" title="pedophysics.utils package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Gaston Mendoza.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
