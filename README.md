@@ -1,3 +1,3 @@
 # Pedophysics
 
-https://github.ugent.be/pages/ORBit/Pedophysics/html/index.html
+https://orbit-ugent.github.io/Pedophysics/build/html/index.html
