@@ -1,18 +1,14 @@
 import numpy as np
 
-def arrays_are_similar(a, b):
+def arrays_are_similar(array1, array2, tol=1e-5):
     """
-    Calculates if two numpy arrays are similar.
-    
-    This function determines whether two numpy arrays, a and b, are similar based on two criteria:
+    Check if two numpy arrays are similar with a given tolerance.
 
-    The arrays must have the same shape.
-    The elements in corresponding positions must either both be NaN (Not a Number) or be numerically close to each other, within the tolerance defined by numpy.isclose.
-
-    Parameters
+        Parameters
     ----------
-    a (numpy.ndarray): The first array to compare.
-    b (numpy.ndarray): The second array to compare.
+    array1 (numpy.ndarray): The first array to compare.
+    array2 (numpy.ndarray): The second array to compare.
+    tol (float): The tolerance for the comparison. Default is 1e-5.
 
     Returns
     -------
@@ -25,20 +21,8 @@ def arrays_are_similar(a, b):
     >>> b = np.array([0.999, 2.001, np.nan, 4.0])
 
     >>> similar = arrays_are_similar(a, b)
-    >>> print(similar)  # Expected output: True, since the non-NaN elements are close and NaN positions match.
 
-    The function assumes that both input arrays are indeed numpy arrays and does not perform type checking. Ensure that the inputs are of the correct type to avoid unexpected behavior.
-    
-    
     """
-    # Check if the two arrays are of the same shape
-    if a.shape != b.shape:
-        return False
-    
-    # Check if the non-NaN elements are close to each other
-    non_nan_match = np.isclose(a[~np.isnan(a)], b[~np.isnan(b)]).all()
 
-    # Check if the NaN locations are the same in both arrays
-    nan_match = np.isnan(a) == np.isnan(b)
-
-    return non_nan_match and nan_match.all()
+    # Check if both arrays are close within the tolerance specified
+    return np.allclose(array1, array2, atol=tol, equal_nan=True)
