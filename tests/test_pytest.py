@@ -20,7 +20,7 @@ from pedophysics.utils.similar_arrays import arrays_are_similar
 from pedophysics.pedophysical_models.bulk_ec import Rhoades
 from pedophysics.pedophysical_models.bulk_perm import LongmireSmithP
 
-############################################# LOAD EXPECTED RESULTS ############################################
+############################################# LOAD TEST DATA ############################################
 
 def load_expected_results(csv_file):
     parent_dir_path = 'tests/'  # This navigates one directory up from the current folder
@@ -33,7 +33,7 @@ def load_expected_results(csv_file):
     }
 
 # Load expected results
-expected_results = load_expected_results('expected_results.csv')
+expected_results = load_expected_results('test_data.csv')
 
 ################################################################################################################
 ################################################## PREDICT BULK EC #############################################
