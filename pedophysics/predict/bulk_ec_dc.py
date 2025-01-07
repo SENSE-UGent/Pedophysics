@@ -103,14 +103,23 @@ def tc_to_non_tc(soil):
 
     for i in range(soil.n_states):
         if soil.df.temperature[i] == 298.15 and np.isnan(soil.df.bulk_ec_dc[i]):
-            soil.info.loc[i, 'bulk_ec_dc'] = str(soil.info.bulk_ec_dc[i]) + "--> Equal to soil.df.bulk_ec_dc_tc in predict.bulk_ec_dc.tc_to_non_tc"
+            soil.info.loc[i, 'bulk_ec_dc'] = str(soil.info.bulk_ec_dc[i]) + "--> Equal to soil.df.bulk_ec_dc_tc because temperature = 298.15 in predict.bulk_ec_dc.tc_to_non_tc"
             soil.df.loc[i, 'bulk_ec_dc'] = soil.df.bulk_ec_dc_tc[i]
 
         elif soil.df.temperature[i] != 298.15 and np.isnan(soil.df.bulk_ec_dc[i]):
             res = minimize(objective_tc_to_non_tc, 0.05, args=(soil.df.bulk_ec_dc_tc[i], soil.df.temperature[i]), bounds=[(0, 1)])
 
-            soil.info.loc[i, 'bulk_ec_dc'] = str(soil.info.bulk_ec_dc[i]) + "--> Calculated from soil.df.bulk_ec_dc_tc using SheetsHendrickx function in predict.bulk_ec_dc.tc_to_non_tc"
+            # Check for missing values
+            missing_bulk_ec_dc_before = soil.df.loc[i, 'bulk_ec_dc'].isna()
             soil.df.loc[i, 'bulk_ec_dc'] = np.nan if np.isnan(res.fun) else round(res.x[0], soil.roundn+2)
+            
+            # Check for missing values
+            missing_bulk_ec_dc_after = soil.df.loc[i, 'bulk_ec_dc'].isna()
+
+            if missing_bulk_ec_dc_before and not missing_bulk_ec_dc_after:    
+                soil.info.loc[i, 'bulk_ec_dc'] = str(soil.info.bulk_ec_dc[i]) + "--> Calculated from soil.df.bulk_ec_dc_tc using SheetsHendrickx function in predict.bulk_ec_dc.tc_to_non_tc"
+            elif missing_bulk_ec_dc_before and missing_bulk_ec_dc_after:  
+                soil.info.loc[i, 'bulk_ec_dc'] = str(soil.info.bulk_ec_dc[i]) + "--> Provide bulk_ec_dc; otherwise, bulk_ec_dc_tc, and temperature"
 
 
 def non_dc_to_dc(soil):
@@ -146,17 +155,32 @@ def non_dc_to_dc(soil):
     """
 
     # Defining minimization function to obtain DC bulk EC 
-    def objective_non_dc_to_dc(x, frequency_ec, bulk_ec):
-        return (LongmireSmithEC(x, frequency_ec) - bulk_ec)**2
+    def objective_non_dc_to_dc(bulk_ec_dc, frequency_ec, bulk_ec):
+        return (LongmireSmithEC(bulk_ec_dc, frequency_ec) - bulk_ec)**2
 
     for i in range(soil.n_states):
         if (soil.df.frequency_ec[i] <= 5) and np.isnan(soil.df.bulk_ec_dc[i]):
-            soil.info.loc[i, 'bulk_ec_dc'] = str(soil.info.bulk_ec_dc[i]) + "--> Equal to soil.df.bulk_ec in predict.bulk_ec_dc.non_dc_to_dc" 
+
+            missing_bulk_ec_dc_before = np.isnan(soil.df.loc[i, 'bulk_ec_dc'])
+
             soil.df.loc[i, 'bulk_ec_dc'] = soil.df.bulk_ec[i]
+            missing_bulk_ec_dc_after = np.isnan(soil.df.loc[i, 'bulk_ec_dc'])
+
+            if missing_bulk_ec_dc_before and not missing_bulk_ec_dc_after:
+                soil.info.loc[i, 'bulk_ec_dc'] = str(soil.info.bulk_ec_dc[i]) + "--> Equal to soil.df.bulk_ec in predict.bulk_ec_dc.non_dc_to_dc"
+            elif missing_bulk_ec_dc_before and missing_bulk_ec_dc_after:                                 
+                soil.info.loc[i, 'bulk_ec_dc'] = str(soil.info.bulk_ec_dc[i]) + "--> Provide bulk_ec_dc; otherwise, bulk_ec, and frequency_ec"
+
 
         elif soil.df.frequency_ec[i] > 5 and np.isnan(soil.df.bulk_ec_dc[i]):
             res = minimize(objective_non_dc_to_dc, 0.05, args=(soil.df.frequency_ec[i], soil.df.bulk_ec[i]), bounds=[(0, 1)])
+            
+            missing_bulk_ec_dc_before = np.isnan(soil.df.loc[i, 'bulk_ec_dc'])
 
-            soil.info.loc[i, 'bulk_ec_dc'] = str(soil.info.bulk_ec_dc[i]) + "--> EM frequency shift from actual to zero Hz using LongmireSmithEC function in predict.bulk_ec_dc.non_dc_to_dc"
             soil.df.loc[i, 'bulk_ec_dc'] = np.nan if np.isnan(res.fun) else round(res.x[0], soil.roundn+2)
+            missing_bulk_ec_dc_after = np.isnan(soil.df.loc[i, 'bulk_ec_dc'])
 
+            if missing_bulk_ec_dc_before and not missing_bulk_ec_dc_after:
+                soil.info.loc[i, 'bulk_ec_dc'] = str(soil.info.bulk_ec_dc[i]) + "--> EM frequency shift from actual to zero Hz using LongmireSmithEC function in predict.bulk_ec_dc.non_dc_to_dc"
+            elif missing_bulk_ec_dc_before and missing_bulk_ec_dc_after:                                 
+                soil.info.loc[i, 'bulk_ec_dc'] = str(soil.info.bulk_ec_dc[i]) + "--> Provide bulk_ec_dc; otherwise, bulk_ec, and temperature"

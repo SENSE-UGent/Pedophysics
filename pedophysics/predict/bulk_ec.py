@@ -77,18 +77,44 @@ def conversion(soil):
     - Annotations in `soil.info['bulk_ec']` provide insight into the source of the updated values, whether
       they are derived from 'bulk_ec_dc_tc' or 'bulk_ec_dc', aiding in the traceability of the data.
     """
-    soil.info['bulk_ec'] = [str(soil.info.bulk_ec[x]) + "--> Equal to soil.df.bulk_ec_dc_tc in predict.bulk_ec.conversion" if np.isnan(soil.df.bulk_ec[x]) and soil.df.temperature[x] == 298.15 and soil.df.frequency_ec[x] <= 5
-                        or soil.info.bulk_ec[x] == str(soil.info.bulk_ec[x]) + "--> Equal to soil.df.bulk_ec_dc_tc in predict.bulk_ec.conversion"
-                        else soil.info.bulk_ec[x] for x in range(soil.n_states)]
-    
-    soil.df['bulk_ec'] = [soil.df.bulk_ec_dc_tc[x] if np.isnan(soil.df.bulk_ec[x]) and soil.df.temperature[x] == 298.15 and soil.df.frequency_ec[x] <= 5 else soil.df.bulk_ec[x] for x in range(soil.n_states)]
-    
-    soil.info['bulk_ec'] = [str(soil.info.bulk_ec[x]) + "--> Equal to soil.df.bulk_ec_dc in predict.bulk_ec.conversion" if np.isnan(soil.df.bulk_ec[x]) and soil.df.frequency_ec[x] <= 5
-                        or soil.info.bulk_ec[x] == str(soil.info.bulk_ec[x]) + "--> Equal to soil.df.bulk_ec_dc in predict.bulk_ec.conversion"
-                        else soil.info.bulk_ec[x] for x in range(soil.n_states)]
+    # Check for missing values
+    missing_bulk_ec_before = soil.df['bulk_ec'].isna()
 
-    soil.df['bulk_ec'] = [soil.df.bulk_ec_dc[x] if np.isnan(soil.df.bulk_ec[x]) and soil.df.frequency_ec[x] <= 5 else soil.df.bulk_ec[x] for x in range(soil.n_states)]
+    soil.df['bulk_ec'] = [soil.df.bulk_ec_dc_tc[x] 
+                          if np.isnan(soil.df.bulk_ec[x]) and soil.df.temperature[x] == 298.15 and soil.df.frequency_ec[x] <= 5 
+                          else soil.df.bulk_ec[x] for x in range(soil.n_states)]
 
+    missing_bulk_ec_after = soil.df['bulk_ec'].isna()
+
+    soil.info['bulk_ec'] = [str(soil.info.bulk_ec[x]) + (
+            "--> Equal to soil.df.bulk_ec_dc_tc in predict.bulk_ec.conversion"
+            if missing_bulk_ec_before[x] and not missing_bulk_ec_after[x]
+            else "--> Provide bulk_ec; otherwise, bulk_ec_dc_tc, temperature, and frequency_ec"
+            if missing_bulk_ec_before[x] and missing_bulk_ec_after[x]
+            else "")
+        if missing_bulk_ec_before[x]
+        else soil.info.bulk_ec[x]
+        for x in range(soil.n_states)]
+    
+    # Check for missing values
+    missing_bulk_ec_before = soil.df['bulk_ec'].isna()
+
+    soil.df['bulk_ec'] = [soil.df.bulk_ec_dc[x] 
+                          if np.isnan(soil.df.bulk_ec[x]) and soil.df.frequency_ec[x] <= 5 
+                          else soil.df.bulk_ec[x] for x in range(soil.n_states)]
+
+    missing_bulk_ec_after = soil.df['bulk_ec'].isna()
+
+    soil.info['bulk_ec'] = [str(soil.info.bulk_ec[x]) + (
+            "--> Equal to soil.df.bulk_ec_dc in predict.bulk_ec.conversion"
+            if missing_bulk_ec_before[x] and not missing_bulk_ec_after[x]
+            else "--> Provide bulk_ec"
+            if missing_bulk_ec_before[x] and missing_bulk_ec_after[x]
+            else "")
+        if missing_bulk_ec_before[x]
+        else soil.info.bulk_ec[x]
+        for x in range(soil.n_states)]
+    
 
 def dc_to_non_dc(soil):
     """
@@ -130,12 +156,22 @@ def dc_to_non_dc(soil):
     External Functions
     ------------------
     - LongmireSmithEC : Calculate the soil bulk real electrical conductivity using the Longmire-Smith model and return
-    """
-    soil.info['bulk_ec'] = [str(soil.info.bulk_ec[x]) + "--> EM frequency shift from zero Hz to actual using LongmireSmithEC function in predict.bulk_ec.dc_to_non_dc" 
-                            if (np.isnan(soil.df.bulk_ec[x]) and soil.df.frequency_ec[x] >= 5) or soil.info.bulk_ec[x] == str(soil.info.bulk_ec[x]) + 
-                            "--> EM frequency shift from zero Hz to actual using LongmireSmithEC function in predict.bulk_ec.dc_to_non_dc" 
-                            else soil.info.bulk_ec[x] for x in range(soil.n_states)]
+    """   
+    # Check for missing values
+    missing_bulk_ec_before = soil.df['bulk_ec'].isna()
     
     soil.df["bulk_ec"] = [round(LongmireSmithEC(soil.df.bulk_ec_dc[x], soil.df.frequency_ec[x]), soil.roundn+3) 
-                          if np.isnan(soil.df.bulk_ec[x]) and soil.df.frequency_ec[x] >= 5 else soil.df.bulk_ec[x] for x in range(soil.n_states)]
+                          if np.isnan(soil.df.bulk_ec[x]) and soil.df.frequency_ec[x] >= 5 
+                          else soil.df.bulk_ec[x] for x in range(soil.n_states)]
 
+    missing_bulk_ec_after = soil.df['bulk_ec'].isna()
+    
+    soil.info['bulk_ec'] = [str(soil.info.bulk_ec[x]) + (
+            "--> EM frequency shift from zero Hz to actual using LongmireSmithEC function in predict.bulk_ec.dc_to_non_dc"
+            if missing_bulk_ec_before[x] and not missing_bulk_ec_after[x]
+            else "--> Provide bulk_ec; otherwise, bulk_ec_dc, and frequency_ec"
+            if missing_bulk_ec_before[x] and missing_bulk_ec_after[x]
+            else "")
+        if missing_bulk_ec_before[x]
+        else soil.info.bulk_ec[x]
+        for x in range(soil.n_states)]

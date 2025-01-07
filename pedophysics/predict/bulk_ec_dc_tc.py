@@ -148,13 +148,25 @@ def non_dc_non_tc_to_dc_tc(soil):
     - The function is specifically designed to handle cases where direct measurements of temperature-corrected DC bulk EC are not available but can be inferred from non-DC EC measurements under standard conditions (298.15K and ≤5Hz).
     - Annotations in `soil.info['bulk_ec_dc_tc']` aid in tracking the source and method used for estimating the updated `bulk_ec_dc_tc` values.
     """
-    soil.info['bulk_ec_dc_tc'] = [str(soil.info.bulk_ec_dc_tc[x]) + "--> Equal to soil.df.bulk_ec in predict.bulk_ec_dc_tc.non_dc_non_tc_to_dc_tc" if np.isnan(soil.df.bulk_ec_dc_tc[x]) and soil.df.temperature[x] == 298.15 and soil.df.frequency_ec[x] <= 5
-                            or soil.info.bulk_ec_dc_tc[x] == str(soil.info.bulk_ec_dc_tc[x]) + "--> Equal to soil.df.bulk_ec in predict.bulk_ec_dc_tc.non_dc_non_tc_to_dc_tc"
-                            else soil.info.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
-    
-    soil.df['bulk_ec_dc_tc'] = [soil.df.bulk_ec[x] if np.isnan(soil.df.bulk_ec_dc_tc[x]) and soil.df.temperature[x] == 298.15 and soil.df.frequency_ec[x] <= 5 else soil.df.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
-    
+    missing_bulk_ec_dc_tc_before = soil.df['bulk_ec_dc_tc'].isna() 
 
+    soil.df['bulk_ec_dc_tc'] = [soil.df.bulk_ec[x] 
+                                if np.isnan(soil.df.bulk_ec_dc_tc[x]) and soil.df.temperature[x] == 298.15 and soil.df.frequency_ec[x] <= 5 
+                                else soil.df.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
+    
+    missing_bulk_ec_dc_tc_after = soil.df['bulk_ec_dc_tc'].isna()
+    
+    soil.info['bulk_ec_dc_tc'] = [str(soil.info.bulk_ec_dc_tc[x]) + (
+            "--> Equal to soil.df.bulk_ec in predict.bulk_ec_dc_tc.non_dc_non_tc_to_dc_tc"
+            if missing_bulk_ec_dc_tc_before[x] and not missing_bulk_ec_dc_tc_after[x]
+            else "--> Provide bulk_ec_dc_tc; otherwise, bulk_ec, temperature, and frequency_ec"
+            if missing_bulk_ec_dc_tc_before[x] and missing_bulk_ec_dc_tc_after[x]
+            else "")
+        if missing_bulk_ec_dc_tc_before[x]
+        else soil.info.bulk_ec_dc_tc[x]
+        for x in range(soil.n_states)]
+    
+    
 def non_tc_to_tc(soil):
     """
     Calculate missing values of soil.df.bulk_ec_dc_tc based on soil.df.bulk_ec_dc
@@ -192,18 +204,43 @@ def non_tc_to_tc(soil):
     - The function distinguishes between standard (298.15K) and non-standard temperatures for updating `bulk_ec_dc_tc` values.
     - Annotations in `soil.info['bulk_ec_dc_tc']` provide insight into the source of the updated values, enhancing data traceability.
     - The `SheetsHendrickx` function is utilized for temperature corrections under non-standard conditions, applying a model to estimate the temperature-corrected EC value.    
-    """
-    soil.info['bulk_ec_dc_tc'] = [str(soil.info.bulk_ec_dc_tc[x]) + "--> Equal to soil.df.bulk_ec_dc in predict.bulk_ec_dc_tc.non_tc_to_tc" if np.isnan(soil.df.bulk_ec_dc_tc[x]) and soil.df.temperature[x] == 298.15
-                            or soil.info.bulk_ec_dc_tc[x] == str(soil.info.bulk_ec_dc_tc[x]) + "--> Equal to soil.df.bulk_ec_dc in predict.bulk_ec_dc_tc.non_tc_to_tc"
-                            else soil.info.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
-     
+    """ 
+    missing_bulk_ec_dc_tc_before = soil.df['bulk_ec_dc_tc'].isna() 
+
     soil.df['bulk_ec_dc_tc'] = [soil.df.bulk_ec_dc[x] if np.isnan(soil.df.bulk_ec_dc_tc[x]) and soil.df.temperature[x] == 298.15 else soil.df.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
 
-    soil.info['bulk_ec_dc_tc'] = [str(soil.info.bulk_ec_dc_tc[x]) + "--> Calculated using SheetsHendrickx function in predict.bulk_ec_dc_tc.non_tc_to_tc" if np.isnan(soil.df.bulk_ec_dc_tc[x]) and soil.df.temperature[x] != 298.15
-                        or soil.info.bulk_ec_dc_tc[x] == str(soil.info.bulk_ec_dc_tc[x]) + "--> Calculated using SheetsHendrickx function in predict.bulk_ec_dc_tc.non_tc_to_tc" else soil.info.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
-    
-    soil.df['bulk_ec_dc_tc'] = [SheetsHendrickx(soil.df.bulk_ec_dc[x], soil.df.temperature[x]) if np.isnan(soil.df.bulk_ec_dc_tc[x]) and soil.df.temperature[x] != 298.15 else soil.df.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
+    missing_bulk_ec_dc_tc_after = soil.df['bulk_ec_dc_tc'].isna()
 
+    soil.info['bulk_ec_dc_tc'] = [str(soil.info.bulk_ec_dc_tc[x]) + (
+            "--> Equal to soil.df.bulk_ec_dc in predict.bulk_ec_dc_tc.non_tc_to_tc"
+            if missing_bulk_ec_dc_tc_before[x] and not missing_bulk_ec_dc_tc_after[x]
+            else "--> Provide bulk_ec_dc_tc; otherwise, bulk_ec_dc and temperature"
+            if missing_bulk_ec_dc_tc_before[x] and missing_bulk_ec_dc_tc_after[x]
+            else "")
+        if missing_bulk_ec_dc_tc_before[x]
+        else soil.info.bulk_ec_dc_tc[x]
+        for x in range(soil.n_states)]
+    
+
+    missing_bulk_ec_dc_tc_before = soil.df['bulk_ec_dc_tc'].isna() 
+
+    soil.df['bulk_ec_dc_tc'] = [SheetsHendrickx(soil.df.bulk_ec_dc[x], soil.df.temperature[x]) 
+                                if np.isnan(soil.df.bulk_ec_dc_tc[x]) and soil.df.temperature[x] != 298.15 
+                                else soil.df.bulk_ec_dc_tc[x] 
+                                for x in range(soil.n_states)]
+    
+    missing_bulk_ec_dc_tc_after = soil.df['bulk_ec_dc_tc'].isna()
+
+    soil.info['bulk_ec_dc_tc'] = [str(soil.info.bulk_ec_dc_tc[x]) + (
+            "--> Calculated using SheetsHendrickx function in predict.bulk_ec_dc_tc.non_tc_to_tc"
+            if missing_bulk_ec_dc_tc_before[x] and not missing_bulk_ec_dc_tc_after[x]
+            else "--> Provide bulk_ec_dc_tc; otherwise, bulk_ec_dc and temperature"
+            if missing_bulk_ec_dc_tc_before[x] and missing_bulk_ec_dc_tc_after[x]
+            else "")
+        if missing_bulk_ec_dc_tc_before[x]
+        else soil.info.bulk_ec_dc_tc[x]
+        for x in range(soil.n_states)]
+    
 
 def fitting(soil):
     """ 
@@ -282,14 +319,25 @@ def fitting(soil):
         # Calculating the R2 score of the model fitting
         R2 = round(R2_score(soil.df.bulk_ec_dc_tc, WunderlichEC(soil.df.water, bulk_ec_dc_tc_init, water_init, soil.df.water_ec, soil.Lw)), soil.roundn)
 
-        # Saving calculated bulk_ec_dc_tc and its info with R2 and valid water range
-        soil.info['bulk_ec_dc_tc'] = [str(soil.info.bulk_ec_dc_tc[x]) + "--> Calculated by fitting (R2="+str(R2)+") WunderlichEC function in predict.bulk_ec_dc_tc.fitting, for soil.water values between"+str(water_range) if np.isnan(soil.df.bulk_ec_dc_tc[x]) and (min(water_range) <= soil.water[x] <= max(water_range))
-                                or soil.info.bulk_ec_dc_tc[x] == str(soil.info.bulk_ec_dc_tc[x]) + "--> Calculated by fitting (R2="+str(R2)+") WunderlichEC function in predict.bulk_ec_dc_tc.fitting, for soil.water values between"+str(water_range)
-                                else soil.info.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
-                
-        soil.df['bulk_ec_dc_tc'] = [round(WunderlichEC(soil.df.water[x], bulk_ec_dc_tc_init, water_init, soil.df.water_ec[x], soil.Lw), soil.roundn+3) if 
-                      np.isnan(soil.df.bulk_ec_dc_tc[x]) and (min(water_range) <= soil.water[x] <= max(water_range)) else soil.df.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
+        missing_bulk_ec_dc_tc_before = soil.df['bulk_ec_dc_tc'].isna() 
 
+        soil.df['bulk_ec_dc_tc'] = [round(WunderlichEC(soil.df.water[x], bulk_ec_dc_tc_init, water_init, soil.df.water_ec[x], soil.Lw), soil.roundn+3) 
+                                    if np.isnan(soil.df.bulk_ec_dc_tc[x]) and (min(water_range) <= soil.water[x] <= max(water_range)) 
+                                    else soil.df.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
+        
+        missing_bulk_ec_dc_tc_after = soil.df['bulk_ec_dc_tc'].isna() 
+
+        # Update info for calculated bulk_ec_dc_tc
+        soil.info['bulk_ec_dc_tc'] = [str(soil.info.bulk_ec_dc_tc[x]) + (
+                "--> Calculated by fitting (R2="+str(R2)+") WunderlichEC function in predict.bulk_ec_dc_tc.fitting, for soil.water values between"+str(water_range)
+                if missing_bulk_ec_dc_tc_before[x] and not missing_bulk_ec_dc_tc_after[x]
+                else "--> Provide bulk_ec_dc_tc; otherwise, water and water_ec. Regression valid for water values between"+str(water_range)
+                if missing_bulk_ec_dc_tc_before[x] and missing_bulk_ec_dc_tc_after[x]
+                else "")
+            if missing_bulk_ec_dc_tc_before[x]
+            else soil.info.bulk_ec_dc_tc[x]
+            for x in range(soil.n_states)]
+        
 
 def non_fitting(soil):
     """ 
@@ -338,10 +386,22 @@ def non_fitting(soil):
     Porosity(soil)
     WaterEC(soil)
     SolidEC(soil)
-
-    soil.info['bulk_ec_dc_tc'] = [str(soil.info.bulk_ec_dc_tc[x]) + "--> Calculated using Fu function (reported R2=0.98) in predict.bulk_ec_dc_tc.non_fitting" if np.isnan(soil.df.bulk_ec_dc_tc[x]) 
-                            or soil.info.bulk_ec_dc_tc[x] == str(soil.info.bulk_ec_dc_tc[x]) + "--> Calculated using Fu function (reported R2=0.98) in predict.bulk_ec_dc_tc.non_fitting"
-                            else soil.info.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
  
+    missing_bulk_ec_dc_tc_before = soil.df['bulk_ec_dc_tc'].isna() 
+
     soil.df['bulk_ec_dc_tc'] = [round(Fu(soil.df.water[x], soil.df.clay[x], soil.df.porosity[x], soil.df.water_ec[x], soil.df.solid_ec[x], soil.df.dry_ec[x], soil.df.sat_ec[x]), soil.roundn+3) 
-                             if np.isnan(soil.df.bulk_ec_dc_tc[x]) else soil.df.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
+                             if np.isnan(soil.df.bulk_ec_dc_tc[x]) 
+                             else soil.df.bulk_ec_dc_tc[x] for x in range(soil.n_states)]
+    
+    missing_bulk_ec_dc_tc_after = soil.df['bulk_ec_dc_tc'].isna()  
+
+    soil.info['bulk_ec_dc_tc'] = [str(soil.info.bulk_ec_dc_tc[x]) + (
+            "--> Calculated using Fu function (reported R2=0.98) in predict.bulk_ec_dc_tc.non_fitting"
+            if missing_bulk_ec_dc_tc_before[x] and not missing_bulk_ec_dc_tc_after[x]
+            else "--> Provide bulk_ec_dc_tc; otherwise, water, clay, porosity, and water_ec; or dry_ec, sat_ec, porosity, clay, and water; or dry_ec, water_ec, porosity, clay, and water"
+            if missing_bulk_ec_dc_tc_before[x] and missing_bulk_ec_dc_tc_after[x]
+            else "")
+        if missing_bulk_ec_dc_tc_before[x]
+        else soil.info.bulk_ec_dc_tc[x]
+        for x in range(soil.n_states)]
+

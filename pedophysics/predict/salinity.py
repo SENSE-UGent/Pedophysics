@@ -72,10 +72,22 @@ def Salinity(soil):
             result = minimize(objective_salinity, 0.01, args=(soil.df.water_ec[x], soil.df.temperature[x]), bounds=[(0, 1)])
             sal.append(np.nan if np.isnan(result.fun) else round(result.x[0], soil.roundn+2))
 
-        soil.info['salinity'] = ["Calculated using SenGood function in predict.Salinity" if np.isnan(soil.df.salinity[x]) or soil.info.salinity[x] == "Calculated using SenGood function in predict.Salinity"
-                                 else soil.info.salinity[x] for x in range(soil.n_states)]
+        missing_salinity_before = soil.df['salinity'].isna()
 
-        soil.df['salinity'] = [sal[x] if np.isnan(soil.df.salinity[x]) else soil.df.salinity[x] for x in range(soil.n_states)]
+        soil.df['salinity'] = [sal[x] if np.isnan(soil.df.salinity[x]) 
+                               else soil.df.salinity[x] for x in range(soil.n_states)]
+        
+        missing_salinity_after = soil.df['salinity'].isna()
+
+        soil.info['salinity'] = [str(soil.info.salinity[x]) + (
+                "--> Calculated using SenGood function in predict.Salinity"
+                if missing_salinity_before[x] and not missing_salinity_after[x]
+                else "--> Provide salinity; otherwise, water_ec"
+                if missing_salinity_before[x] and missing_salinity_after[x]
+                else "")
+            if missing_salinity_before[x]
+            else soil.info.salinity[x]
+            for x in range(soil.n_states)]
+        
 
     return soil.df.salinity.values 
-

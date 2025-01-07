@@ -130,11 +130,22 @@ def non_fitting(soil):
                                                         soil.df.dry_ec[i], soil.df.sat_ec[i], soil.df.bulk_ec_dc_tc[i]), bounds=[(0, .65)] )
         wat.append(np.nan if np.isnan(res.fun) else round(res.x[0], soil.roundn) )
 
-   # Saving calculated water and its info
-    soil.info['water'] = [str(soil.info.water[x]) + "--> Calculated using Fu function (reported R2=0.98) in predict.water_from_ec.non_fitting" if  np.isnan(soil.df.water[x]) or 
-                          soil.info.water[x] == str(soil.info.water[x]) + "--> Calculated using Fu function (reported R2=0.98) in predict.water_from_ec.non_fitting" else soil.info.water[x] for x in range(soil.n_states)]
-    
+    # Check for missing values
+    missing_water_before = soil.df['water'].isna()
+
     soil.df['water'] = [round(wat[i], soil.roundn) if np.isnan(soil.df.water[i]) else soil.df.water[i] for i in range(soil.n_states) ]
+    missing_water_after = soil.df['water'].isna()
+
+    # Update info for calculated water
+    soil.info['water'] = [str(soil.info.water[x]) + (
+            "--> Calculated using Fu function (reported R2=0.98) in predict.water_from_ec.non_fitting"
+            if missing_water_before[x] and not missing_water_after[x]
+            else "--> Provide water; otherwise clay, porosity, water_ec and bulk_ec_dc_tc"
+            if missing_water_before[x] and missing_water_after[x]
+            else "")
+        if missing_water_before[x]
+        else soil.info.water[x]
+        for x in range(soil.n_states)]
 
 
 def fitting(soil):
@@ -227,11 +238,21 @@ def fitting(soil):
 
         # Calculating the R2 score of the model fitting
         R2 = round(R2_score(soil.df.water[valids], np.array(Wat_wund)[valids]), soil.roundn)
+    
+        missing_water_before = soil.df['water'].isna()  
 
-        # Saving calculated bulk_perm and its info with R2 and valid bulk_ec range
-        soil.info['water'] = [str(soil.info.water[x]) + "--> Calculated by fitting (R2="+str(R2)+") WunderlichEC function in predict.water_from_ec.fitting, for soil.bulk_ec values between: "+str(bulk_ec_range) 
-                              if min(bulk_ec_range) <= soil.df.bulk_ec_dc_tc[x] <= max(bulk_ec_range) and np.isnan(soil.df.water[x])
-                                or soil.info.water[x] == str(soil.info.water[x]) + "--> Calculated by fitting (R2="+str(R2)+") WunderlichEC function in predict.water_from_ec.fitting, for soil.bulk_ec values between: "+str(bulk_ec_range)
-                                else soil.info.water[x] for x in range(soil.n_states)]
-        
         soil.df['water'] = [Wat_wund[x] if np.isnan(soil.df.water[x]) else soil.df.water[x] for x in range(soil.n_states)]
+
+        missing_water_after = soil.df['water'].isna()  
+
+        soil.info['water'] = [str(soil.info.water[x]) + (
+                "--> Calculated by fitting (R2="+str(R2)+") WunderlichEC function in predict.water_from_ec.fitting, for soil.bulk_ec values between: "+str(bulk_ec_range)
+                if missing_water_before[x] and not missing_water_after[x]
+                else "--> Provide water; otherwise, bulk_ec_dc_tc and water_ec. Regression valid for bulk_ec_dc_tc values between: "+str(bulk_ec_range)
+                if missing_water_before[x] and missing_water_after[x]
+                else "")
+            if missing_water_before[x]
+            else soil.info.water[x]
+            for x in range(soil.n_states)]
+    
+        

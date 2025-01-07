@@ -34,16 +34,34 @@ def Porosity(soil):
     Example
     -------
     # Assuming `soil` is a pre-defined Soil object with the required attributes
-    porosity_values = Porosity(soil)
+    porosity_values = Porosity(soil) 
     print(porosity_values)
     """
     ParticleDensity(soil)
-    # Check if any value of porosity is missing
-    if any(np.isnan(soil.df.porosity[x]) and not np.isnan(soil.df.bulk_density[x]) for x in range(soil.n_states)): 
-        
-        soil.info['porosity'] = ["Calculated based on bulk density" if np.isnan(soil.df.porosity[x]) or soil.info.porosity[x] == "Calculated based on bulk density"
-                                     else soil.info.porosity[x] for x in range(soil.n_states)]
-        
-        soil.df['porosity'] = [round(1 - soil.df.bulk_density[x]/soil.df.particle_density[x], soil.roundn) if np.isnan(soil.df.porosity[x]) else soil.df.porosity[x] for x in range(soil.n_states)]
 
+    # Check for missing values
+    missing_porosity_before = soil.df['porosity'].isna()
+
+    # Calculate missing porosity values where possible
+    soil.df['porosity'] = [
+        round(1 - soil.df.bulk_density[x] / soil.df.particle_density[x], soil.roundn)
+        if np.isnan(soil.df.porosity[x]) and not np.isnan(soil.df.bulk_density[x]) and not np.isnan(soil.df.particle_density[x])
+        else soil.df.porosity[x] 
+        for x in range(soil.n_states)
+    ]
+    missing_porosity_after = soil.df['porosity'].isna()
+
+    # Update info for calculated porosity
+    soil.info['porosity'] = [str(soil.info.porosity[x]) + (
+            "--> Calculated based on bulk density"
+            if missing_porosity_before[x] and not missing_porosity_after[x]
+            else "--> Provide porosity or bulk_density"
+            if missing_porosity_before[x] and missing_porosity_after[x]
+            else "")
+        if missing_porosity_before[x]
+        else soil.info.porosity[x]
+        for x in range(soil.n_states)]
+    
     return soil.df.porosity.values
+
+

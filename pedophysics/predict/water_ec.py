@@ -122,13 +122,23 @@ def from_salinity(soil):
     - SenGoode : Calculate soil water real electrical conductivity using the Sen and Goode model and return
     """
 
-    # Calculating and saving water_ec and its info
-    soil.info['water_ec'] = [str(soil.info.water_ec[x]) + "--> Calculated using SenGood function in predict.water_ec.from_salinity" if np.isnan(soil.df.water_ec[x]) 
-                             or soil.info.water_ec[x] == str(soil.info.water_ec[x]) + "--> Calculated using SenGood function in predict.water_ec.from_salinity"
-                                else soil.info.water_ec[x] for x in range(soil.n_states)]
- 
-    soil.df['water_ec'] = [SenGoode(soil.df.temperature[x], soil.df.salinity[x]) if np.isnan(soil.df.water_ec[x]) 
-                                else soil.df.water_ec[x] for x in range(soil.n_states)]
+    # Check for missing values
+    missing_water_ec_before = soil.df['water_ec'].isna()
+
+    soil.df['water_ec'] = [SenGoode(soil.df.temperature[x], soil.df.salinity[x]) 
+                            if np.isnan(soil.df.water_ec[x]) 
+                            else soil.df.water_ec[x] for x in range(soil.n_states)]
+    missing_water_ec_after = soil.df['water_ec'].isna()
+    
+    soil.info['water_ec'] = [str(soil.info.water_ec[x]) + (
+            "--> Calculated using SenGood function in predict.water_ec.from_salinity"
+            if missing_water_ec_before[x] and not missing_water_ec_after[x]
+            #else "--> Provide water_ec, otherwise salinity"
+            #if missing_water_ec_before[x] and missing_water_ec_after[x]
+            else "")
+        if missing_water_ec_before[x]
+        else soil.info.water_ec[x]
+        for x in range(soil.n_states)]
 
 
 def from_ec(soil):
@@ -181,12 +191,24 @@ def from_ec(soil):
         wat_ec.append(np.nan if np.isnan(res.fun) else round(res.x[0], soil.roundn) )
 
     # Saving calculated water_ec and its info
-    soil.info['water_ec'] = [str(soil.info.water_ec[x]) + "--> Calculated using Fu function (reported R2=0.98) in predict.water_ec.from_ec" if np.isnan(soil.df.water_ec[x]) 
-                             or soil.info.water_ec[x] == str(soil.info.water_ec[x]) + "--> Calculated using Fu function (reported R2=0.98) in predict.water_ec.from_ec"
-                                 else soil.info.water_ec[x] for x in range(soil.n_states)]
+    missing_water_ec_before = soil.df['water_ec'].isna()
 
-    soil.df['water_ec'] = [round(wat_ec[x], soil.roundn+3) if np.isnan(soil.df.water_ec[x]) else soil.df.water[x] for x in range(soil.n_states) ]
-
+    soil.df['water_ec'] = [round(wat_ec[x], soil.roundn+3) 
+                           if np.isnan(soil.df.water_ec[x]) 
+                           else soil.df.water[x] for x in range(soil.n_states) ]
+    
+    missing_water_ec_after = soil.df['water_ec'].isna()
+    
+    soil.info['water_ec'] = [str(soil.info.water_ec[x]) + (
+            "--> Calculated using Fu function (reported R2=0.98) in predict.water_ec.from_ec"
+            if missing_water_ec_before[x] and not missing_water_ec_after[x]
+            else "--> Provide water_ec; otherwise bulk_ec_dc_tc, water, clay and porosity"
+            if missing_water_ec_before[x] and missing_water_ec_after[x]
+            else "")
+        if missing_water_ec_before[x]
+        else soil.info.water_ec[x]
+        for x in range(soil.n_states)]
+    
 
 def fitting_rhoades(soil):
     """
@@ -251,7 +273,7 @@ def fitting_rhoades(soil):
     # Calculating optimal water_ec and s_ec
     res1 = minimize(objective_water_ec, [initial_guess_watec, initial_guess_s_ec], args=(arg_water, arg_EC, initial_guess_E, initial_guess_F), bounds=bounds)
     best_water_ec, best_s_ecs = res1.x
-
+ 
     # Saving calculated s_ec and its info
     soil.info['s_ec'] = [str(soil.info.s_ec[x]) + "--> Calculated by fitting Rhoades function in predict.water_ec.fitting_rhoades" if np.isnan(soil.df.s_ec[x])
                             or soil.info.s_ec[x] == str(soil.info.s_ec[x]) + "--> Calculated by fitting Rhoades function in predict.water_ec.fitting_rhoades"
@@ -273,14 +295,25 @@ def fitting_rhoades(soil):
 
     # Calculating the R2 score of the fitting
     R2 = round(R2_score(arg_EC, Rhoades(arg_water, best_water_ec, best_s_ecs, best_E, best_F)), soil.roundn)
+
+    missing_water_ec_before = soil.df['water_ec'].isna()
+
+    soil.df['water_ec'] = [round(best_water_ec, soil.roundn+3) 
+                           if np.isnan(soil.df.water_ec[x]) 
+                           else soil.df.water_ec[x] for x in range(soil.n_states) ]
+
+    missing_water_ec_after = soil.df['water_ec'].isna()
     
-    # Saving calculated water_ec and its info with R2
-    soil.info['water_ec'] = [str(soil.info.water_ec[x]) + "--> Calculated by fitting (R2 = "+str(R2)+") Rhoades function in predict.water_ec.fitting_rhoades" if np.isnan(soil.df.water_ec[x]) 
-                            or soil.info.water_ec[x] == str(soil.info.water_ec[x]) + "--> Calculated by fitting (R2 = "+str(R2)+") Rhoades function in predict.water_ec.fitting_rhoades"
-                            else soil.info.water_ec[x] for x in range(soil.n_states)]
-
-    soil.df['water_ec'] = [round(best_water_ec, soil.roundn+3) if np.isnan(soil.df.water_ec[x]) else soil.df.water_ec[x] for x in range(soil.n_states) ]
-
+    soil.info['water_ec'] = [str(soil.info.water_ec[x]) + (
+            "--> Calculated by fitting (R2 = "+str(R2)+") Rhoades function in predict.water_ec.fitting_rhoades"
+            if missing_water_ec_before[x] and not missing_water_ec_after[x]
+            else "--> Provide water_ec, otherwise water and bulk_ec_dc_tc"
+            if missing_water_ec_before[x] and missing_water_ec_after[x]
+            else "")
+        if missing_water_ec_before[x]
+        else soil.info.water_ec[x]
+        for x in range(soil.n_states)]
+    
 
 def fitting_hilhorst(soil):
     """
@@ -362,9 +395,20 @@ def fitting_hilhorst(soil):
     # Calculating the R2 score of the fitting
     R2 = round(R2_score(arg_bulk_perm, Hilhorst(arg_EC, best_water_ec, arg_water_perm, best_offset_perm)), soil.roundn)
     
-    # Saving calculated water_ec and its info with R2
-    soil.info['water_ec'] = [str(soil.info.water_ec[x]) + "--> Calculated by fitting (R2="+str(R2)+") Hilhorst function in predict.water_ec.fitting_hilhorst" if np.isnan(soil.df.water_ec[x]) 
-                             or soil.info.water_ec[x] == str(soil.info.water_ec[x]) + "--> Calculated by fitting (R2="+str(R2)+") Hilhorst function in predict.water_ec.fitting_hilhorst"
-                                 else soil.info.water_ec[x] for x in range(soil.n_states)]
+    missing_water_ec_before = soil.df['water_ec'].isna()
+
+    soil.df['water_ec'] = [round(best_water_ec, soil.roundn+3) 
+                           if np.isnan(soil.df.water_ec[x]) 
+                           else soil.df.water_ec[x] for x in range(soil.n_states) ]
+
+    missing_water_ec_after = soil.df['water_ec'].isna()
     
-    soil.df['water_ec'] = [round(best_water_ec, soil.roundn+3) if np.isnan(soil.df.water_ec[x]) else soil.df.water_ec[x] for x in range(soil.n_states) ]
+    soil.info['water_ec'] = [str(soil.info.water_ec[x]) + (
+            "--> Calculated by fitting (R2="+str(R2)+") Hilhorst function in predict.water_ec.fitting_hilhorst"
+            if missing_water_ec_before[x] and not missing_water_ec_after[x]
+            else "--> Provide water_ec; otherwise, bulk_perm and bulk_ec_dc_tc"
+            if missing_water_ec_before[x] and missing_water_ec_after[x]
+            else "")
+        if missing_water_ec_before[x]
+        else soil.info.water_ec[x]
+        for x in range(soil.n_states)]

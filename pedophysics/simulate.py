@@ -202,8 +202,8 @@ class Soil(object):
         self.df = pd.DataFrame({attr: getattr(self, attr) for attr in array_like_attributes})
 
         # defining soil.info
-        self.info = self.df.where(pd.notna(self.df), 'NaN')
-        self.info = self.info.where(pd.isna(self.info), 'Value given by the user')
+        self.info = self.df.where(pd.notna(self.df), 'nan')
+        self.info = self.info.where(pd.isna(self.df), 'Value given by the user')
         
     # Simplify the getter methods using __getattr__
     def __getattr__(self, name):

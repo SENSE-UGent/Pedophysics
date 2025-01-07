@@ -50,15 +50,42 @@ def BulkECTC(soil):
     if (np.isnan(soil.df.bulk_ec_tc)).any():
         BulkEC(soil)
 
-        soil.info['bulk_ec_tc'] = [str(soil.info.bulk_ec_tc[x]) + "--> Not corrected. Equal to soil.df.bulk_ec" if np.isnan(soil.df.bulk_ec_tc[x]) and soil.df.temperature[x] == 298.15 or 
-                                   soil.info.bulk_ec_tc[x] == str(soil.info.bulk_ec_tc[x]) + "--> Not corrected. Equal to soil.df.bulk_ec" else soil.info.bulk_ec_tc[x] for x in range(soil.n_states)]
+        # Check for missing values
+        missing_bulk_ec_tc_before = soil.df['bulk_ec_tc'].isna()
 
-        soil.df['bulk_ec_tc'] = [soil.df.bulk_ec.values[x] if np.isnan(soil.df.bulk_ec_tc[x]) and soil.df.temperature[x] == 298.15 else soil.df.bulk_ec_tc[x] for x in range(soil.n_states)] # There is no temperaturre correction
+        soil.df['bulk_ec_tc'] = [soil.df.bulk_ec.values[x] if np.isnan(soil.df.bulk_ec_tc[x]) and soil.df.temperature[x] == 298.15 
+                                 else soil.df.bulk_ec_tc[x] for x in range(soil.n_states)] # There is no temperaturre correction
+        
+        missing_bulk_ec_tc_after = soil.df['bulk_ec_tc'].isna()
 
-        soil.info['bulk_ec_tc'] = [str(soil.info.bulk_ec_tc[x]) + "--> Calculated using SheetsHendrickx function" if np.isnan(soil.df.bulk_ec_tc[x]) and soil.df.temperature[x] != 298.15 or 
-                                   soil.info.bulk_ec_tc[x] == str(soil.info.bulk_ec_tc[x]) + "--> Calculated using SheetsHendrickx function" else soil.info.bulk_ec_tc[x] for x in range(soil.n_states)]
+        soil.info['bulk_ec_tc'] = [str(soil.info.bulk_ec_tc[x]) + (
+                "--> Equal to soil.df.bulk_ec because temperature = 298.15"
+                if missing_bulk_ec_tc_before[x] and not missing_bulk_ec_tc_after[x]
+                else "--> Provide bulk_ec_tc; otherwise, bulk_ec, and temperature"
+                if missing_bulk_ec_tc_before[x] and missing_bulk_ec_tc_after[x]
+                else "")
+            if missing_bulk_ec_tc_before[x]
+            else soil.info.bulk_ec_tc[x]
+            for x in range(soil.n_states)]
+
+
+        # Check for missing values
+        missing_bulk_ec_tc_before = soil.df['bulk_ec_tc'].isna()
+
+        soil.df['bulk_ec_tc'] = [SheetsHendrickx(soil.df.bulk_ec.values[x], soil.df.temperature.values[x]) 
+                                    if np.isnan(soil.df.bulk_ec_tc[x]) and soil.df.temperature[x] != 298.15
+                                    else soil.df.bulk_ec_tc[x] for x in range(soil.n_states)]
         
-        soil.df['bulk_ec_tc'] = [SheetsHendrickx(soil.df.bulk_ec.values[x], soil.df.temperature.values[x]) if np.isnan(soil.df.bulk_ec_tc[x]) and soil.df.temperature[x] != 298.15
-                                       else soil.df.bulk_ec_tc[x] for x in range(soil.n_states)]
-        
+        missing_bulk_ec_tc_after = soil.df['bulk_ec_tc'].isna()
+                
+        soil.info['bulk_ec_tc'] = [str(soil.info.bulk_ec_tc[x]) + (
+                "--> Calculated using SheetsHendrickx function in predict.bulk_ec_tc.BulkECTC"
+                if missing_bulk_ec_tc_before[x] and not missing_bulk_ec_tc_after[x]
+                else "--> Provide bulk_ec_tc; otherwise, bulk_ec"
+                if missing_bulk_ec_tc_before[x] and missing_bulk_ec_tc_after[x]
+                else "")
+            if missing_bulk_ec_tc_before[x]
+            else soil.info.bulk_ec_tc[x]
+            for x in range(soil.n_states)]
+
     return soil.df.bulk_ec_tc.values

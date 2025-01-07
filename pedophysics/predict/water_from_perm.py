@@ -122,21 +122,44 @@ def changing_freq(soil):
         else:
             bulk_ec_dc.append(np.nan)
 
-    # Warn about applying LongmireSmithP function to non-validated soil conditions    
-    if any( soil.df.frequency_perm[x] > 200e6 and (soil.df.clay[x] > 10 or soil.df.sand[x] < 90) and np.isnan(soil.df.bulk_ec_dc[x]) for x in range(soil.n_states) ):
-        states_warns = []
-        for x in range(soil.n_states):
-            if (soil.df.frequency_perm[x] > 200e6 and (soil.df.clay[x] > 10 or soil.df.sand[x] < 90) and np.isnan(soil.df.bulk_ec_dc[x]) ):
-                states_warns.append(x) 
+    def warn_states(soil):
+        # Warn about applying LongmireSmithP function to non-validated soil conditions
+        mask_invalid = (
+            (soil.df.frequency_perm) > 200e6 &
+            (soil.df.water > 0.22) &
+            (soil.df.porosity > 0.255) &
+            (soil.df.water_ec > 3.3) | (soil.df.water_ec < 0.0016) &
+            (soil.df.clay > 10) | (soil.df.sand < 85) &
+            np.isnan(soil.df.bulk_ec_dc)
+        )
 
-        warnings.warn(f"LongmireSmithP function is applied to soil states {states_warns} with conditions soil.df.frequency_perm > 200e6 and soil.df.clay > 10 or (soil.df.sand < 90), for which the validation of such model is uncertain. ")
+        # Find the indices of the invalid states
+        states_warns = np.where(mask_invalid)[0]
 
-    # Saving calculated bulk_ec and its info
-    soil.info['bulk_ec_dc'] = [str(soil.info.bulk_ec_dc[x]) + "--> Calculated using LongmireSmithP function in predict.water_from_perm.changing_freq" if np.isnan(soil.df.bulk_ec_dc[x])
-                            or soil.info.bulk_ec_dc[x] == str(soil.info.bulk_ec_dc[x]) + "--> Calculated using LongmireSmithP function in predict.water_from_perm.changing_freq"
-                            else soil.info.bulk_ec_dc[x] for x in range(soil.n_states)]
-        
-    soil.df['bulk_ec_dc'] = [bulk_ec_dc[x] if np.isnan(soil.df.bulk_ec_dc[x]) else soil.df.bulk_ec_dc[x] for x in range(soil.n_states)]
+        if states_warns.size > 0:
+            warnings.warn(
+                f"LongmireSmithP function is applied to soil states {states_warns} with conditions "
+                f"frequency_perm > 200e6, and water > 0.22, and porosity > 0.255, and water_ec > 3.3 or water_ec < 0.0016, and clay > 10 or sand < 85"
+                f", for which the validity of such model is uncertain."
+                )   
+            
+    warn_states(soil)    
+    missing_bulk_ec_dc_before = soil.df['bulk_ec_dc'].isna()
+    soil.df['bulk_ec_dc'] = [bulk_ec_dc[x] 
+                             if np.isnan(soil.df.bulk_ec_dc[x]) 
+                             else soil.df.bulk_ec_dc[x] for x in range(soil.n_states)]
+
+    missing_bulk_ec_dc_after = soil.df['bulk_ec_dc'].isna()
+    
+    soil.info['bulk_ec_dc'] = [str(soil.info.bulk_ec_dc[x]) + (
+                                "--> Calculated using LongmireSmithP function in predict.water_from_perm.changing_freq" 
+                                if missing_bulk_ec_dc_before[x] and not missing_bulk_ec_dc_after[x]
+                                else "--> Provide bulk_ec_dc; otherwise, bulk_perm" 
+                                if missing_bulk_ec_dc_before[x] and missing_bulk_ec_dc_after[x]
+                                else "")
+                            if missing_bulk_ec_dc_before[x]
+                            else soil.info.bulk_ec_dc[x]
+                            for x in range(soil.n_states)]
 
 
 def fixed_freq(soil):
@@ -275,13 +298,21 @@ def fitting(soil):
         # Calculating the R2 score of the model fitting
         R2 = round(R2_score(soil.df.water, np.array(Wat_wund)), soil.roundn)
 
-        # Saving calculated bulk_perm and its info with R2 and valid bulk_perm range
-        soil.info['water'] = [str(soil.info.water[x]) + "--> Calculated by fitting (R2="+str(R2)+") WunderlichP function in predict.water_from_perm.fitting, for soil.bulk_perm values between: "+str(bulk_perm_range) if min(bulk_perm_range) <= soil.df.bulk_perm[x] <= max(bulk_perm_range) and ~np.isnan(soil.df.bulk_perm[x]) and np.isnan(soil.df.water[x])
-                                or soil.info.water[x] == str(soil.info.water[x]) + "--> Calculated by fitting (R2="+str(R2)+") WunderlichP function in predict.water_from_perm.fitting, for soil.bulk_perm values between: "+str(bulk_perm_range)
-                                else soil.info.water[x] for x in range(soil.n_states)]
-        
-        soil.df['water'] = [Wat_wund[x] if np.isnan(soil.df.water[x]) else soil.df.water[x] for x in range(soil.n_states)]
+        missing_water_before = soil.df['water'].isna()  
 
+        soil.df['water'] = [Wat_wund[x] if np.isnan(soil.df.water[x]) else soil.df.water[x] for x in range(soil.n_states)]
+        missing_water_after = soil.df['water'].isna()  
+        
+        soil.info['water'] = [str(soil.info.water[x]) + (
+                "--> Calculated by fitting (R2="+str(R2)+") WunderlichP function in predict.water_from_perm.fitting, for soil.bulk_perm values between: "+str(bulk_perm_range)
+                if missing_water_before[x] and not missing_water_after[x]
+                else "--> Provide water; otherwise, bulk_perm. Regression valid for bulk_perm values between"+str(bulk_perm_range)
+                if missing_water_before[x] and missing_water_after[x]
+                else "")
+            if missing_water_before[x]
+            else soil.info.water[x]
+            for x in range(soil.n_states)]
+        
 
 def non_fitting(soil):
     """ 
@@ -353,36 +384,85 @@ def non_fitting(soil):
             result = minimize(objective, 0.05, args=(soil.df.bulk_perm_inf[i], soil.df.frequency_perm[i], soil.df.bulk_perm[i]), bounds=[(1e-6, 1)], method='L-BFGS-B')
             bulk_ec_dc.append(np.nan if np.isnan(result.fun) else round(result.x[0], soil.roundn+2))
 
-        # Saving calculated bulk_ec_dc and its info
-        soil.info['bulk_ec_dc'] = [str(soil.info.bulk_ec_dc[x]) + "--> Calculated using LongmireSmithP function in predict.water_from_perm.non_fitting" if np.isnan(soil.df.bulk_ec_dc[x]) 
-                                or soil.info.bulk_ec_dc[x] ==str(soil.info.bulk_ec_dc[x]) + "--> Calculated using LongmireSmithP function in predict.water_from_perm.non_fitting" else soil.info.bulk_ec_dc[x] for x in range(soil.n_states)]
-        
+        # Check for missing values
+        missing_bulk_ec_dc_before = soil.df['bulk_ec_dc'].isna()
         soil.df['bulk_ec_dc'] = [bulk_ec_dc[x] if np.isnan(soil.df.bulk_ec_dc[x]) else soil.df.bulk_ec_dc[x] for x in range(soil.n_states)]
+
+        missing_bulk_ec_dc_after = soil.df['bulk_ec_dc'].isna()
+        
+        # Update info for calculated bulk_ec_dc
+        soil.info['bulk_ec_dc'] = [str(soil.info.bulk_ec_dc[x]) + (
+                "--> Calculated using LongmireSmithP function in predict.water_from_perm.non_fitting"
+                if missing_bulk_ec_dc_before[x] and not missing_bulk_ec_dc_after[x]
+                else "--> Provide bulk_ec_dc; otherwise, bulk_perm"
+                if missing_bulk_ec_dc_before[x] and missing_bulk_ec_dc_after[x]
+                else "")
+            if missing_bulk_ec_dc_before[x]
+            else soil.info.bulk_ec_dc[x]
+            for x in range(soil.n_states)]
+    
 
     # Condition for EM frequencies between 30e6 and 100e6
     elif ((soil.df.frequency_perm >= 30e6) & (soil.df.frequency_perm < 100e6)).all():
 
-        # Saving calculated water and its info
-        soil.info['water'] = [str(soil.info.water[x]) + "--> Calculated using LR_MV function (reported R2=0.93) in predict.water_from_perm.non_fitting" if np.isnan(soil.df.water[x]) 
-                              or soil.info.water[x] ==str(soil.info.water[x]) + "--> Calculated using LR_MV function (reported R2=0.93) in predict.water_from_perm.non_fitting" else soil.info.water[x] for x in range(soil.n_states)]
+        missing_water_before = soil.df['water'].isna()
 
         soil.df['water'] = [round(LR_MV(soil.df.bulk_perm[x], soil.df.porosity[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.df.CEC[x]), soil.roundn) 
                             if np.isnan(soil.df.water[x]) else soil.df.water[x] for x in range(soil.n_states)]
 
+        missing_water_after = soil.df['water'].isna()
+
+        # Update info for calculated water
+        soil.info['water'] = [str(soil.info.water[x]) + (
+                "--> Calculated using LR_MV function (reported R2=0.93) in predict.water_from_perm.non_fitting"
+                if missing_water_before[x] and not missing_water_after[x]
+                else "--> Provide water; otherwise bulk_perm, porosity, and CEC"
+                if missing_water_before[x] and missing_water_after[x]
+                else "")
+            if missing_water_before[x]
+            else soil.info.water[x]
+            for x in range(soil.n_states)]
+    
+
     # Condition for EM frequencies between 100e6 and 200e6
     elif ((soil.df.frequency_perm >= 100e6) & (soil.df.frequency_perm < 200e6)).all():
 
-        # Saving calculated water and its info
-        soil.info['water'] = [str(soil.info.water[x]) + "--> Calculated using LR function (reported RMSE=0.032) in predict.water_from_perm.non_fitting" if np.isnan(soil.df.water[x]) 
-                        or soil.info.water[x] ==str(soil.info.water[x]) + "--> Calculated using LR function (reported RMSE=0.032) in predict.water_from_perm.non_fitting" else soil.info.water[x] for x in range(soil.n_states)]
-                
-        soil.df['water'] = [round(LR(soil.df.bulk_perm[x], soil.df.porosity[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.alpha), soil.roundn) if np.isnan(soil.df.water[x]) else soil.df.water[x] for x in range(soil.n_states)]
+        missing_water_before = soil.df['water'].isna()
+    
+        soil.df['water'] = [round(LR(soil.df.bulk_perm[x], soil.df.porosity[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.alpha), soil.roundn) 
+                            if np.isnan(soil.df.water[x]) else soil.df.water[x] for x in range(soil.n_states)]
+
+        missing_water_after = soil.df['water'].isna()
+
+        # Update info for calculated water
+        soil.info['water'] = [str(soil.info.water[x]) + (
+                "--> Calculated using LR function (reported RMSE=0.032) in predict.water_from_perm.non_fitting"
+                if missing_water_before[x] and not missing_water_after[x]
+                else "--> Provide water; otherwise bulk_perm, and porosity"
+                if missing_water_before[x] and missing_water_after[x]
+                else "")
+            if missing_water_before[x]
+            else soil.info.water[x]
+            for x in range(soil.n_states)]
+        
 
     # Condition for EM frequencies between 200e6 and 30e9
     elif ( ((soil.df.frequency_perm >= 200e6) & (soil.df.frequency_perm <= 30e9))).all():
+      
+        missing_water_before = soil.df['water'].isna()
 
-        # Saving calculated water and its info
-        soil.info['water'] = [str(soil.info.water[x]) + "--> Calculated using LR_W function in predict.water_from_perm.non_fitting" if np.isnan(soil.df.water[x]) 
-                        or soil.info.water[x] ==str(soil.info.water[x]) + "--> Calculated using LR_W function in predict.water_from_perm.non_fitting" else soil.info.water[x] for x in range(soil.n_states)]
-        
-        soil.df['water'] = [round(LR_W(soil.df.bulk_perm[x], soil.df.porosity[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.df.clay[x]), soil.roundn) if np.isnan(soil.df.water[x]) else soil.df.water[x] for x in range(soil.n_states)] 
+        soil.df['water'] = [round(LR_W(soil.df.bulk_perm[x], soil.df.porosity[x], soil.df.air_perm[x], soil.df.solid_perm[x], soil.df.water_perm[x], soil.df.clay[x]), soil.roundn) 
+                            if np.isnan(soil.df.water[x]) else soil.df.water[x] for x in range(soil.n_states)] 
+
+        missing_water_after = soil.df['water'].isna()
+
+        # Update info for calculated water
+        soil.info['water'] = [str(soil.info.water[x]) + (
+                "--> Calculated using LR_W function in predict.water_from_perm.non_fitting"
+                if missing_water_before[x] and not missing_water_after[x]
+                else "--> Provide water; otherwise bulk_perm, porosity, and Clay"
+                if missing_water_before[x] and missing_water_after[x]
+                else "")
+            if missing_water_before[x]
+            else soil.info.water[x]
+            for x in range(soil.n_states)]
