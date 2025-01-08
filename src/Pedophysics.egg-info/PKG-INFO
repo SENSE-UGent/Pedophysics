@@ -1,0 +1,21 @@
+Metadata-Version: 2.1
+Name: Pedophysics
+Version: 0.1.1
+Summary: A Python package for soil electromagnetic geophysics
+Author-email: Gaston Matias Mendoza Veirana <mendoveirana@gmail.com>
+Keywords: soil,geophysics,petrophysics,pedophysics
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt
+Requires-Dist: numpy
+Requires-Dist: matplotlib
+Requires-Dist: pandas
+Requires-Dist: scipy
+
+# Pedophysics
+
+https://orbit-ugent.github.io/Pedophysics/build/html/index.html
+Cite this code using the DOI: 10.5281/zenodo.13465701
