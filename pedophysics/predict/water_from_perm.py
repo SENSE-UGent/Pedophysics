@@ -125,7 +125,7 @@ def changing_freq(soil):
     def warn_states(soil):
         # Warn about applying LongmireSmithP function to non-validated soil conditions
         mask_invalid = (
-            (soil.df.frequency_perm) > 200e6 &
+            (soil.df.frequency_perm > 200e6) &
             (soil.df.water > 0.22) &
             (soil.df.porosity > 0.255) &
             (soil.df.water_ec > 3.3) | (soil.df.water_ec < 0.0016) &
