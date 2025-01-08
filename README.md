@@ -11,5 +11,6 @@ To install this package from the Python Package Index, use the following command
 
 ```bash
 pip install pedophysics 
+```
 
 Cite this code using the DOI: 10.5281/zenodo.13465701
