@@ -1,2 +1,8 @@
 **/__pycache__/**
 **/.vscode/**
+# Ignore virtual environments
+testenv/
+# Ignore build artifacts
+dist/
+*.egg-info/
+build/
