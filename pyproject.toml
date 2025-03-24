@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "Pedophysics"
-version = "0.1.1"
+version = "0.1.3"  # 
 description = "A Python package for soil electromagnetic geophysics"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -24,3 +24,9 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
 ]
+
+[project.urls]
+Homepage = "https://github.com/SENSE-UGent/Pedophysics"
+Repository = "https://github.com/SENSE-UGent/Pedophysics"
+Documentation = "https://sense-ugent.github.io/Pedophysics/build/html/index.html"
+Issues = "https://github.com/SENSE-UGent/Pedophysics/issues"
