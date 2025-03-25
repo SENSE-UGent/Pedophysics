@@ -14,7 +14,9 @@ pip install pedophysics
 ```
 
 Cite this code using the DOI: 10.5281/zenodo.13465701
-![PyPI](https://img.shields.io/pypi/v/Pedophysics)
-![Python](https://img.shields.io/pypi/pyversions/Pedophysics)
-[![Docs](https://img.shields.io/badge/docs-online-blue)](https://sense-ugent.github.io/Pedophysics/build/html/index.html)
-[![License](https://img.shields.io/github/license/SENSE-UGent/Pedophysics)](https://github.com/SENSE-UGent/Pedophysics/blob/main/LICENSE.txt)
+
+
+[![PyPI version](https://img.shields.io/pypi/v/pedophysics.svg)](https://pypi.org/project/pedophysics/)
+[![Python](https://img.shields.io/badge/python-3-blue.svg)](https://www.python.org/)
+[![Docs](https://img.shields.io/badge/docs-online-blue.svg)](https://sense-ugent.github.io/Pedophysics/build/html/index.html)
+[![License](https://img.shields.io/badge/license-GPL--3.0-orange.svg)](./LICENSE.txt)
