@@ -1,8 +1,22 @@
-**/__pycache__/**
-**/.vscode/**
+# Ignore Python cache and compiled files
+**/__pycache__/
+*.py[cod]
+
 # Ignore virtual environments
-testenv/
+venv/
+env/
+.testenv/
+.conda/
+
 # Ignore build artifacts
+build/
 dist/
 *.egg-info/
-build/
+
+# Ignore coverage reports
+.coverage
+htmlcov/
+
+# Ignore IDE/editor-specific settings
+.vscode/
+.idea/
