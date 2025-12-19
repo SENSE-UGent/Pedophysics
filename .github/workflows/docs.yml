@@ -36,16 +36,26 @@ jobs:
         run: |
           sphinx-build -b html docs/source docs/_build/html
 
+      - name: Disable Jekyll (keep _static and _sources)
+        run: |
+          touch docs/_build/html/.nojekyll
+
+      - name: Debug (prove index + _static exist)
+        run: |
+          ls -la docs/_build/html | head -n 50
+          test -f docs/_build/html/index.html
+          test -d docs/_build/html/_static
+
       - uses: actions/configure-pages@v5
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
 
       - uses: actions/upload-pages-artifact@v3
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         with:
           path: docs/_build/html
 
   deploy:
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     needs: build
     environment:
