@@ -36,6 +36,16 @@ jobs:
         run: |
           sphinx-build -b html docs/source docs/_build/html
 
+      - name: Disable Jekyll (keep _static and _sources)
+        run: |
+          touch docs/_build/html/.nojekyll
+
+      - name: Debug (prove _static is present)
+        run: |
+          ls -la docs/_build/html | head -n 50
+          ls -la docs/_build/html/_static | head -n 50
+          test -f docs/_build/html/.nojekyll
+
       - uses: actions/configure-pages@v5
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
 
